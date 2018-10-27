@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>客户信息</title>
+    <style>
+        .form-horizontal .form-group {
+            margin-left: 0px;
+            margin-right: 0px;
+        }
+    </style>
+    <link rel="stylesheet" href="assets/css/chosen.css" />
+    <link rel="stylesheet" href="assets/css/select2.css"/>
+</head>
+<body>
+<div class="page-header">
+    <h5>
+        <button class="btn btn-default btn-sm" onclick="history.back()">
+            <i class="ace-icon fa fa-arrow-left"></i>
+            返回
+        </button>
+    </h5>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <form class="form-horizontal" id="validation-form-hospital" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="hosId" th:value="@{hospital.hosId}">
+            <div class="widget-box">
+                <div class="widget-header">
+                    <h4 class="widget-title">医院信息</h4>
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse">
+                            <i class="ace-icon fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="widget-body">
+                    <div class="widget-main" style="min-height: 200px;">
+                        <div class="row">
+                            <div class="col-xs-3 form-group">
+                                <label class="control-label" for="form-hospital-name">医院名称<span
+                                        class="red">*</span></label>
+                                <input class="form-control" id="form-hospital-name" name="hosName" th:value="${hospital.hosName}"
+                                       placeholder="请输入代理商昵称">
+                            </div>
+
+                            <div class="col-xs-3  form-group">
+                                <label for="form-hospital-grade">医院等级<span class="red">*</span></label>
+                                <select id="form-hospital-grade" name="hosGrade" class="chosen-select form-control" data-placeholder="请输入医院等级"></select>
+                            </div>
+
+                            <div class="col-xs-3 form-group">
+                                <label class="control-label" for="form-hospital-city">所属市<span
+                                        class="red">*</span></label>
+                                <select  id="form-hospital-city" name="hosCity" class="chosen-select form-control" data-placeholder="请输入所属市"></select>
+                            </div>
+
+                            <div class="col-xs-3 form-group">
+                                <label class="control-label" for="form-hospital-area">所属县/区<span class="red">*</span></label>
+                                <select id="form-hospital-area" name="hosArea" disabled="disabled" class="chosen-select form-control" data-placeholder="请输入所属县/区"></select>
+                            </div>
+                        </div>
+
+                        <div class="space-12"></div>
+
+                        <div class="row">
+                            <div class="col-xs-6 form-group">
+                                <label class="control-label" for="form-hospital-hosLinkphone">联系电话</label>
+                                <input class="form-control" id="form-hospital-hosLinkphone" name="hosLinkphone" th:value="${hospital.hosLinkphone}"
+                                       placeholder="请输入联系电话"/>
+                            </div>
+
+                            <div class="col-xs-6 form-group">
+                                <label class="control-label" for="form-hospital-hosMedicine">特色医科</label>
+                                <input class="form-control" id="form-hospital-hosMedicine" name="hosMedicine" th:value="${hospital.hosMedicine}"
+                                       placeholder="请输入特色医科"/>
+                            </div>
+                        </div>
+
+                        <div class="space-12"></div>
+
+                        <div class="row">
+                            <div class="col-xs-6 form-group">
+                                <label class="control-label" for="form-hospital-awards">获得奖项</label>
+                                <textarea class="form-control" id="form-hospital-awards" name="awards"
+                                       th:value="${hospital.hosAwards}"
+                                       placeholder="请输入获得的奖项"/>
+                            </div>
+
+                            <div class="col-xs-6 form-group">
+                                <label class="control-label" for="form-hospital-desc">医院描述</label>
+                                <textarea class="form-control" id="form-hospital-desc" name="desc"
+                                       th:value="${hospital.hosDesc}"
+                                       placeholder="请输入医院描述"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-12"></div>
+            <div class="row">
+                <div class="col-xs-4 col-xs-offset-5">
+                    <input type="submit" class="btn btn-primary" id="agency_save">
+                    <input class="btn" type="reset" style="margin-left: 20px;" onclick="resetForm()" value="重置表单"></input>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    var scripts = [null, "assets/js/jquery-ui.custom.js",
+        "assets/js/date-time/bootstrap-datepicker.js",
+        "assets/js/date-time/bootstrap-timepicker.js",
+        "assets/js/date-time/daterangepicker.js",
+        "assets/js/jquery.colorbox.js",
+        "assets/js/jquery.validate.js",
+        "assets/js/jquery.validate_zh.js",
+        "assets/js/jquery.form.js",
+        "assets/js/bootbox.js",
+        "assets/js/chosen.jquery.js",
+        "assets/js/date-time/bootstrap-datetimepicker.js", null];
+
+    function resetForm() {
+        $(".chosen-select").val('').trigger("chosen:updated");
+    }
+
+    $('.page-content-area').ace_ajax('loadScripts', scripts, function () {
+        /**
+         * 设置选择框
+         */
+        $("#form-hospital-grade").chosen({allow_single_deselect:true});
+        myAjax("/base/getAllGrade", null, function(result){
+            if(result.code == 1) {
+                toSelectData(result.data, "data_id", "data_name");
+                //设置选择框中信息
+                createDepSelect(result.data);
+            }else{
+                showErrorInfo(result.message);
+            }
+        });
+
+        function createDepSelect(data) {
+            var html = '<option value="">&nbsp;</option>';
+            data.forEach(function(info) {
+                html += '<option value="'+info.data_id+'">'+info.data_name+'</option>';
+            });
+            $("#form-hospital-grade").html(html);
+            $("#form-hospital-grade").trigger("chosen:updated");
+            $("#form-hospital-grade").val('${hospital.hosGrade}').trigger("chosen:updated");
+        }
+
+        /**
+         * 加载市
+         */
+        $("#form-hospital-city").chosen({allow_single_deselect:true});
+        myAjax("/base/getAllCity", null, function(result){
+            if(result.code === 1) {
+                toSelectData(result.data, "city_id", "name");
+                //设置选择框中信息
+                createCitySelect(result.data);
+            }else{
+                showErrorInfo(result.message);
+            }
+        });
+        //创建选择的城市
+        function createCitySelect(data) {
+            var html = '<option value="">&nbsp;</option>';
+            data.forEach(function(info) {
+                html += '<option value="'+info.city_id+'">'+info.name+'</option>';
+            });
+            $("#form-hospital-city").html(html);
+            $("#form-hospital-city").trigger("chosen:updated");
+            $("#form-hospital-city").val('${hospital.hosCity}').trigger("chosen:updated");
+        }
+        //加载县
+        $("#form-hospital-area").chosen({allow_single_deselect:true});
+        $("#form-hospital-city").change(function() {
+            var val = $(this).val();
+            if(!val) {
+                $("#form-hospital-area").attr("disabled", true);
+                $("#form-hospital-area").val("").trigger("chosen:updated");
+                return;
+            }
+            myAjax("/base/getArea", {city_id: val}, function(result) {
+                if(result.code === 1) {
+                    toSelectData(result.data, "area_id", "name");
+                    //设置选择框中信息
+                    createAreaSelect(result.data);
+                }else{
+                    showErrorInfo(result.message);
+                }
+            })
+        });
+
+        function createAreaSelect(data) {
+            $("#form-hospital-area").attr("disabled", false);
+            var html = '<option value="">&nbsp;</option>';
+            data.forEach(function(info) {
+                html += '<option value="'+info.area_id+'">'+info.name+'</option>';
+            });
+            $("#form-hospital-area").html(html);
+            $("#form-hospital-area").trigger("chosen:updated");
+            $("#form-hospital-area").val('${hospital.hosArea}').trigger("chosen:updated");
+        }
+
+        //提交
+        $("#validation-form-hospital").submit(function (e) {
+            e.preventDefault();
+            var flag = $("#validation-form-hospital").valid();
+            if (flag) {
+                $(this).ajaxSubmit({
+                    url: projectUrl + "/hospital/saveHospital",
+                    type: "post",
+                    success: function (result) {
+                        bootbox.hideAll();
+                        if (result.code === 1) {
+                            showInfo("操作成功! 即将返回主列表", 3000);
+                            setTimeout(function(){
+                                history.back();
+                            }, 3000);
+                        } else {
+                            showError("操作失败！错误信息：" + result.message);
+                        }
+                    },
+                    error: function (err) {
+                        bootbox.hideAll();
+                        showErrorInfo("保存失败，" + err.statusText);
+                    }
+                });
+            }
+            return false;
+        });
+
+    })
+</script>
+</body>
+</html>

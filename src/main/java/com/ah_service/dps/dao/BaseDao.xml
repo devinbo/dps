@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ah_service.dps.dao.BaseDao">
+
+    <select id="getAllGrade" resultType="map">
+        select data_id, data_name from bs_basedict where dict_code = 'HOS01'
+    </select>
+
+    <select id="getAllCityByAnHui" resultType="map">
+        select name, city_id from city where province_id = (select province_id from province where name = '安徽省')
+    </select>
+
+    <select id="getArea" resultType="map">
+        select area_id, name from area where city_id = #{city_id}
+    </select>
+</mapper>

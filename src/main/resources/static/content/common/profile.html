@@ -1,0 +1,623 @@
+<title>个人中心 - 笑享租</title>
+
+<link rel="stylesheet" href="assets/css/select2.css" />
+<link rel="stylesheet" href="assets/css/bootstrap-datepicker3.css" />
+<link rel="stylesheet" href="assets/css/bootstrap-editable.css" />
+
+
+<div class="page-header">
+    <h1>
+        个人中心
+        <small>
+            <i class="ace-icon fa fa-angle-double-right"></i>
+            你可以在此修改你的个人信息
+        </small>
+    </h1>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="clearfix">
+            <div class="pull-left alert alert-success no-margin">
+                <button type="button" class="close" data-dismiss="alert">
+                    <i class="ace-icon fa fa-times"></i>
+                </button>
+                <i class="ace-icon fa fa-umbrella bigger-120 blue"></i>
+                点击下面的图片或者在配置文件的字段中编辑它们...
+            </div>
+        </div>
+        <div class="hr dotted"></div>
+
+        <div>
+            <div class="col-xs-12 col-sm-3 center">
+                <div>
+                    <span class="profile-picture">
+                        <img id="avatar" style="width: 180px; height: 200px;" class="editable img-responsive  editable-empty" alt="头像" src="assets/avatars/avatar2.png">
+                        <span id="avatar_upload" class="editable-container editable-inline" style="display: none">
+                            <div>
+                                <div class="editableform-loading" style="display: none;">
+                                    <i class="ace-icon fa fa-spinner fa-spin fa-2x light-blue"></i>
+                                </div>
+                                <form class="form-inline editableform" style="">
+                                    <div class="control-group form-group"><div>
+                                        <div class="editable-input editable-image">
+                                            <span>
+                                                <input type="hidden" name="avatar-hidden" value="">
+                                            </span>
+                                            <span>
+                                                <label class="ace-file-input ace-file-multiple" style="width: 150px;">
+                                                    <input type="file" name="avatar" accept="image/*">
+                                                    <span class="ace-file-container" data-title="选择图片">
+                                                        <span class="ace-file-name" data-title="No File ...">
+                                                            <i class=" ace-icon fa fa-picture-o"></i>
+                                                        </span>
+                                                    </span>
+                                                    <a class="remove" href="#">
+                                                        <i class=" ace-icon fa fa-times"></i>
+                                                    </a>
+                                                </label>
+                                            </span>
+                                        </div>
+                                        <div class="editable-buttons">
+                                            <button type="submit" class="btn btn-info editable-submit">
+                                                <i class="ace-icon fa fa-check"></i>
+                                            </button>
+                                            <button type="button" class="btn editable-cancel">
+                                                <i class="ace-icon fa fa-times"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                        <div class="editable-error-block help-block" style="display: none;"></div>
+                                    </div>
+                                </form>
+                            </div>
+                        </span>
+                    </span>
+
+                    <div class="space-4"></div>
+                    <div class="width-80 label label-info label-xlg arrowed-in arrowed-in-right">
+                        <div class="inline position-relative">
+                            <a href="javascript:void(0);" class="user-title-label dropdown-toggle" data-toggle="dropdown">
+                                <!--<i class="ace-icon fa fa-circle light-green"></i>-->
+                                &nbsp;
+                                <span class="white" id="loginUser_name"></span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="space-6"></div>
+
+                    <div class="profile-contact-info">
+                        <div class="profile-contact-links align-center">
+                            <a href="javascript:void(0)" class="btn btn-link" onclick="changeSysIcon()">
+                                <i class="ace-icon fa fa-plus-circle bigger-120 green"></i>
+                                更换头像
+                            </a>
+                            <a href="javascript:changeOwnIcon()" class="btn btn-link">
+                                <i class="ace-icon fa fa-upload bigger-120 pink"></i>
+                                上传本地头像
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="space-12"></div>
+
+                    <div id="sysicon" class="align-left" hidden>
+                        <ul class="ace-thumbnails clearfix">
+                            <li>
+                                <a href="javascript:void(0)"   class="cboxElement" onclick="selectSysIcon(this, 'assets/images/avatars/avatar.png')">
+                                    <img width="80" height="80" alt="80x80" src="assets/images/avatars/avatar.png">
+                                    <div class="text">
+                                        <div class="inner">
+                                            <i class="fa fa-check green bigger-240"></i>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)"  class="cboxElement" onclick="selectSysIcon(this, 'assets/images/avatars/avatar2.png')">
+                                    <img width="80" height="80" alt="80x80" src="assets/images/avatars/avatar2.png">
+                                    <div class="text">
+                                        <div class="inner">
+                                            <i class="fa fa-check green bigger-240"></i>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)"  class="cboxElement" onclick="selectSysIcon(this, 'assets/images/avatars/avatar3.png')">
+                                    <img width="80" height="80" alt="80x80" src="assets/images/avatars/avatar3.png">
+                                    <div class="text">
+                                        <div class="inner">
+                                            <i class="fa fa-check green bigger-240"></i>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="javascript:void(0)"  class="cboxElement" onclick="selectSysIcon(this, 'assets/images/avatars/avatar4.png')">
+                                    <img width="80" height="80" alt="80x80" src="assets/images/avatars/avatar4.png">
+                                    <div class="text">
+                                        <div class="inner">
+                                            <i class="fa fa-check green bigger-240"></i>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="space-12"></div>
+                        <div class="center">
+                            <button class="btn btn-white btn-default btn-round" onclick="cancelUpdIcon()">
+                                <i class="ace-icon fa fa-times red2"></i>
+                                取消
+                            </button>
+                            <button class="btn btn-white btn-default btn-round" onclick="confirmUpdIcon()">
+                                <i class="ace-icon fa fa-check green"></i>
+                                确认
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="col-xs-12 col-sm-9">
+
+                <div class="profile-user-info profile-user-info-striped">
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 姓名 </div>
+
+                        <div class="profile-info-value">
+                            <span class="editable editable-click" id="username"></span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 年龄 </div>
+
+                        <div class="profile-info-value">
+                            <span class="editable editable-click" id="age"></span>
+                        </div>
+                    </div>
+
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 生日 </div>
+
+                        <div class="profile-info-value">
+                            <span class="editable editable-click" id="birthday"></span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 手机号 </div>
+
+                        <div class="profile-info-value">
+                            <span class="editable editable-click" id="cellphone"></span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 座机电话 </div>
+
+                        <div class="profile-info-value">
+                            <span class="editable editable-click" id="telephone"></span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> 微信 </div>
+
+                        <div class="profile-info-value">
+                            <span class="editable editable-click" id="weixin"></span>
+                        </div>
+                    </div>
+
+                    <div class="profile-info-row">
+                        <div class="profile-info-name"> QQ </div>
+
+                        <div class="profile-info-value">
+                            <span class="editable editable-click" id="qq"></span>
+                        </div>
+                    </div>
+
+                    <!--<div class="profile-info-row">-->
+                        <!--<div class="profile-info-name"> About Me </div>-->
+
+                        <!--<div class="profile-info-value">-->
+                            <!--<span class="editable editable-click" id="about">Editable as WYSIWYG</span>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--[if lte IE 8]>
+<script src="../../assets/js/excanvas.js"></script>
+<![endif]-->
+<script type="text/javascript">
+    var scripts = [null,
+        "assets/js/jquery.ui.touch-punch.js",
+        "assets/js/jquery.gritter.js",
+        // "../../assets/js/jquery.easypiechart.js",
+        "assets/js/date-time/bootstrap-datepicker.js",
+        "assets/js/jquery.hotkeys.js",
+        "assets/js/bootstrap-wysiwyg.js",
+        "assets/js/fuelux/fuelux.spinner.js",
+        "assets/js/x-editable/bootstrap-editable.js",
+        "assets/js/x-editable/ace-editable.js",
+        "assets/js/jquery.maskedinput.js",
+        null]
+
+    $('.page-content-area').ace_ajax('loadScripts', scripts, function() {
+        //设置用户相关
+        setUserInfo();
+        function setUserInfo() {
+            if(userInfo.headicon) {
+                if(userInfo.headicon.indexOf("nginxImg")>-1) {
+                    $("#avatar").attr("src",  window.location.origin + "/" +userInfo.headicon);
+                }else{
+                    $("#avatar").attr("src",  projectUrl + "/" +userInfo.headicon);
+                }
+            }
+            $("#loginUser_name").html(userInfo.anick);
+            $("#username").html(userInfo.username);
+            $("#age").html(userInfo.age);
+            $("#birthday").html(userInfo.birthday);
+            $("#cellphone").html(userInfo.cellphone);
+            $("#telephone").html(userInfo.telephone);
+            $("#weixin").html(userInfo.weixin);
+            $("#qq").html(userInfo.qq);
+        }
+
+        //inline scripts related to this page
+        jQuery(function($) {
+            //editables on first profile page
+            $.fn.editable.defaults.mode = 'inline';
+            $.fn.editableform.loading = "<div class='editableform-loading'><i class='ace-icon fa fa-spinner fa-spin fa-2x light-blue'></i></div>";
+            $.fn.editableform.buttons = '<button type="submit" class="btn btn-info editable-submit"><i class="ace-icon fa fa-check"></i></button>' +
+                '<button type="button" class="btn editable-cancel"><i class="ace-icon fa fa-times"></i></button>';
+
+            $('#username').editable({
+                type: 'text',
+                name: 'username',
+                url: function(params){
+                    var newValue = params.value;
+                    var errMsg;
+                    myAjax("/user/updUserName", {username:newValue}, function(result) {
+                        if(result.code === 0) {
+                            errMsg = result.message;
+                        }else{
+                            userInfo = result.data;
+                        }
+                    });
+                    var d = new $.Deferred();
+                    if(errMsg) {
+                        return d.reject(errMsg);
+                    }
+                },
+            });
+            $('#age').editable({
+                type: 'spinner',
+                spinner : {
+                    min : 1,
+                    max : 99,
+                    step: 1,
+                    on_sides: true
+                    //,nativeUI: true//if true and browser support input[type=number], native browser control will be used
+                },
+                url: function(params){
+                    var newValue = params.value;
+                    var errMsg;
+                    myAjax("/user/updUserAge", {age:newValue}, function(result) {
+                        if(result.code === 0) {
+                            errMsg = result.message;
+                        }else{
+                            userInfo = result.data;
+                        }
+                    });
+                    if(errMsg) {
+                        var d = new $.Deferred();
+                        return d.reject(errMsg);
+                    }
+                },
+            });
+
+            $("#birthday").editable({
+                type: 'adate',
+                date: {
+                    //datepicker plugin options
+                    format: 'mm-dd',
+                    viewformat: 'mm-dd',
+                    language:"zh-CN",
+                    weekStart: 1
+                },
+                url: function(params){
+                    var newValue = params.value;
+                    var errMsg;
+                    myAjax("/user/updUserBirthday", {birthday:newValue}, function(result) {
+                        if(result.code === 0) {
+                            errMsg = result.message;
+                        }else{
+                            userInfo = result.data;
+                        }
+                    });
+                    if(errMsg) {
+                        var d = new $.Deferred();
+                        return d.reject(errMsg);
+                    }
+                },
+            });
+
+            $("#telephone").editable({
+                type: 'text',
+                name: 'telephone',
+                url: function(params){
+                    var newValue = params.value;
+                    var errMsg;
+                    myAjax("/user/updUserTelephone", {telephone:newValue}, function(result) {
+                        if(result.code === 0) {
+                            errMsg = result.message;
+                        }else{
+                            userInfo = result.data;
+                        }
+                    });
+                    if(errMsg) {
+                        var d = new $.Deferred();
+                        return d.reject(errMsg);
+                    }
+                },
+            })
+
+            $("#cellphone").editable({
+                type: 'text',
+                name: 'cellphone',
+                url: function(params){
+                    var newValue = params.value;
+                    var errMsg;
+                    myAjax("/user/updUserCellphone", {cellphone:newValue}, function(result) {
+                        if(result.code === 0) {
+                            errMsg = result.message;
+                        }else{
+                            userInfo = result.data;
+                        }
+                    });
+                    if(errMsg) {
+                        var d = new $.Deferred();
+                        return d.reject(errMsg);
+                    }
+                },
+            })
+
+            $("#weixin").editable({
+                type: 'text',
+                name: 'weixin',
+                url: function(params){
+                    var newValue = params.value;
+                    var errMsg;
+                    myAjax("/user/updUserWeixin", {weixin:newValue}, function(result) {
+                        if(result.code === 0) {
+                            errMsg = result.message;
+                        }else{
+                            userInfo = result.data;
+                        }
+                    });
+                    if(errMsg) {
+                        var d = new $.Deferred();
+                        return d.reject(errMsg);
+                    }
+                },
+            })
+
+            $("#qq").editable({
+                type: 'text',
+                name: 'qq',
+                url: function(params){
+                    var newValue = params.value;
+                    var errMsg;
+                    myAjax("/user/updUserQq", {qq:newValue}, function(result) {
+                        if(result.code === 0) {
+                            errMsg = result.message;
+                        }else{
+                            userInfo = result.data;
+                        }
+                    });
+                    if(errMsg) {
+                        var d = new $.Deferred();
+                        return d.reject(errMsg);
+                    }
+                },
+            })
+
+
+
+            try {
+                try {
+                    document.createElement('IMG').appendChild(document.createElement('B'));
+                } catch(e) {
+                    Image.prototype.appendChild = function(el){}
+                }
+
+                var last_gritter
+                $('#avatar').editable({
+                    type: 'image',
+                    name: 'avatar',
+                    value: null,
+                    // onblur: 'ignore',  //don't reset or hide editable onblur?!
+                    image: {
+                        //specify ace file input plugin's options here
+                        btn_choose: '选择照片',
+                        droppable: true,
+                        maxSize: 1100000,//~1000Kb
+                        //and a few extra ones here
+                        name: 'avatar',//put the field name here as well, will be used inside the custom plugin
+                        on_error : function(error_type) {//on_error function will be called when the selected file has a problem
+                            if(last_gritter) $.gritter.remove(last_gritter);
+                            if(error_type == 1) {//file format error
+                                last_gritter = $.gritter.add({
+                                    title: '格式错误!',
+                                    text: '请选择一个jpg|gif|png 格式的图片!',
+                                    class_name: 'gritter-error gritter-center'
+                                });
+                            } else if(error_type == 2) {//file size rror
+                                last_gritter = $.gritter.add({
+                                    title: '文件太大!',
+                                    text: '请选择不大于1M的照片!',
+                                    class_name: 'gritter-error gritter-center'
+                                });
+                            }
+                            else {//other error
+                            }
+                        },
+                        on_success : function() {
+                            $.gritter.removeAll();
+                        }
+                    },
+                    url: function(params) {
+                        //开始文件上传操作
+                        uploadFile();
+                    },
+                    success: function(response, newValue) {
+                    }
+                })
+            }catch(e) {}
+
+        });
+    });
+
+    //开始文件上传
+    function uploadFile() {
+        var submit_url = projectUrl + '/upload/uploadHeadIcon';//please modify submit_url accordingly
+        var deferred = null;
+        var avatar = '#avatar';
+        var value = $(avatar).next().find('input[type=hidden]:eq(0)').val();
+        if(!value || value.length == 0) {
+            deferred = new $.Deferred
+            deferred.resolve();
+            return deferred.promise();
+        }
+        var $form = $(avatar).next().find('.editableform:eq(0)')
+        var file_input = $form.find('input[type=file]:eq(0)');
+        var pk = $(avatar).attr('data-pk');//primary key to be sent to server
+        var ie_timeout = null
+        if( "FormData" in window ) {
+            var formData_object = new FormData();//create empty FormData object
+            //serialize our form (which excludes file inputs)
+            $.each($form.serializeArray(), function(i, item) {
+                //add them one by one to our FormData
+                formData_object.append(item.name, item.value);
+            });
+            //and then add files
+            $form.find('input[type=file]').each(function(){
+                var field_name = $(this).attr('name');
+                var files = $(this).data('ace_input_files');
+                if(files && files.length > 0) {
+                    formData_object.append(field_name, files[0]);
+                }
+            });
+            //append primary key to our formData
+            formData_object.append('pk', pk);
+            deferred = $.ajax({
+                url: submit_url,
+                type: 'POST',
+                processData: false,//important
+                contentType: false,//important
+                dataType: 'json',//server response type
+                data: formData_object
+            })
+        }
+        else {
+            deferred = new $.Deferred
+            var temporary_iframe_id = 'temporary-iframe-'+(new Date()).getTime()+'-'+(parseInt(Math.random()*1000));
+            var temp_iframe = $('<iframe id="'+temporary_iframe_id+'" name="'+temporary_iframe_id+'" \
+			frameborder="0" width="0" height="0" src="about:blank"\
+			style="position:absolute; z-index:-1; visibility: hidden;"></iframe>').insertAfter($form);
+            $form.append('<input type="hidden" name="temporary-iframe-id" value="'+temporary_iframe_id+'" />');
+            //append primary key (pk) to our form
+            $('<input type="hidden" name="pk" />').val(pk).appendTo($form);
+            temp_iframe.data('deferrer' , deferred);
+            //we save the deferred object to the iframe and in our server side response
+            //we use "temporary-iframe-id" to access iframe and its deferred object
+            $form.attr({
+                action: submit_url,
+                method: 'POST',
+                enctype: 'multipart/form-data',
+                target: temporary_iframe_id //important
+            });
+            $form.get(0).submit();
+            //if we don't receive any response after 30 seconds, declare it as failed!
+            ie_timeout = setTimeout(function(){
+                ie_timeout = null;
+                temp_iframe.attr('src', 'about:blank').remove();
+                deferred.reject({'status':'fail', 'message':'Timeout!'});
+            } , 30000);
+        }
+        deferred.done(function(result) {//success
+            if(result.code == 1) {
+                $(avatar).get(0).src = "http://" + window.location.hostname + "/" + result.data;
+                //设置到首页
+                $("#user_headicon").attr("src", "http://" + window.location.hostname + "/" + result.data);
+            } else {
+                showErrorInfo(result.message);
+            }
+            }).fail(function(result) {//failure
+                // alert("There was an error");
+                showErrorInfo("上传出错，请联系管理员解决");
+            }).always(function() {//called on both success and failure
+                if(ie_timeout) clearTimeout(ie_timeout);
+                ie_timeout = null;
+            });
+        return deferred.promise();
+    }
+
+    //更换系统头像
+    function changeSysIcon() {
+        $("#sysicon").slideDown(300);
+        $("#avatar_upload").hide();
+        $("#avatar").show();
+    }
+    //更换本地自己头像
+    function changeOwnIcon() {
+        // $("#avatar_upload").show();
+        // $("#avatar").hide();
+        $("#avatar").trigger("click");
+        //关闭
+        $("#sysicon").slideUp(300);
+    }
+
+    var currUrl;
+    //选择系统头像
+    function selectSysIcon($this, url) {
+        $("div.text").removeClass("text_hover");
+        $($this).find("div.text").addClass("text_hover");
+        currUrl = url;
+        $("#avatar").attr("src", currUrl);
+    }
+    //取消更新头像
+    function cancelUpdIcon() {
+        $("div.text").removeClass("text_hover");
+        currUrl = "";
+        $("#sysicon").slideUp(300);
+    }
+    //确认更新头像
+    function confirmUpdIcon() {
+        var imgSrc = $("#avatar").attr("src");
+        if(!imgSrc) {
+            showWarnInfo("请选择头像在进行确认操作");
+            return false;
+        }
+        //更新到后台
+        // imgSrc = imgSrc.substr(3);
+        myAjax("/user/updUserIcon", {imgSrc: imgSrc}, function(result){
+            if(result.code === 0) {
+                showErrorInfo(result.message);
+            }
+            //设置到首页
+            $("#user_headicon").attr("src", imgSrc);
+        });
+        //关闭
+        $("#sysicon").slideUp(300);
+    }
+</script>

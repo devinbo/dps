@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ah_service.dps.dao.HospitalDao">
+
+    <select id="hospitalList" resultType="hospital" parameterType="hospital">
+        select hos_id, hos_name, hos_medicine, hos_linkphone, hos_logo, hos_grade,
+         hos_desc, hos_awards, hos_city, hos_area, crtuser, crtdate from hospital
+         where recsts = 1
+    </select>
+    <select id="getHospitalDetail" resultType="hospital">
+        select hos_id, hos_name, hos_medicine, hos_linkphone, hos_logo, hos_grade,
+         hos_desc, hos_awards, hos_city, hos_area, crtuser, crtdate from hospital
+         where hos_id = #{id}
+    </select>
+</mapper>

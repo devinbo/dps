@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ah_service.dps.dao.UserDao">
+
+    <select id="checkNoAndPass" resultType="doctor" parameterType="doctor" resultMap="doctorMap">
+        select doc_id, doc_name, doc_loginno, doc_password, doc_sex,
+        doc_age, doc_speciality, doc_desc, doc_medicineId, doc_hospital, doc_headimg,
+        h.hos_id, h.hos_area, h.hos_city, h.hos_awards, h.hos_desc, h.hos_grade, h.hos_logo,
+        h.hos_linkphone, h.hos_medicine, h.hos_name
+        from doctor d left join hospital h on d.doc_hospital = h.hos_id
+        where d.doc_loginno = #{docLoginno} and d.doc_password = #{docPasswordMd5} and d.recsts = '1'
+    </select>
+
+    <resultMap id="doctorMap" type="doctor">
+        <id property="docId" column="doc_id"/>
+        <result property="docName" column="doc_name"/>
+        <result property="docLoginno" column="doc_loginno"/>
+        <result property="docSex" column="doc_sex"/>
+        <result property="docAge" column="doc_age"/>
+        <result property="docSpeciality" column="doc_speciality"/>
+        <result property="docDesc" column="doc_desc"/>
+        <result property="docMedicineId" column="doc_medicineId"/>
+        <result property="docHeadimg" column="doc_headimg"/>
+        <association property="docHospital" javaType="hospital">
+            <id column="hos_id" property="hosId"/>
+            <result column="hos_area" property="hosArea"/>
+            <result column="hos_city" property="hosCity"/>
+            <result column="hos_awards" property="hosAwards"/>
+            <result column="hos_desc" property="hosDesc"/>
+            <result column="hos_grade" property="hosGrade"/>
+            <result column="hos_logo" property="hosLogo"/>
+            <result column="hos_linkphone" property="hosLinkphone"/>
+            <result column="hos_medicine" property="hosMedicine"/>
+            <result column="hos_name" property="hosName"/>
+        </association>
+    </resultMap>
+</mapper>

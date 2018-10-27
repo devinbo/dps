@@ -1,0 +1,193 @@
+<title>医院维护</title>
+<!--列表样式信息-->
+<link rel="stylesheet" href="assets/css/ui.jqgrid.css"/>
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="space-6"></div>
+        <div class="well">
+            <form id="queryForm" class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-xs-3">
+                        <label for="hos_name" class="col-sm-3 control-label no-padding-right">医院名称:</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="hos_name" name="hos_name" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                        <label for="hos_city" class="col-sm-3 control-label no-padding-right">所属市:</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="hos_city" name="hos_city" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                        <label for="hos_area" class="col-sm-3 control-label no-padding-right">所属县:</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="hos_area" name="hos_area" class="form-control"/>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-3">
+                        <button class="btn btn-primary" type="button" onclick="queryData()">
+                            <i class="ace-icon fa fa-search bigger"></i>
+                            查询
+                        </button>
+                        <button class="btn" type="reset" onclick="resetForm()">
+                            <i class="ace-icon fa fa-refresh bigger"></i>
+                            重置
+                        </button>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+        <div class="space-12"></div>
+        <div class="fc-button-group" style="margin-left: 5px;">
+            <a id="custom_edit" data-rel="tooltip" title="" data-original-title="修改" href="javascript:void(0)" style="padding: 2px;"><i class="ace-icon fa fa-pencil blue bigger-125"></i></a>
+            <a id="custom_del" data-rel="tooltip" title="" data-original-title="删除" href="javascript:void(0)" style="padding: 2px;"><i class="ace-icon fa fa-trash-o red bigger-125"></i></a>
+        </div>
+        <table id="grid-table"></table>
+        <div id="grid-pager"></div>
+    </div><!-- /.col -->
+</div>
+
+<script type="text/javascript">
+    var scripts = [null, "assets/js/date-time/bootstrap-datepicker.js",
+        "assets/js/jqGrid/jquery.jqGrid.custom.js",
+        "assets/js/chosen.jquery.js",
+        "assets/js/jqGrid/i18n/grid.locale-cn.js", null]
+
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
+
+    //查询表单数据
+    function queryData() {
+        var formData = $("#queryForm").serializeJson();
+        jQuery(grid_selector).jqGrid("setGridParam", {postData: formData}).trigger("reloadGrid", [{page: 1}]);
+    }
+
+    function resetForm() {
+        // $(".chosen-select").val('').trigger("chosen:updated");
+    }
+
+    $('.page-content-area').ace_ajax('loadScripts', scripts, function () {
+        //inline scripts related to this page
+        jQuery(function ($) {
+            var parent_column = $(grid_selector).closest('[class*="col-"]');
+            $(window).on('resize.jqGrid', function () {
+                $(grid_selector).jqGrid('setGridWidth', parent_column.width());
+                $(grid_selector).jqGrid('setGridHeight', $(window).height() - 360);
+            });
+            //resize on sidebar collapse/expand
+
+            //重新进入时，销毁原有页面信息
+            $(document).one('ajaxloadstart.page', function (e) {
+                $.jgrid.gridDestroy(grid_selector);
+                $('.ui-jqdialog').remove();
+            });
+
+            $("#custom_edit").on("click", function(){
+                var ids = $(grid_selector).jqGrid('getGridParam','selarrrow');
+                if(!ids || ids.length === 0) {
+                    showWarnInfo("请先选择一条记录", 3000);
+                }else if(ids.length>1) {
+                    showWarnInfo("只能选择一条记录进行修改", 3000);
+                }else{
+                    toCustomUrl('server/custom/toCustomDetail?cid='+ids[0]);
+                }
+            });
+
+            //删除数据
+            $("#custom_del").on("click", function(){
+                var ids = $(grid_selector).jqGrid('getGridParam','selarrrow');
+                if(!ids || ids.length === 0) {
+                    showWarnInfo("请至少选择一条记录!");
+                }else{
+                    bootbox.confirm("确认删除选中的客户信息? ", function(result) {
+                        if(result) {
+                            myAjax("/custom/delCustom", {ids: ids.join(",")}, function(result) {
+                                if(result.code === 1) {
+                                    showSuccInfo("操作成功！");
+                                    queryData();
+                                }else{
+                                    showErrorInfo(result.message);
+                                }
+                            })
+                        }
+                    });
+                }
+            });
+
+            $(grid_selector).jqGrid({
+                url: projectUrl + "/hospital/hospitalList", //获取所用用户信息
+                datatype: "json",
+                mtype: 'POST',
+                height: $(window).height() - 360,
+                colNames: ['ID', '医院名称', '医院等级', '所在市', '所在县', '联系电话', '特色医科', '获取的奖项', '医院描述',
+                    '创建人', '创建时间'],
+                colModel: [
+                    {name: 'hosId', key: true, width: 60, hidden: true},
+                    {name: 'hosName', width: 100},
+                    {name: 'hosGrade', width: 100},
+                    {name: 'hosCity', width: 100},
+                    {name: 'hosArea', width: 80},
+                    {name: 'hosLinkphone', width: 100, editable: true},
+                    {name: 'hosMedicine', width: 150, editable: true},
+                    {name: 'hosAwards', width: 250, editable: true},
+                    {name: 'hosDesc', width: 350, editable: true},
+                    {name: 'crtuser', width: 150, editable: true},
+                    {name: 'crtdate', width: 200, editable: true},
+                ],
+                sortname: 'crtdate',
+                sortorder: 'desc',
+                ondblClickRow: queryDetail,
+                viewrecords: true,
+                rowNum: 10,
+                rowList: [10, 20, 30],
+                pager: pager_selector,
+                autowidth: true,
+                autoScroll: false,
+                shrinkToFit: false,
+                multiselect: true,
+                multiboxonly: true,
+                loadError: function (xhr, status, error) {
+                    showErrorInfo("服务异常;"+error);
+                },
+            });
+            jQuery(grid_selector).jqGrid('setFrozenColumns'); //固定右侧菜单
+            $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
+
+            //查看详细信息
+            function queryDetail(rowid) {
+                toCustomUrl('server/hospital/toHospitalDetail?id='+rowid);
+            }
+
+            /***以下为表单格式处理***/
+            function pickMaterial(val) {
+                if (val) {
+                    return '<button class="btn btn-link btn-xs"><i class="ace-icon fa fa-download bigger-110"></i>下载</button>';
+                }else{
+                    return '无资料';
+                }
+            }
+            function pickSource(val) {
+                if(val == "1") {
+                    return "APP"
+                }else if(val == "2") {
+                    return "官网"
+                }else if(val == "4") {
+                    return "微信"
+                }else{
+                    return "未知"
+                }
+            }
+            function pickType(val) {
+                if(val == "2") {
+                    return "学生"
+                }else{
+                    return "成人"
+                }
+            }
+        });
+    });
+</script>
