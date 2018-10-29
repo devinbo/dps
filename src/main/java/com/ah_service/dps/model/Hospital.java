@@ -8,15 +8,20 @@ public class Hospital {
   private Long hosId;
   private String hosName;
   private String hosGrade;
+  private String hosGradeName;
   private String hosLogo;
   private String hosCity;
+  private String hosCityName;
   private String hosArea;
+  private String hosAreaName;
   private String hosLinkphone;
   private String hosMedicine;
   private String hosAwards;
   private String hosDesc;
   private String crtuser;
   private String crtdate;
+  private String upduser;
+  private String update;
   private String recsts;
 
 
@@ -37,7 +42,6 @@ public class Hospital {
     this.hosName = hosName;
   }
 
-
   public String getHosGrade() {
     return hosGrade;
   }
@@ -46,6 +50,13 @@ public class Hospital {
     this.hosGrade = hosGrade;
   }
 
+  public String getHosGradeName() {
+    return hosGradeName;
+  }
+
+  public void setHosGradeName(String hosGradeName) {
+    this.hosGradeName = hosGradeName;
+  }
 
   public String getHosLogo() {
     return hosLogo;
@@ -133,4 +144,35 @@ public class Hospital {
     this.recsts = recsts;
   }
 
+  public String getUpduser() {
+    return upduser;
+  }
+
+  public void setUpduser(String upduser) {
+    this.upduser = upduser;
+  }
+
+  public String getUpdate() {
+    return update;
+  }
+
+  public void setUpdate(String update) {
+    this.update = update;
+  }
+
+  public String getHosCityName() {
+    return hosCityName;
+  }
+
+  public void setHosCityName(String hosCityName) {
+    this.hosCityName = hosCityName;
+  }
+
+  public String getHosAreaName() {
+    return hosAreaName;
+  }
+
+  public void setHosAreaName(String hosAreaName) {
+    this.hosAreaName = hosAreaName;
+  }
 }

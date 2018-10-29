@@ -10,4 +10,12 @@ public interface HospitalDao {
     List<Hospital> hospitalList(Hospital hospital);
 
     Hospital getHospitalDetail(@Param("id") String id);
+
+    int getSameHospital(Hospital hospital);
+
+    void addHospital(Hospital hospital);
+
+    void updHospital(Hospital hospital);
+
+    void delHospital(@Param("ids") List<String> ids);
 }

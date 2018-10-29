@@ -5,8 +5,12 @@
     <select id="checkNoAndPass" resultType="doctor" parameterType="doctor" resultMap="doctorMap">
         select doc_id, doc_name, doc_loginno, doc_password, doc_sex,
         doc_age, doc_speciality, doc_desc, doc_medicineId, doc_hospital, doc_headimg,
+        isadmin, ishosadmin,
         h.hos_id, h.hos_area, h.hos_city, h.hos_awards, h.hos_desc, h.hos_grade, h.hos_logo,
-        h.hos_linkphone, h.hos_medicine, h.hos_name
+        h.hos_linkphone, h.hos_medicine, h.hos_name,
+        (select data_name from bs_basedict where dict_code = 'HOS01' and data_code = h.hos_grade) hos_grade_name,
+        (select name from city where city_id = h.hos_city) hos_city_name,
+        (select name from area where area_id = h.hos_area) hos_area_name
         from doctor d left join hospital h on d.doc_hospital = h.hos_id
         where d.doc_loginno = #{docLoginno} and d.doc_password = #{docPasswordMd5} and d.recsts = '1'
     </select>
@@ -21,7 +25,9 @@
         <result property="docDesc" column="doc_desc"/>
         <result property="docMedicineId" column="doc_medicineId"/>
         <result property="docHeadimg" column="doc_headimg"/>
-        <association property="docHospital" javaType="hospital">
+        <result property="isadmin" column="isadmin"/>
+        <result property="ishosadmin" column="ishosadmin"/>
+        <association property="hospital" javaType="hospital">
             <id column="hos_id" property="hosId"/>
             <result column="hos_area" property="hosArea"/>
             <result column="hos_city" property="hosCity"/>
@@ -29,6 +35,9 @@
             <result column="hos_desc" property="hosDesc"/>
             <result column="hos_grade" property="hosGrade"/>
             <result column="hos_logo" property="hosLogo"/>
+            <result column="hos_grade_name" property="hosGradeName"/>
+            <result column="hos_city_name" property="hosCityName"/>
+            <result column="hos_area_name" property="hosAreaName"/>
             <result column="hos_linkphone" property="hosLinkphone"/>
             <result column="hos_medicine" property="hosMedicine"/>
             <result column="hos_name" property="hosName"/>

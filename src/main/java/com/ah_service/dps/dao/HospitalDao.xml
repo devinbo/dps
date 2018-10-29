@@ -4,12 +4,54 @@
 
     <select id="hospitalList" resultType="hospital" parameterType="hospital">
         select hos_id, hos_name, hos_medicine, hos_linkphone, hos_logo, hos_grade,
-         hos_desc, hos_awards, hos_city, hos_area, crtuser, crtdate from hospital
+        (select data_name from bs_basedict where dict_code = 'HOS01' and data_code = hos_grade) hos_grade_name,
+        (select name from city where city_id = hos_city) hos_city_name, hos_city,
+        (select name from area where area_id = hos_area) hos_area_name, hos_area,
+         hos_desc, hos_awards, crtuser, crtdate from hospital
          where recsts = 1
+        <if test="hosName !=null and hosName !=''">
+            and hos_name like concat('%', #{hosName}, '%')
+        </if>
+         <if test="hosCity != null and hosCity != ''">
+             and hos_city = #{hosCity}
+         </if>
+        <if test="hosArea != null and hosArea != ''">
+             and hos_area = #{hosArea}
+        </if>
     </select>
+
     <select id="getHospitalDetail" resultType="hospital">
         select hos_id, hos_name, hos_medicine, hos_linkphone, hos_logo, hos_grade,
+        (select data_name from bs_basedict where dict_code = 'HOS01' and data_code = hos_grade) hos_grade_name,
          hos_desc, hos_awards, hos_city, hos_area, crtuser, crtdate from hospital
          where hos_id = #{id}
     </select>
+
+    <select id="getSameHospital" resultType="int" parameterType="hospital">
+        SELECT count(*) from hospital where hos_name = #{hosName}
+        <if test="hosId != null  and hosId != ''">
+            and hos_id != #{hosId}
+        </if>
+    </select>
+
+    <insert id="addHospital" parameterType="hospital">
+        insert into hospital(hos_name, hos_grade, hos_logo, hos_city, hos_area, hos_linkphone,
+        hos_medicine, hos_awards, hos_desc, hos_logo, crtuser, crtdate)
+        VALUES (#{hosName}, #{hosGrade}, #{hosLogo}, #{hosCity}, #{hosArea}, #{hosLinkphone},
+        #{hosMedicine}, #{hosAwards}, #{hosDesc}, #{hosLogo}, #{crtuser}, now())
+    </insert>
+
+    <update id="updHospital" parameterType="hospital">
+        update hospital set hos_name = #{hosName}, hos_grade = #{hosGrade}, hos_city = #{hosCity},
+         hos_area = #{hosArea}, hos_linkphone = #{hosLinkphone}, hos_medicine = #{hosMedicine}, hos_awards = #{hosAwards},
+         <if test="hosLogo != null and hosLogo != ''">
+             hos_logo = #{hosLogo},
+         </if>
+         hos_desc = #{hosDesc}, upduser = #{upduser}, `update` = now() where hos_id = #{hosId}
+    </update>
+
+    <update id="delHospital">
+        update hospital set recsts = 'D' where hos_id
+        in <foreach collection="ids" separator="," open="(" close=")" item="id">#{id}</foreach>
+    </update>
 </mapper>

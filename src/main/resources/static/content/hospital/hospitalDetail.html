@@ -25,7 +25,7 @@
 <div class="row">
     <div class="col-xs-12">
         <form class="form-horizontal" id="validation-form-hospital" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="hosId" th:value="@{hospital.hosId}">
+            <input type="hidden" name="hosId" th:value='${hospital.hosId}'>
             <div class="widget-box">
                 <div class="widget-header">
                     <h4 class="widget-title">医院信息</h4>
@@ -83,16 +83,23 @@
                         <div class="row">
                             <div class="col-xs-6 form-group">
                                 <label class="control-label" for="form-hospital-awards">获得奖项</label>
-                                <textarea class="form-control" id="form-hospital-awards" name="awards"
-                                       th:value="${hospital.hosAwards}"
+                                <textarea class="form-control" id="form-hospital-awards" name="hosAwards"
+                                       th:value='${hospital.hosAwards}'
+                                          th:text='${hospital.hosAwards}'
                                        placeholder="请输入获得的奖项"/>
                             </div>
-
                             <div class="col-xs-6 form-group">
                                 <label class="control-label" for="form-hospital-desc">医院描述</label>
-                                <textarea class="form-control" id="form-hospital-desc" name="desc"
-                                       th:value="${hospital.hosDesc}"
+                                <textarea class="form-control" id="form-hospital-desc" name="hosDesc"
+                                       th:value='${hospital.hosDesc}' th:text='${hospital.hosDesc}'
                                        placeholder="请输入医院描述"/>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-6 form-group">
+                                <label class="control-label" for="form-hospital-logo">公司logo</label>
+                                <input multiple="" type="file" name="logoFile" id="form-hospital-logo"/>
                             </div>
                         </div>
                     </div>
@@ -103,7 +110,7 @@
             <div class="row">
                 <div class="col-xs-4 col-xs-offset-5">
                     <input type="submit" class="btn btn-primary" id="agency_save">
-                    <input class="btn" type="reset" style="margin-left: 20px;" onclick="resetForm()" value="重置表单"></input>
+                    <input class="btn" type="reset" style="margin-left: 20px;" onclick="resetForm()" value="重置表单"/>
                 </div>
             </div>
         </form>
@@ -149,8 +156,28 @@
             });
             $("#form-hospital-grade").html(html);
             $("#form-hospital-grade").trigger("chosen:updated");
-            $("#form-hospital-grade").val('${hospital.hosGrade}').trigger("chosen:updated");
+            $("#form-hospital-grade").val('[[${hospital.hosGrade}]]').trigger("chosen:updated");
         }
+
+        //加载县
+        $("#form-hospital-area").chosen({allow_single_deselect:true});
+        $("#form-hospital-city").change(function() {
+            var val = $(this).val();
+            if(!val) {
+                $("#form-hospital-area").attr("disabled", true);
+                $("#form-hospital-area").val("").trigger("chosen:updated");
+                return;
+            }
+            myAjax("/base/getArea", {city_id: val}, function(result) {
+                if(result.code === 1) {
+                    toSelectData(result.data, "area_id", "name");
+                    //设置选择框中信息
+                    createAreaSelect(result.data);
+                }else{
+                    showErrorInfo(result.message);
+                }
+            })
+        });
 
         /**
          * 加载市
@@ -173,27 +200,13 @@
             });
             $("#form-hospital-city").html(html);
             $("#form-hospital-city").trigger("chosen:updated");
-            $("#form-hospital-city").val('${hospital.hosCity}').trigger("chosen:updated");
-        }
-        //加载县
-        $("#form-hospital-area").chosen({allow_single_deselect:true});
-        $("#form-hospital-city").change(function() {
-            var val = $(this).val();
-            if(!val) {
-                $("#form-hospital-area").attr("disabled", true);
-                $("#form-hospital-area").val("").trigger("chosen:updated");
-                return;
+            $("#form-hospital-city").val('[[${hospital.hosCity}]]').trigger("chosen:updated");
+            if('[[${hospital.hosCity}]]') {
+                console.log("主动触发change");
+               //主动触发change；
+               $("#form-hospital-city").trigger('change');
             }
-            myAjax("/base/getArea", {city_id: val}, function(result) {
-                if(result.code === 1) {
-                    toSelectData(result.data, "area_id", "name");
-                    //设置选择框中信息
-                    createAreaSelect(result.data);
-                }else{
-                    showErrorInfo(result.message);
-                }
-            })
-        });
+        }
 
         function createAreaSelect(data) {
             $("#form-hospital-area").attr("disabled", false);
@@ -203,7 +216,7 @@
             });
             $("#form-hospital-area").html(html);
             $("#form-hospital-area").trigger("chosen:updated");
-            $("#form-hospital-area").val('${hospital.hosArea}').trigger("chosen:updated");
+            $("#form-hospital-area").val('[[${hospital.hosArea}]]').trigger("chosen:updated");
         }
 
         //提交
@@ -234,6 +247,36 @@
             return false;
         });
 
+        if ('[[${hospital.hosLogo}]]') {
+            $('#form-hospital-logo').hide();
+            var hosLogo = '[[${hospital.hosLogo}]]';
+            $('#form-hospital-logo').after('<a onclick="openFile(\''+hosLogo+'\')" class="blue2" style="display:block; cursor: pointer">文件已上传，点击查看</a><a class="orange reloadFile" style="cursor: pointer">重新上传</a>');
+        } else {
+            toFile($('#form-hospital-logo'));
+        }
+
+        $(".reloadFile").on("click", function(){
+            $(this).parent().find("a").hide();
+            $(this).hide();
+            $(this).parent().find("input[type=file]").show();
+            toFile($(this).parent().find("input[type=file]"));
+        });
+
+        function toFile($obj) {
+            $obj.ace_file_input({
+                style: 'well',
+                btn_choose: 'Drop files here or click to choose',
+                btn_change: null,
+                no_icon: 'ace-icon fa fa-cloud-upload',
+                droppable: true,
+                thumbnail: 'small',
+                preview_error : function(filename, error_code) {
+                }
+            }).on('change', function(){
+                //console.log($(this).data('ace_input_files'));
+                //console.log($(this).data('ace_input_method'));
+            });
+        }
     })
 </script>
 </body>

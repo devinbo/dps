@@ -1,14 +1,18 @@
 package com.ah_service.dps.service.impl;
 
 import com.ah_service.dps.dao.HospitalDao;
+import com.ah_service.dps.model.Doctor;
 import com.ah_service.dps.model.Hospital;
 import com.ah_service.dps.pojo.Page;
+import com.ah_service.dps.pojo.Result;
 import com.ah_service.dps.pojo.ResultPage;
 import com.ah_service.dps.service.HospitalService;
+import com.ah_service.dps.utils.PublicUtil;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
@@ -16,6 +20,9 @@ public class HospitalServiceImpl implements HospitalService {
 
     @Autowired
     private HospitalDao hospitalDao;
+
+    @Autowired
+    private HttpSession session;
 
     @Override
     public ResultPage<Hospital> hospitalList(Hospital hospital, Page page) {
@@ -29,5 +36,32 @@ public class HospitalServiceImpl implements HospitalService {
         return hospitalDao.getHospitalDetail(id);
     }
 
+    @Override
+    public Result saveHospital(Hospital hospital) {
+        //校验是否重名
+        int count = hospitalDao.getSameHospital(hospital);
+        if(count > 0) {
+            return new Result(0, "医院名称重复，请重新输入");
+        }
+        Doctor loginDoctor = getLoginDoctor();
+        hospital.setCrtuser(loginDoctor.getDocLoginno());
+        hospital.setUpduser(loginDoctor.getDocLoginno());
+        if(hospital.getHosId() == null) {
+            hospitalDao.addHospital(hospital);
+        }else{
+            hospitalDao.updHospital(hospital);
+        }
+        return new Result();
+    }
+
+    @Override
+    public Result delHospital(String ids) {
+        hospitalDao.delHospital(PublicUtil.toListByIds(ids));
+        return new Result();
+    }
+
+    public Doctor getLoginDoctor() {
+        return (Doctor) session.getAttribute("user");
+    }
 
 }

@@ -189,4 +189,28 @@ public class Doctor {
   public void setDocHeadimg(String docHeadimg) {
     this.docHeadimg = docHeadimg;
   }
+
+  @Override
+  public String toString() {
+    return "Doctor{" +
+            "docId=" + docId +
+            ", docName='" + docName + '\'' +
+            ", docLoginno='" + docLoginno + '\'' +
+            ", docPassword='" + docPassword + '\'' +
+            ", docPasswordMd5='" + docPasswordMd5 + '\'' +
+            ", docSex='" + docSex + '\'' +
+            ", docAge='" + docAge + '\'' +
+            ", docSpeciality='" + docSpeciality + '\'' +
+            ", docDesc='" + docDesc + '\'' +
+            ", docMedicineId=" + docMedicineId +
+            ", docHospital=" + docHospital +
+            ", ishosadmin=" + ishosadmin +
+            ", isadmin=" + isadmin +
+            ", docHeadimg='" + docHeadimg + '\'' +
+            ", crtuser='" + crtuser + '\'' +
+            ", crtdate='" + crtdate + '\'' +
+            ", recsts='" + recsts + '\'' +
+            ", hospital=" + hospital +
+            '}';
+  }
 }

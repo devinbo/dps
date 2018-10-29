@@ -11,15 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpSession;
 
+//import javax.servlet.http.HttpSession;
+
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private HttpSession session;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Result<Doctor> login(Doctor doctor) {
@@ -30,9 +29,10 @@ public class UserController {
     }
 
     @RequestMapping(value = "/getUserInfo")
-    public Result<Doctor> getUserInfo() {
+    public Result<Doctor> getUserInfo(HttpSession session) {
         Doctor doctor = (Doctor) session.getAttribute("user");
         return new Result<>(1, "查询成功", doctor);
     }
+
 
 }
