@@ -1,7 +1,9 @@
 package com.ah_service.dps.controller;
 
 import com.ah_service.dps.model.Doctor;
+import com.ah_service.dps.pojo.Page;
 import com.ah_service.dps.pojo.Result;
+import com.ah_service.dps.pojo.ResultPage;
 import com.ah_service.dps.service.UserService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,5 +36,9 @@ public class UserController {
         return new Result<>(1, "查询成功", doctor);
     }
 
+    @RequestMapping("/doctorList")
+    public ResultPage<Doctor> doctorList(Doctor doctor, Page page) {
+        return userService.doctorList(doctor, page);
+    }
 
 }
