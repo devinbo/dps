@@ -25,7 +25,7 @@
 <div class="row">
     <div class="col-xs-12">
         <form class="form-horizontal" id="validation-form-hospital" method="post" enctype="multipart/form-data">
-            <input type="hidden" name="hosId" th:value='${hospital.hosId}'>
+            <input type="hidden" name="hosId" th:value='${hospital?.hosId}'>
             <div class="widget-box">
                 <div class="widget-header">
                     <h4 class="widget-title">医院信息</h4>
@@ -41,7 +41,7 @@
                             <div class="col-xs-3 form-group">
                                 <label class="control-label" for="form-hospital-name">医院名称<span
                                         class="red">*</span></label>
-                                <input class="form-control" id="form-hospital-name" name="hosName" th:value="${hospital.hosName}"
+                                <input class="form-control" id="form-hospital-name" name="hosName" th:value="${hospital?.hosName}"
                                        placeholder="请输入代理商昵称">
                             </div>
 
@@ -67,13 +67,13 @@
                         <div class="row">
                             <div class="col-xs-6 form-group">
                                 <label class="control-label" for="form-hospital-hosLinkphone">联系电话</label>
-                                <input class="form-control" id="form-hospital-hosLinkphone" name="hosLinkphone" th:value="${hospital.hosLinkphone}"
+                                <input class="form-control" id="form-hospital-hosLinkphone" name="hosLinkphone" th:value="${hospital?.hosLinkphone}"
                                        placeholder="请输入联系电话"/>
                             </div>
 
                             <div class="col-xs-6 form-group">
                                 <label class="control-label" for="form-hospital-hosMedicine">特色医科</label>
-                                <input class="form-control" id="form-hospital-hosMedicine" name="hosMedicine" th:value="${hospital.hosMedicine}"
+                                <input class="form-control" id="form-hospital-hosMedicine" name="hosMedicine" th:value="${hospital?.hosMedicine}"
                                        placeholder="请输入特色医科"/>
                             </div>
                         </div>
@@ -84,14 +84,14 @@
                             <div class="col-xs-6 form-group">
                                 <label class="control-label" for="form-hospital-awards">获得奖项</label>
                                 <textarea class="form-control" id="form-hospital-awards" name="hosAwards"
-                                       th:value='${hospital.hosAwards}'
-                                          th:text='${hospital.hosAwards}'
+                                       th:value='${hospital?.hosAwards}'
+                                          th:text='${hospital?.hosAwards}'
                                        placeholder="请输入获得的奖项"/>
                             </div>
                             <div class="col-xs-6 form-group">
                                 <label class="control-label" for="form-hospital-desc">医院描述</label>
                                 <textarea class="form-control" id="form-hospital-desc" name="hosDesc"
-                                       th:value='${hospital.hosDesc}' th:text='${hospital.hosDesc}'
+                                       th:value='${hospital?.hosDesc}' th:text='${hospital?.hosDesc}'
                                        placeholder="请输入医院描述"/>
                             </div>
                         </div>
@@ -156,7 +156,7 @@
             });
             $("#form-hospital-grade").html(html);
             $("#form-hospital-grade").trigger("chosen:updated");
-            $("#form-hospital-grade").val('[[${hospital.hosGrade}]]').trigger("chosen:updated");
+            $("#form-hospital-grade").val('[[${hospital?.hosGrade}]]').trigger("chosen:updated");
         }
 
         //加载县
@@ -200,8 +200,8 @@
             });
             $("#form-hospital-city").html(html);
             $("#form-hospital-city").trigger("chosen:updated");
-            $("#form-hospital-city").val('[[${hospital.hosCity}]]').trigger("chosen:updated");
-            if('[[${hospital.hosCity}]]') {
+            $("#form-hospital-city").val('[[${hospital?.hosCity}]]').trigger("chosen:updated");
+            if('[[${hospital?.hosCity}]]') {
                 console.log("主动触发change");
                //主动触发change；
                $("#form-hospital-city").trigger('change');
@@ -216,7 +216,7 @@
             });
             $("#form-hospital-area").html(html);
             $("#form-hospital-area").trigger("chosen:updated");
-            $("#form-hospital-area").val('[[${hospital.hosArea}]]').trigger("chosen:updated");
+            $("#form-hospital-area").val('[[${hospital?.hosArea}]]').trigger("chosen:updated");
         }
 
         //提交
@@ -247,9 +247,10 @@
             return false;
         });
 
-        if ('[[${hospital.hosLogo}]]') {
+        if ('[[${hospital?.hosLogo}]]') {
             $('#form-hospital-logo').hide();
-            var hosLogo = '[[${hospital.hosLogo}]]';
+            var hosLogo = '[[${hospital?.hosLogo}]]';
+            console.log(hosLogo);
             $('#form-hospital-logo').after('<a onclick="openFile(\''+hosLogo+'\')" class="blue2" style="display:block; cursor: pointer">文件已上传，点击查看</a><a class="orange reloadFile" style="cursor: pointer">重新上传</a>');
         } else {
             toFile($('#form-hospital-logo'));

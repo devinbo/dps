@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>医生维护</title>
+    <!--列表样式信息-->
+    <link rel="stylesheet" href="assets/css/ui.jqgrid.css"/>
+    <link rel="stylesheet" href="assets/css/chosen.css" />
+    <link rel="stylesheet" href="assets/css/select2.css"/>
+</head>
+
+<body>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="space-6"></div>
+            <div class="well">
+                <form id="queryForm" class="form-horizontal">
+                    <div class="form-group">
+                        <div class="col-xs-3">
+                            <label for="hos_name" class="col-sm-3 control-label no-padding-right">医生名称:</label>
+                            <div class="col-sm-9">
+                                <input type="text" id="hos_name" name="hos_name" class="form-control" data-placeholder="请输入医生名称"/>
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <label for="hos_city" class="col-sm-3 control-label no-padding-right">所属科室:</label>
+                            <div class="col-sm-9">
+                                <select  id="hos_city" name="hosCity" class="chosen-select form-control" data-placeholder="请输入所属科室"></select>
+                            </div>
+                        </div>
+
+                        <div class="col-xs-3">
+                            <button class="btn btn-primary" type="button" onclick="queryData()">
+                                <i class="ace-icon fa fa-search bigger"></i>
+                                查询
+                            </button>
+                            <button class="btn" type="reset" onclick="resetForm()">
+                                <i class="ace-icon fa fa-refresh bigger"></i>
+                                重置
+                            </button>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+            <div class="space-12"></div>
+            <div class="fc-button-group" style="margin-left: 5px;">
+                <a id="hospital_add" data-rel="tooltip" title="" data-original-title="添加" href="javascript:void(0)" style="padding: 2px;"><i class="ace-icon fa fa-plus-circle purple bigger-125"></i></a>
+                <a id="hospital_edit" data-rel="tooltip" title="" data-original-title="修改" href="javascript:void(0)" style="padding: 2px;"><i class="ace-icon fa fa-pencil blue bigger-125"></i></a>
+                <a id="hospital_del" data-rel="tooltip" title="" data-original-title="删除" href="javascript:void(0)" style="padding: 2px;"><i class="ace-icon fa fa-trash-o red bigger-125"></i></a>
+            </div>
+            <table id="grid-table"></table>
+            <div id="grid-pager"></div>
+        </div><!-- /.col -->
+    </div>
+
+    <script type="text/javascript">
+        var scripts = [null, "assets/js/date-time/bootstrap-datepicker.js",
+            "assets/js/jqGrid/jquery.jqGrid.custom.js",
+            "assets/js/chosen.jquery.js",
+            "assets/js/jqGrid/i18n/grid.locale-cn.js", null]
+
+        var grid_selector = "#grid-table";
+        var pager_selector = "#grid-pager";
+
+        //查询表单数据
+        function queryData() {
+            var formData = $("#queryForm").serializeJson();
+            jQuery(grid_selector).jqGrid("setGridParam", {postData: formData}).trigger("reloadGrid", [{page: 1}]);
+        }
+
+        function resetForm() {
+            // $(".chosen-select").val('').trigger("chosen:updated");
+        }
+
+        $('.page-content-area').ace_ajax('loadScripts', scripts, function () {
+            //inline scripts related to this page
+            jQuery(function ($) {
+                var parent_column = $(grid_selector).closest('[class*="col-"]');
+                $(window).on('resize.jqGrid', function () {
+                    $(grid_selector).jqGrid('setGridWidth', parent_column.width());
+                    $(grid_selector).jqGrid('setGridHeight', $(window).height() - 360);
+                });
+                //resize on sidebar collapse/expand
+
+                //重新进入时，销毁原有页面信息
+                $(document).one('ajaxloadstart.page', function (e) {
+                    $.jgrid.gridDestroy(grid_selector);
+                    $('.ui-jqdialog').remove();
+                });
+
+                //新增数据
+                $("#hospital_add").on("click", function () {
+                    toCustomUrl('page/hospital/hospitalDetail');
+                });
+
+                //修改数据
+                $("#hospital_edit").on("click", function(){
+                    var ids = $(grid_selector).jqGrid('getGridParam','selarrrow');
+                    if(!ids || ids.length === 0) {
+                        showWarnInfo("请先选择一条记录", 3000);
+                    }else if(ids.length>1) {
+                        showWarnInfo("只能选择一条记录进行修改", 3000);
+                    }else{
+                        toCustomUrl('server/hospital/toHospitalDetail?id='+ids[0]);
+                    }
+                });
+
+                //删除数据
+                $("#hospital_del").on("click", function(){
+                    var ids = $(grid_selector).jqGrid('getGridParam','selarrrow');
+                    if(!ids || ids.length === 0) {
+                        showWarnInfo("请至少选择一条记录!");
+                    }else{
+                        bootbox.confirm("确认删除选中的客户信息? ", function(result) {
+                            if(result) {
+                                myAjax("/hospital/delHospital", {ids: ids.join(",")}, function(result) {
+                                    if(result.code === 1) {
+                                        showSuccInfo("操作成功！");
+                                        queryData();
+                                    }else{
+                                        showErrorInfo(result.message);
+                                    }
+                                })
+                            }
+                        });
+                    }
+                });
+
+                $(grid_selector).jqGrid({
+                    url: projectUrl + "/user/doctorList", //获取所用用户信息
+                    datatype: "json",
+                    mtype: 'POST',
+                    height: $(window).height() - 360,
+                    colNames: ['ID', '医生名称', '登录账号', '性别', '年龄', '特长', '所属医科', '所属医院', '个人头像',
+                        '个人简介', '创建人', '创建时间'],
+                    colModel: [
+                        {name: 'docId', key: true, width: 60, hidden: true},
+                        {name: 'docName', width: 100},
+                        {name: 'docLoginno', width: 100},
+                        {name: 'docSex', width: 100},
+                        {name: 'docAge', width: 80},
+                        {name: 'docSpeciality', width: 100, editable: true},
+                        {name: 'docMedicineId', width: 150, editable: true},
+                        {name: 'docHospital', width: 200, editable: true},
+                        {name: 'docHeadimg', width: 120, editable: true},
+                        {name: 'docDesc', width: 350, editable: true},
+                        {name: 'crtuser', width: 150, editable: true},
+                        {name: 'crtdate', width: 200, editable: true},
+                    ],
+                    sortname: 'crtdate',
+                    sortorder: 'desc',
+                    ondblClickRow: queryDetail,
+                    viewrecords: true,
+                    rowNum: 10,
+                    rowList: [10, 20, 30],
+                    pager: pager_selector,
+                    autowidth: true,
+                    autoScroll: false,
+                    shrinkToFit: false,
+                    multiselect: true,
+                    multiboxonly: true,
+                    loadError: function (xhr, status, error) {
+                        showErrorInfo("服务异常;"+error);
+                    },
+                });
+                jQuery(grid_selector).jqGrid('setFrozenColumns'); //固定右侧菜单
+                $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
+
+                //查看详细信息
+                function queryDetail(rowid) {
+                    toCustomUrl('server/hospital/toHospitalDetail?id='+rowid);
+                }
+
+                //加载县
+                $("#hos_city").chosen({allow_single_deselect:true});
+                $("#hos_city").change(function() {
+                    var val = $(this).val();
+                    if(!val) {
+                        $("#hos_area").attr("disabled", true);
+                        $("#hos_area").val("").trigger("chosen:updated");
+                        return;
+                    }
+                    myAjax("/base/getArea", {city_id: val}, function(result) {
+                        if(result.code === 1) {
+                            toSelectData(result.data, "area_id", "name");
+                            //设置选择框中信息
+                            createAreaSelect(result.data);
+                        }else{
+                            showErrorInfo(result.message);
+                        }
+                    })
+                });
+
+                /**
+                 * 加载市
+                 */
+                $("#hos_area").chosen({allow_single_deselect:true});
+                myAjax("/base/getAllCity", null, function(result){
+                    if(result.code === 1) {
+                        toSelectData(result.data, "city_id", "name");
+                        //设置选择框中信息
+                        createCitySelect(result.data);
+                    }else{
+                        showErrorInfo(result.message);
+                    }
+                });
+                //创建选择的城市
+                function createCitySelect(data) {
+                    var html = '<option value="">&nbsp;</option>';
+                    data.forEach(function(info) {
+                        html += '<option value="'+info.city_id+'">'+info.name+'</option>';
+                    });
+                    $("#hos_city").html(html);
+                    $("#hos_city").trigger("chosen:updated");
+                }
+
+                function createAreaSelect(data) {
+                    $("#hos_area").attr("disabled", false);
+                    var html = '<option value="">&nbsp;</option>';
+                    data.forEach(function(info) {
+                        html += '<option value="'+info.area_id+'">'+info.name+'</option>';
+                    });
+                    $("#hos_area").html(html);
+                    $("#hos_area").trigger("chosen:updated");
+                }
+            });
+        });
+    </script>
+</body>
