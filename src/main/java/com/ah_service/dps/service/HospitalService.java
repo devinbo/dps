@@ -14,4 +14,6 @@ public interface HospitalService {
     Result saveHospital(Hospital hospital);
 
     Result delHospital(String ids);
+
+    Result getAllDivision();
 }

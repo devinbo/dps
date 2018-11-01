@@ -145,16 +145,52 @@
 
             <li th:style="${'display:'+((session.user.isadmin == null || !session.user.isadmin) ? 'none': 'block')}">
                 <a href="#" class="dropdown-toggle">
-                    <i class="menu-icon fa fa-list"></i>
+                    <i class="menu-icon fa fa-heart"></i>
                     <span class="menu-text">医院系统</span>
                     <b class="arrow fa fa-angle-down"></b>
                 </a>
                 <b class="arrow"></b>
                 <ul class="submenu">
                     <li class="">
-                        <a data-url="page/tables" href="#page/hospital/hospitallist">
+                        <a data-url="page/hospital/hospitallist" href="#page/hospital/hospitallist">
                             <i class="menu-icon fa fa-caret-right"></i>
                             医院管理
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                </ul>
+            </li>
+
+            <li th:style="${'display:'+((session.user.isadmin == null && session.user.ishosadmin == null) ? 'none': 'block')}">
+                <a href="#" class="dropdown-toggle">
+                    <i class="menu-icon fa fa-user"></i>
+                    <span class="menu-text">医生系统</span>
+                    <b class="arrow fa fa-angle-down"></b>
+                </a>
+                <b class="arrow"></b>
+                <ul class="submenu">
+                    <li class="">
+                        <a data-url="page/doctor/doctorlist" href="#page/doctor/doctorlist">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            医生维护
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                </ul>
+            </li>
+
+            <li>
+                <a href="#" class="dropdown-toggle">
+                    <i class="menu-icon fa fa-users"></i>
+                    <span class="menu-text">便民服务</span>
+                    <b class="arrow fa fa-angle-down"></b>
+                </a>
+                <b class="arrow"></b>
+                <ul class="submenu">
+                    <li class="">
+                        <a data-url="page/reply/reply" href="#page/reply/reply">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            患者留言
                         </a>
                         <b class="arrow"></b>
                     </li>

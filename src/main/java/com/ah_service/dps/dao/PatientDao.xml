@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.ah_service.dps.dao.PatientDao">
+
+    <insert id="sendMsg" parameterType="wjwRepFordocMsg">
+        insert into wjw_rep_fordoc_msg(rep_msg_info, rep_msg_type, msg_docuser_id, msg_id, rep_msg_time)
+        VALUES (#{repMsgInfo}, '2', #{msgDocuserId}, #{msgId}, now())
+    </insert>
+
+    <select id="getFordocMsg" resultType="wjwFordocMsg" parameterType="wjwFordocMsg">
+        select m.msg_id, msg_info, msg_key, msg_user_id, msg_doc_id, msg_crttime, msg_updtime, rep_flag,
+        rep.rep_msg_info, rep.rep_msg_time
+        from wjw_fordoc_msg m left join wjw_rep_fordoc_msg rep on m.msg_id = rep.msg_id
+        where 1 = 1
+        <if test="repFlag != null and repFlag !=''">
+            and rep_flag = #{repFlag}
+        </if>
+        <if test="msgCrttime != null and msgCrttime != ''">
+            and DATE_FORMAT(msgCrttime, '%Y-%m-%d') = #{msgCrttime}
+        </if>
+        order by msg_crttime desc
+    </select>
+</mapper>

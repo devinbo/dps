@@ -9,7 +9,7 @@ import java.util.Map;
  * 用于接收前端传递的参数
  */
 public class Page<T> extends PageInfo<T> {
-    private int page; //当前页
+    private int page = 1; //当前页
     private int rows; //每页显示的行数
     private long total; //总记录数
     private boolean _search; //是否进行搜索操作
@@ -62,7 +62,7 @@ public class Page<T> extends PageInfo<T> {
     }
 
     public void setRows(int rows) {
-        this.setPageSize(10);
+        this.setPageSize(rows);
         this.rows = rows;
     }
 

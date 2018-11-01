@@ -5,13 +5,22 @@ import com.ah_service.dps.pojo.Page;
 import com.ah_service.dps.pojo.Result;
 import com.ah_service.dps.pojo.ResultPage;
 import com.ah_service.dps.service.UserService;
+import com.ah_service.dps.utils.PropertyLoad;
+import com.ah_service.dps.utils.PublicUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.print.Doc;
 import javax.servlet.http.HttpSession;
+import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
 //import javax.servlet.http.HttpSession;
 
@@ -41,4 +50,43 @@ public class UserController {
         return userService.doctorList(doctor, page);
     }
 
+    @RequestMapping("/toDoctorDetail")
+    public @ResponseBody ModelAndView toDoctorDetail(String id) {
+        Doctor doctor = userService.toDoctorDetail(id);
+        ModelAndView modelAndView = new ModelAndView();
+        modelAndView.setViewName("content/doctor/doctorDetail");
+        modelAndView.addObject("doctor", doctor);
+        return modelAndView;
+    }
+
+    @RequestMapping("/saveDoctor")
+    public @ResponseBody Result saveDoctor(MultipartFile docHeadimgFile, Doctor doctor) throws IOException {
+        if(docHeadimgFile != null) {
+            String filepath = dealFile(docHeadimgFile);
+            doctor.setDocHeadimg(filepath);
+        }
+        return userService.saveDoctor(doctor);
+    }
+
+    private String dealFile(MultipartFile file) throws IOException {
+        if (file == null) {
+            return null;
+        }
+        String file_sourcename = file.getOriginalFilename();
+        String ref = file_sourcename.substring(file_sourcename.lastIndexOf("."));
+        String uuid = UUID.randomUUID().toString().replaceAll("_", "").substring(0, 8);
+        //生成文件名称
+        String date = PublicUtil.getDate("yyyy-MM-dd");
+        String filename = date +"_" + uuid + ref;
+        String dir = PropertyLoad.getProperty("headImgServicePath");
+        System.out.println(dir);
+        File dirFile = new File(dir);
+        if (!dirFile.exists()) {
+            dirFile.mkdirs();
+        }
+        String nginxImgPath = PropertyLoad.getProperty("nginxHeadImgPath");
+        File bookFile = new File(dir + File.separator + filename);
+        file.transferTo(bookFile);
+        return nginxImgPath + filename;
+    }
 }

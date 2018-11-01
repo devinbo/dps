@@ -135,14 +135,14 @@
                         '个人简介', '创建人', '创建时间'],
                     colModel: [
                         {name: 'docId', key: true, width: 60, hidden: true},
+                        {name: 'docHeadimg', width: 120, formatter: pickHeadImgFile},
                         {name: 'docName', width: 100},
                         {name: 'docLoginno', width: 100},
                         {name: 'docSex', width: 100},
                         {name: 'docAge', width: 80},
                         {name: 'docSpeciality', width: 100, editable: true},
-                        {name: 'docMedicineId', width: 150, editable: true},
-                        {name: 'docHospital', width: 200, editable: true},
-                        {name: 'docHeadimg', width: 120, editable: true},
+                        {name: 'docMedicineName', width: 150, editable: true},
+                        {name: 'docHospitalName', width: 200, editable: true},
                         {name: 'docDesc', width: 350, editable: true},
                         {name: 'crtuser', width: 150, editable: true},
                         {name: 'crtdate', width: 200, editable: true},
@@ -166,9 +166,17 @@
                 jQuery(grid_selector).jqGrid('setFrozenColumns'); //固定右侧菜单
                 $(window).triggerHandler('resize.jqGrid');//trigger window resize to make the grid get the correct size
 
-                //查看详细信息
+                //查看医生的详细信息
                 function queryDetail(rowid) {
-                    toCustomUrl('server/hospital/toHospitalDetail?id='+rowid);
+                    toCustomUrl('server/user/toDoctorDetail?id='+rowid);
+                }
+
+                function pickHeadImgFile(val) {
+                    if(val) {
+                        return "<img style='height: 100px; width: 100px;' src='"+val+"'/>"
+                    }else{
+                        return "";
+                    }
                 }
 
                 //加载县

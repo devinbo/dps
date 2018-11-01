@@ -24,6 +24,8 @@ public class Hospital {
   private String update;
   private String recsts;
 
+  private Doctor admin; //医院管理员账户
+
 
   public Long getHosId() {
     return hosId;
@@ -174,5 +176,13 @@ public class Hospital {
 
   public void setHosAreaName(String hosAreaName) {
     this.hosAreaName = hosAreaName;
+  }
+
+  public Doctor getAdmin() {
+    return admin;
+  }
+
+  public void setAdmin(Doctor admin) {
+    this.admin = admin;
   }
 }

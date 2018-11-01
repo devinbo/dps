@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>留言回复</title>
+    <!--列表样式信息-->
+</head>
+
+<body>
+    <div class="row">
+        <div class="well">
+            <form id="queryForm" class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-xs-3">
+                        <label for="msgCrtdate" class="col-sm-3 control-label no-padding-right">留言时间:</label>
+                        <div class="col-sm-9">
+                            <!--<input type="text" id="hos_name" name="hos_name" class="form-control"/>-->
+                            <input class="form-control date-picker" id="msgCrtdate" type="text"
+                                   name="msgCrtdate"
+                                   data-date-format="yyyy-mm-dd"  placeholder="留言时间">
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                        <label for="msgUserName" class="col-sm-3 control-label no-padding-right">用户姓名:</label>
+                        <div class="col-sm-9">
+                            <input type="text" id="msgUserName" name="msgUserName" class="form-control"/>
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                        <label for="repFlag" class="col-sm-3 control-label no-padding-right">是否回复:</label>
+                        <div class="col-sm-9">
+                            <select class="form-control" id="repFlag" name="repFlag">
+                                <option value=""></option>
+                                <option value="1">已回复</option>
+                                <option value="2" selected>尚未回复</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-3">
+                        <button class="btn btn-primary" type="button" id="query">
+                            <i class="ace-icon fa fa-search bigger"></i>
+                            查询
+                        </button>
+                        <button class="btn" type="reset" onclick="resetForm()">
+                            <i class="ace-icon fa fa-refresh bigger"></i>
+                            重置
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="col-sm-9">
+            <div class="widget-box">
+                <div class="widget-header">
+                    <h4 class="widget-title lighter smaller">
+                        <i class="ace-icon fa fa-comment blue"></i>
+                        用户留言信息
+                    </h4>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main no-padding">
+                        <!-- #section:pages/dashboard.conversations -->
+                        <div id="msgContent" class="dialogs ace-scroll">
+                        </div>
+                        <div class='center' id="loadMore"><a href='javascript:void(0);' >加载更多</a></div>
+                        <form>
+                            <div class="form-actions">
+                                <div class="input-group">
+                                    <input id="sendMsgId" placeholder="选择客户进行留言" type="text" class="form-control" name="message" />
+                                    <span class="input-group-btn">
+                                        <button disabled id="send" class="btn btn-sm btn-info no-radius" type="button">
+                                            <i class="ace-icon fa fa-share"></i>
+                                            Send
+                                        </button>
+									</span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script type="text/javascript">
+        var scripts = [null, "assets/js/date-time/bootstrap-datepicker.js",
+            "assets/js/jqGrid/jquery.jqGrid.custom.js",
+            "assets/js/chosen.jquery.js",
+            "assets/js/ace/elements.scroller.js",
+            "assets/js/jqGrid/i18n/grid.locale-cn.js", null]
+        var grid_selector = "#grid-table";
+        var pager_selector = "#grid-pager";
+
+
+        $('.page-content-area').ace_ajax('loadScripts', scripts, function () {
+            //inline scripts related to this page
+            jQuery(function ($) {
+                var parent_column = $(grid_selector).closest('[class*="col-"]');
+                $(window).on('resize.jqGrid', function () {
+                    $(grid_selector).jqGrid('setGridWidth', parent_column.width());
+                    $(grid_selector).jqGrid('setGridHeight', $(window).height() - 360);
+                });
+
+                //设置日期选择样式
+                $('.date-picker').datepicker({
+                    autoclose: true,
+                    todayHighlight: true
+                });
+
+                //重新进入时，销毁原有页面信息
+                $(document).one('ajaxloadstart.page', function (e) {
+                    $.jgrid.gridDestroy(grid_selector);
+                    $('.ui-jqdialog').remove();
+                });
+
+                var page = 1; //当前页面
+                $("#query").click(function(){
+                    page = 1;
+                    getForDocMsg();
+                });
+                //加载留言信息
+                getForDocMsg();
+                function getForDocMsg() {
+                    var par = {
+                        page: page,
+                        rows: 20
+                    };
+                    var formData = $("#queryForm").serializeJson();
+                    par = Object.assign(par, formData);
+                    myAjax("/patient/getFordocMsg", par, function(result) {
+                        if(page === 1) {
+                            $("#msgContent").html("");
+                        }
+                        createMsgHtml(result);
+                    });
+                }
+
+                function createMsgHtml(result) {
+                    var html = "";
+                    if(result.rows) {
+                        result.rows.forEach(function(data) {
+                            html += '<div class="itemdiv dialogdiv">';
+                            html += '<div class="body">';
+                            html += '<div class="time">';
+                            html += '<i class="ace-icon fa fa-clock-o"></i>';
+                            html += '<span class="green" title="留言时间">'+data.msgCrttime+'</span>';
+                            html += '</div>';
+                            html += '<div class="name">';
+                            html += '<a href="" style="cursor: text">'+data.msgUserId+'</a>';
+                            html += '</div>';
+                            html += '<div class="text"><span class="orange2">提问：</span>'+data.msgInfo+'</div>';
+                            if(data.repMsgInfo && data.repFlag == '1') {
+                                html += '<div class="text" style="text-align: right;"><span class="light-grey">'+data.repMsgTime+'</span><span class="green">回复：</span>'+data.repMsgInfo+'</div>'
+                            }
+                            html += '<div class="tools">';
+                            html += '<a href="javascript:void(0);" onclick="selectId('+data.msgId+')" class="btn btn-minier btn-info">';
+                            html += '<i class="icon-only ace-icon fa fa-share"></i>';
+                            html += '</a>';
+                            html += '</div>';
+                            html += '</div>';
+                            html += '</div>';
+                        });
+                        if(result.rows.length === 20) {
+                            //加载更多
+                            $("#loadMore").show();
+                        }else{
+                            $("#loadMore").hide();
+                        }
+                    }
+                    $("#msgContent").append(html);
+                }
+
+                $("#loadMore").find("a").on("click", function(){
+                    page++;
+                    getForDocMsg();
+                });
+            });
+
+            $('#msgContent').ace_scroll({
+                size: 500
+            });
+        });
+
+        function selectId(msgId, userName) {
+            $("#sendMsgId").attr("placeholder", "给客户"+userName+"留言:")
+            $("#send").removeAttr("disabled");
+            selectedMsgId = msgId;
+        }
+
+        var selectedMsgId = "";
+        $("#send").click(function() {
+            //选择客户信息进行发送
+            if(!selectedMsgId) {
+                return;
+            }
+            if(!$(this).val()) {
+                showWarnInfo("留言信息不能为空");
+                return;
+            }
+            myAjax("/patient/sendMsg", {repMsgInfo: $(this).val(), msgId: selectedMsgId}, function(result) {
+                if(result.code === 1) {
+                    $("#send").val("");
+                    showSuccInfo("已成功回复");
+                }
+            })
+        })
+    </script>
+</body>

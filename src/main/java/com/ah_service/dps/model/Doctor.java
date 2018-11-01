@@ -15,12 +15,16 @@ public class Doctor {
   private String docSpeciality;
   private String docDesc;
   private Long docMedicineId; //所属医科
+  private String docMedicineName; //所属医科名称
   private Long docHospital; //所属医院
+  private String docHospitalName; //所属医院名称
   private Boolean ishosadmin; //医院管理员
   private Boolean isadmin; //超级管理员
   private String docHeadimg; //个人头像地址
   private String crtuser;
   private String crtdate;
+  private String upduser;
+  private String update;
   private String recsts;
 
   private Hospital hospital; //所属医院信息
@@ -132,7 +136,6 @@ public class Doctor {
     this.docHospital = docHospital;
   }
 
-
   public String getCrtuser() {
     return crtuser;
   }
@@ -190,6 +193,38 @@ public class Doctor {
     this.docHeadimg = docHeadimg;
   }
 
+  public String getDocMedicineName() {
+    return docMedicineName;
+  }
+
+  public void setDocMedicineName(String docMedicineName) {
+    this.docMedicineName = docMedicineName;
+  }
+
+  public String getDocHospitalName() {
+    return docHospitalName;
+  }
+
+  public void setDocHospitalName(String docHospitalName) {
+    this.docHospitalName = docHospitalName;
+  }
+
+  public String getUpduser() {
+    return upduser;
+  }
+
+  public void setUpduser(String upduser) {
+    this.upduser = upduser;
+  }
+
+  public String getUpdate() {
+    return update;
+  }
+
+  public void setUpdate(String update) {
+    this.update = update;
+  }
+
   @Override
   public String toString() {
     return "Doctor{" +
@@ -203,12 +238,16 @@ public class Doctor {
             ", docSpeciality='" + docSpeciality + '\'' +
             ", docDesc='" + docDesc + '\'' +
             ", docMedicineId=" + docMedicineId +
+            ", docMedicineName='" + docMedicineName + '\'' +
             ", docHospital=" + docHospital +
+            ", docHospitalName='" + docHospitalName + '\'' +
             ", ishosadmin=" + ishosadmin +
             ", isadmin=" + isadmin +
             ", docHeadimg='" + docHeadimg + '\'' +
             ", crtuser='" + crtuser + '\'' +
             ", crtdate='" + crtdate + '\'' +
+            ", upduser='" + upduser + '\'' +
+            ", update='" + update + '\'' +
             ", recsts='" + recsts + '\'' +
             ", hospital=" + hospital +
             '}';

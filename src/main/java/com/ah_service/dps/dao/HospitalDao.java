@@ -1,5 +1,7 @@
 package com.ah_service.dps.dao;
 
+import com.ah_service.dps.model.Division;
+import com.ah_service.dps.model.Doctor;
 import com.ah_service.dps.model.Hospital;
 import org.apache.ibatis.annotations.Param;
 
@@ -18,4 +20,6 @@ public interface HospitalDao {
     void updHospital(Hospital hospital);
 
     void delHospital(@Param("ids") List<String> ids);
+
+    List<Division> getAllDivision(Doctor loginDoctor);
 }

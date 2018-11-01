@@ -20,18 +20,46 @@
         </if>
     </select>
 
-    <select id="getHospitalDetail" resultType="hospital">
+    <select id="getHospitalDetail" resultType="hospital" resultMap="hospitalMap">
         select hos_id, hos_name, hos_medicine, hos_linkphone, hos_logo, hos_grade,
         (select data_name from bs_basedict where dict_code = 'HOS01' and data_code = hos_grade) hos_grade_name,
-         hos_desc, hos_awards, hos_city, hos_area, crtuser, crtdate from hospital
+         hos_desc, hos_awards, hos_city, hos_area, h.crtuser, h.crtdate,
+         doc_name, doc_id, doc_loginno
+          from hospital h left join doctor on (hos_id = doctor.doc_hospital and ishosadmin = '1')
          where hos_id = #{id}
     </select>
+
+    <resultMap id="hospitalMap" type="hospital">
+        <id column="hos_id" property="hosId"/>
+        <result column="hos_name" property="hosName"/>
+        <result column="hos_medicine" property="hosMedicine"/>
+        <result column="hos_linkphone" property="hosLinkphone"/>
+        <result column="hos_logo" property="hosLogo"/>
+        <result column="hos_grade" property="hosGrade"/>
+        <result column="hos_grade_name" property="hosGradeName"/>
+        <result column="hos_desc" property="hosDesc"/>
+        <result column="hos_awards" property="hosAwards"/>
+        <result column="hos_city" property="hosCity"/>
+        <result column="hos_area" property="hosArea"/>
+        <result column="crtuser" property="crtuser"/>
+        <result column="crtdate" property="crtdate"/>
+        <association property="admin" javaType="doctor">
+            <id column="doc_id" property="docId"/>
+            <id column="doc_name" property="docName"/>
+            <id column="doc_loginno" property="docLoginno"/>
+        </association>
+    </resultMap>
 
     <select id="getSameHospital" resultType="int" parameterType="hospital">
         SELECT count(*) from hospital where hos_name = #{hosName}
         <if test="hosId != null  and hosId != ''">
             and hos_id != #{hosId}
         </if>
+    </select>
+
+    <!--加载当前医院的所有医科-->
+    <select id="getAllDivision" resultType="division" parameterType="doctor">
+        select div_id, div_name from division where hospital_id = #{docHospital}
     </select>
 
     <insert id="addHospital" parameterType="hospital">

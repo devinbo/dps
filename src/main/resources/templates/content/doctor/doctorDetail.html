@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="cn" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>客户信息</title>
+    <style>
+        .form-horizontal .form-group {
+            margin-left: 0px;
+            margin-right: 0px;
+        }
+    </style>
+    <link rel="stylesheet" href="assets/css/chosen.css" />
+    <link rel="stylesheet" href="assets/css/select2.css"/>
+</head>
+<body>
+<div class="page-header">
+    <h5>
+        <button class="btn btn-default btn-sm" onclick="history.back()">
+            <i class="ace-icon fa fa-arrow-left"></i>
+            返回
+        </button>
+    </h5>
+</div>
+
+<div class="row">
+    <div class="col-xs-12">
+        <form class="form-horizontal" id="validation-form-doctor" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="docId" th:value='${doctor?.docId}'>
+            <div class="widget-box">
+                <div class="widget-header">
+                    <h4 class="widget-title">医院信息(<span class="orange">新创建用户，密码默认为000000，如需修改，请登录系统后，手动修改</span>)</h4>
+                    <div class="widget-toolbar">
+                        <a href="#" data-action="collapse">
+                            <i class="ace-icon fa fa-chevron-up"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="widget-body">
+                    <div class="widget-main" style="min-height: 200px;">
+                        <div class="row">
+                            <div class="col-xs-3 form-group">
+                                <label class="control-label" for="docName">医生名称<span
+                                        class="red">*</span></label>
+                                <input class="form-control" id="docName" name="docName" th:value="${doctor?.docName}"
+                                       placeholder="请输入医生名称">
+                            </div>
+
+                            <div class="col-xs-3  form-group">
+                                <label for="docLoginno">登录账号<span class="red">*</span></label>
+                                <input class="form-control" id="docLoginno" name="docLoginno" th:value="${doctor?.docLoginno}"
+                                       placeholder="请输入登录账号">
+                            </div>
+
+                            <div class="col-xs-3 form-group">
+                                <label class="control-label" for="docSex">性别</label>
+                                <select th:value="${doctor?.docSex}" id="docSex" name="docSex" class="form-control" data-placeholder="请选择性别">
+                                    <option value="" th:selected="${doctor?.docSex==null}"></option>
+                                    <option value="男" th:selected="${doctor?.docSex=='男'}">男</option>
+                                    <option value="女" th:selected="${doctor?.docSex=='女'}">女</option>
+                                </select>
+                            </div>
+
+                            <div class="col-xs-3 form-group">
+                                <label class="control-label" for="docAge">年龄</label>
+                                <input class="form-control" id="docAge" name="docAge" th:value="${doctor?.docAge}" placeholder="请输入年龄">
+                            </div>
+                        </div>
+
+                        <div class="space-12"></div>
+
+                        <div class="row">
+                            <div class="col-xs-6 form-group">
+                                <label class="control-label" for="docSpeciality">特长</label>
+                                <input class="form-control" id="docSpeciality" name="docSpeciality" th:value="${doctor?.docSpeciality}"
+                                       placeholder="请输入个人特长"/>
+                            </div>
+
+                            <div class="col-xs-6 form-group">
+                                <label class="control-label" for="docMedicineId">所属医科</label>
+                                <select  id="docMedicineId" name="docMedicineId" class="chosen-select form-control" data-placeholder="请选择所属医科"></select>
+                            </div>
+                        </div>
+
+                        <div class="space-12"></div>
+
+                        <div class="row">
+                            <div class="col-xs-6 form-group">
+                                <label class="control-label" for="docDesc">个人简介</label>
+                                <textarea class="form-control" id="docDesc" name="docDesc"
+                                       th:value='${doctor?.docDesc}' th:text='${doctor?.docDesc}' placeholder="请输入个人简介"/>
+                            </div>
+
+                            <div class="col-xs-6 form-group">
+                                <label class="control-label" for="docHeadimg">个人头像</label>
+                                <input multiple="" type="file" name="docHeadimgFile" id="docHeadimg"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="space-12"></div>
+            <div class="row">
+                <div class="col-xs-4 col-xs-offset-5">
+                    <input type="submit" class="btn btn-primary" id="agency_save">
+                    <input class="btn" type="reset" style="margin-left: 20px;" onclick="resetForm()" value="重置表单"/>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    var scripts = [null, "assets/js/jquery-ui.custom.js",
+        "assets/js/date-time/bootstrap-datepicker.js",
+        "assets/js/date-time/bootstrap-timepicker.js",
+        "assets/js/date-time/daterangepicker.js",
+        "assets/js/jquery.colorbox.js",
+        "assets/js/jquery.validate.js",
+        "assets/js/jquery.validate_zh.js",
+        "assets/js/jquery.form.js",
+        "assets/js/bootbox.js",
+        "assets/js/chosen.jquery.js",
+        "assets/js/date-time/bootstrap-datetimepicker.js", null];
+
+    function resetForm() {
+        $(".chosen-select").val('').trigger("chosen:updated");
+    }
+
+    $('.page-content-area').ace_ajax('loadScripts', scripts, function () {
+
+        /**
+         * 设置选择框
+         */
+        $("#docMedicineId").chosen({allow_single_deselect:true});
+        myAjax("/hospital/getAllDivision", null, function(result){
+            if(result.code == 1) {
+                toSelectData(result.data, "div_id", "div_name");
+                //设置选择框中信息
+                createDepSelect(result.data);
+            }else{
+                showErrorInfo(result.message);
+            }
+        });
+
+        function createDepSelect(data) {
+            var html = '<option value="">&nbsp;</option>';
+            data.forEach(function(info) {
+                html += '<option value="'+info.data_id+'">'+info.data_name+'</option>';
+            });
+            $("#docMedicineId").html(html);
+            $("#docMedicineId").trigger("chosen:updated");
+            $("#docMedicineId").val('[[${doctor?.docMedicineId}]]').trigger("chosen:updated");
+        }
+
+
+        //提交
+        $("#validation-form-doctor").submit(function (e) {
+            e.preventDefault();
+            var flag = $("#validation-form-doctor").valid();
+            if (flag) {
+                $(this).ajaxSubmit({
+                    url: projectUrl + "/user/saveDoctor",
+                    type: "post",
+                    success: function (result) {
+                        bootbox.hideAll();
+                        if (result.code === 1) {
+                            showInfo("操作成功! 即将返回主列表", 3000);
+                            setTimeout(function(){
+                                history.back();
+                            }, 3000);
+                        } else {
+                            showErrorInfo("操作失败！错误信息：" + result.message);
+                        }
+                    },
+                    error: function (err) {
+                        bootbox.hideAll();
+                        showErrorInfo("保存失败，" + err.statusText);
+                    }
+                });
+            }
+            return false;
+        });
+
+        //做校验
+        $("#validation-form-doctor").validate({
+            errorElement: 'div',
+            errorClass: 'help-block',
+            focusInvalid: false,
+            ignore: ":hidden:not(select)",
+            rules: {
+                docName: {required: true},
+                docLoginno: {required: true},
+            },
+            highlight: function (e) {
+                $(e).closest('.form-group').removeClass('has-info').addClass('has-error');
+            },
+            success: function (e) {
+                $(e).closest('.form-group').removeClass('has-error');//.addClass('has-info');
+                $(e).remove();
+            },
+            errorPlacement: function (error, element) {
+                if (element.is('input[type=checkbox]') || element.is('input[type=radio]')) {
+                    var controls = element.closest('div[class*="col-"]');
+                    if (controls.find(':checkbox,:radio').length > 1) controls.append(error);
+                    else error.insertAfter(element.nextAll('.lbl:eq(0)').eq(0));
+                }
+                else if (element.is('.select2')) {
+                    error.insertAfter(element.siblings('[class*="select2-container"]:eq(0)'));
+                }
+                else if (element.is('.chosen-select')) {
+                    error.insertAfter(element.siblings('[class*="chosen-container"]:eq(0)'));
+                } else if (element.is('input[type=file]')) {
+                    $(error).css("margin-top", "35px");
+                    $(error).css("position", "absolute");
+                    error.insertAfter(element);
+                } else {
+                    error.insertAfter(element)
+                };
+            },
+        });
+
+
+        if ('[[${doctor?.docHeadimg}]]') {
+            $('#docHeadimg').hide();
+            var hosLogo = '[[${doctor?.docHeadimg}]]';
+            console.log(hosLogo);
+            $('#docHeadimg').after('<a onclick="openFile(\''+hosLogo+'\')" class="blue2" style="display:block; cursor: pointer">文件已上传，点击查看</a><a class="orange reloadFile" style="cursor: pointer">重新上传</a>');
+        } else {
+            toFile($('#docHeadimg'));
+        }
+
+        $(".reloadFile").on("click", function(){
+            $(this).parent().find("a").hide();
+            $(this).hide();
+            $(this).parent().find("input[type=file]").show();
+            toFile($(this).parent().find("input[type=file]"));
+        });
+
+        function toFile($obj) {
+            $obj.ace_file_input({
+                style: 'well',
+                btn_choose: 'Drop files here or click to choose',
+                btn_change: null,
+                no_icon: 'ace-icon fa fa-cloud-upload',
+                droppable: true,
+                thumbnail: 'small',
+                preview_error : function(filename, error_code) {
+                }
+            }).on('change', function(){
+                //console.log($(this).data('ace_input_files'));
+                //console.log($(this).data('ace_input_method'));
+            });
+        }
+    })
+</script>
+</body>
+</html>

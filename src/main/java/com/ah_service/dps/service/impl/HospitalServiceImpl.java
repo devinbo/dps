@@ -1,6 +1,7 @@
 package com.ah_service.dps.service.impl;
 
 import com.ah_service.dps.dao.HospitalDao;
+import com.ah_service.dps.model.Division;
 import com.ah_service.dps.model.Doctor;
 import com.ah_service.dps.model.Hospital;
 import com.ah_service.dps.pojo.Page;
@@ -48,8 +49,12 @@ public class HospitalServiceImpl implements HospitalService {
         hospital.setUpduser(loginDoctor.getDocLoginno());
         if(hospital.getHosId() == null) {
             hospitalDao.addHospital(hospital);
+            //生成管理员信息
+
         }else{
             hospitalDao.updHospital(hospital);
+            //修改管理员信息
+
         }
         return new Result();
     }
@@ -58,6 +63,13 @@ public class HospitalServiceImpl implements HospitalService {
     public Result delHospital(String ids) {
         hospitalDao.delHospital(PublicUtil.toListByIds(ids));
         return new Result();
+    }
+
+    @Override
+    public Result getAllDivision() {
+        Doctor loginDoctor = getLoginDoctor();
+        List<Division> list = hospitalDao.getAllDivision(loginDoctor);
+        return new Result<List>(1, "查询成功！", list);
     }
 
     public Doctor getLoginDoctor() {

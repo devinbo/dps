@@ -118,13 +118,15 @@ jQuery(function($) {
 
                  //for example in Ace HTML demo version we convert /ajax/index.html#page/gallery to > /ajax/content/gallery.html and load it
                  if(path.match(/(\/ajax\/)(index\.html)?/))
-                     return path.replace(/(\/ajax\/)(index\.html)?/, '/ajax/content/'+hash.replace(/^page\//, '')) ;
+                     // return path.replace(/(\/ajax\/)(index\.html)?/, '/ajax/content/'+hash.replace(/^page\//, '')+'.html') ;
+                 	 return path.replace(/(\/ajax\/)(index\.html)?/, '/ajax/content/'+hash.replace(/^page\//, '')) ;
                  if(path.match(/index\.html?/)) {
                      if(hash.match(/^server\//)) {
                          return path.replace(/index\.html?/, hash.replace(/server/, ''));
                      } if(hash.endsWith(".jsp")) {
                          return path.replace(/index\.html?/, 'content/'+hash.replace(/^page\//, ''));
                      } else if(hash.match(/^page\//)) {
+                         // return path.replace(/index\.html?/, 'content/'+hash.replace(/^page\//, '')+'.html');
                          return path.replace(/index\.html?/, 'content/'+hash.replace(/^page\//, ''));
                      }
                  }

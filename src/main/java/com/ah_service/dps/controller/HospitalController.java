@@ -28,6 +28,7 @@ public class HospitalController {
     @RequestMapping("/hospitalList")
     public @ResponseBody
     ResultPage<Hospital> hospitalList(Hospital hospital, Page page) {
+        System.out.println(page);
         return hospitalService.hospitalList(hospital, page);
     }
 
@@ -87,4 +88,13 @@ public class HospitalController {
     public @ResponseBody Result delHospital(String ids) {
         return hospitalService.delHospital(ids);
     }
+
+    /**
+     * 获取当前医院的所有医科
+     */
+    @RequestMapping("/getAllDivision")
+    public @ResponseBody Result getAllDivision() {
+        return hospitalService.getAllDivision();
+    }
+
 }

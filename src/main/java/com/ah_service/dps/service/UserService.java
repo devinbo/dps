@@ -10,4 +10,8 @@ public interface UserService {
     Result<Doctor> login(Doctor employee);
 
     ResultPage<Doctor> doctorList(Doctor doctor, Page page);
+
+    Doctor toDoctorDetail(String id);
+
+    Result saveDoctor(Doctor doctor);
 }
