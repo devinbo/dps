@@ -29,9 +29,9 @@
                         <label for="repFlag" class="col-sm-3 control-label no-padding-right">是否回复:</label>
                         <div class="col-sm-9">
                             <select class="form-control" id="repFlag" name="repFlag">
-                                <option value=""></option>
+                                <option value="" selected></option>
                                 <option value="1">已回复</option>
-                                <option value="2" selected>尚未回复</option>
+                                <option value="2">尚未回复</option>
                             </select>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                             <i class="ace-icon fa fa-search bigger"></i>
                             查询
                         </button>
-                        <button class="btn" type="reset" onclick="resetForm()">
+                        <button class="btn" type="reset">
                             <i class="ace-icon fa fa-refresh bigger"></i>
                             重置
                         </button>
@@ -50,7 +50,7 @@
             </form>
         </div>
 
-        <div class="col-sm-9">
+        <div class="col-sm-12">
             <div class="widget-box">
                 <div class="widget-header">
                     <h4 class="widget-title lighter smaller">
@@ -62,22 +62,23 @@
                 <div class="widget-body">
                     <div class="widget-main no-padding">
                         <!-- #section:pages/dashboard.conversations -->
-                        <div id="msgContent" class="dialogs ace-scroll">
+                        <div id="msgContent" class="dialogs ace-scroll" style="font-size: 16px;">
+
                         </div>
                         <div class='center' id="loadMore"><a href='javascript:void(0);' >加载更多</a></div>
-                        <form>
-                            <div class="form-actions">
-                                <div class="input-group">
-                                    <input id="sendMsgId" placeholder="选择客户进行留言" type="text" class="form-control" name="message" />
-                                    <span class="input-group-btn">
-                                        <button disabled id="send" class="btn btn-sm btn-info no-radius" type="button">
-                                            <i class="ace-icon fa fa-share"></i>
-                                            Send
-                                        </button>
-									</span>
-                                </div>
-                            </div>
-                        </form>
+                        <!--<form>-->
+                            <!--<div class="form-actions">-->
+                                <!--<div class="input-group">-->
+                                    <!--<input id="sendMsgId" placeholder="选择客户进行留言" type="text" class="form-control" name="message" />-->
+                                    <!--<span class="input-group-btn">-->
+                                        <!--<button disabled id="send" class="btn btn-sm btn-info no-radius" type="button">-->
+                                            <!--<i class="ace-icon fa fa-share"></i>-->
+                                            <!--Send-->
+                                        <!--</button>-->
+									<!--</span>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</form>-->
                     </div>
                 </div>
             </div>
@@ -142,22 +143,43 @@
                     var html = "";
                     if(result.rows) {
                         result.rows.forEach(function(data) {
-                            html += '<div class="itemdiv dialogdiv">';
+                            html += '<div class="itemdiv dialogdiv" id="msg'+data.msgId+'">';
                             html += '<div class="body">';
                             html += '<div class="time">';
-                            html += '<i class="ace-icon fa fa-clock-o"></i>';
-                            html += '<span class="green" title="留言时间">'+data.msgCrttime+'</span>';
                             html += '</div>';
                             html += '<div class="name">';
-                            html += '<a href="" style="cursor: text">'+data.msgUserId+'</a>';
+                            html += '<a>患者：'+data.msgUserId+'; <span class="green"><i class="ace-icon fa fa-clock-o"></i>'+data.msgCrttime+'</span></a>';
                             html += '</div>';
-                            html += '<div class="text"><span class="orange2">提问：</span>'+data.msgInfo+'</div>';
-                            if(data.repMsgInfo && data.repFlag == '1') {
-                                html += '<div class="text" style="text-align: right;"><span class="light-grey">'+data.repMsgTime+'</span><span class="green">回复：</span>'+data.repMsgInfo+'</div>'
+                            html += '<div class="text" style="font-size: 16px; padding: 10px;">'+data.msgInfo+'</div>';
+                            //如果进行过回复
+                            if(data.repFlag == '1') {
+                                var hasMore = false;
+                                data.wjwRepFordocMsgList.forEach(function(rep, index){
+                                    var hidden = "block";
+                                    if(index > 2) {
+                                        //如果超过5条记录，那么就隐藏.
+                                        hidden = "none";
+                                        if(!hasMore) {
+                                            hasMore = true;
+                                            html += '<a href="javascript:void(0);" class="openAll" data-id="'+data.msgId+'">查看全部记录<a/>'
+                                        }
+                                    }
+                                    if(rep.repMsgType === '2') {
+                                        //如果是医生的回复
+                                        html += '<div class="well replyclass" style="margin-top:20px; width: 80%; margin-left:10%; display: '+hidden+'">' +
+                                            '<h4 class="blue">'+data.doctor.docName+'： <span class="grey">于'+rep.repMsgTime+'回复</span></h4>'+rep.repMsgInfo+'</div>';
+                                    }else {
+                                        //是患者的回复
+                                        html += '<div style="display: '+hidden+'" class="name replyclass">';
+                                        html += '<a>患者：'+data.msgUserId+'; <span class="green"><i class="ace-icon fa fa-clock-o"></i>'+rep.repMsgTime+'</span></a>';
+                                        html += '<div class="text" style="font-size: 16px; padding: 10px;"><span class="orange2">追问:</span>'+rep.repMsgInfo+'</div>';
+                                        html += '</div>';
+                                    }
+                                });
                             }
                             html += '<div class="tools">';
                             html += '<a href="javascript:void(0);" onclick="selectId('+data.msgId+')" class="btn btn-minier btn-info">';
-                            html += '<i class="icon-only ace-icon fa fa-share"></i>';
+                            html += '<i class="icon-only ace-icon fa fa-share" title="进行回复" ></i>';
                             html += '</a>';
                             html += '</div>';
                             html += '</div>';
@@ -177,17 +199,85 @@
                     page++;
                     getForDocMsg();
                 });
+
+                $(document).on("click", ".openAll", function(){
+                    var msgId = $(this).attr("data-id");
+                    $("#msg"+msgId).find(".replyclass").show();
+                    $(this).hide();
+                })
             });
 
             $('#msgContent').ace_scroll({
-                size: 500
+                size: 600
             });
         });
 
         function selectId(msgId, userName) {
-            $("#sendMsgId").attr("placeholder", "给客户"+userName+"留言:")
-            $("#send").removeAttr("disabled");
+            //加载该患者最后的问题
+            myAjax("/patient/getLastProblem", {msgId: msgId}, function(result){
+                if(result.code === 1) {
+                    createReplyHtml(result, userName);
+                }else{
+                    showErrorInfo(result.message);
+                }
+            });
             selectedMsgId = msgId;
+        }
+
+
+        function createReplyHtml(result, userName) {
+            var data = result.data;
+            var question = "";
+            if(data.wjwRepFordocMsgList && data.wjwRepFordocMsgList.length > 0) {
+                question = data.wjwRepFordocMsgList[0].repMsgInfo;
+            }else{
+                question = data.msgInfo;
+            }
+            //弹窗回复
+            bootbox.dialog({
+                title: '给患者：'+ (userName?userName:'')+'回复',
+                closeButton: false,
+                message: '<form class="form-horizontal" id="validation-form" method="get">' +
+                '<div style="padding-left: 50px; padding-right: 50px;">' +
+                '<h3 class="light-blue">问:<span style="font-size:14px;" class="grey">'+question+'</span></h3>' +
+                '</div>' +
+                '<div class="form-group2">' +
+                '<div class="col-xs-12 col-sm-9">' +
+                '<textarea id="replycontent" class="col-xs-12 col-xs-offset-2" style="min-height: 150px;" placeholder="在此输入你要回复的内容"/>' +
+                '</div>' +
+                '</div>' +
+                '</form>',
+                buttons: {
+                    cancel: {
+                        label: '取消',
+                        className: 'btn-danger',
+                    },
+                    ok: {
+                        label: '确认',
+                        className: 'btn-success',
+                        callback: function () {
+                                var operState = true;
+                                var par = {
+                                    repMsgInfo: $("#replycontent").val(),
+                                    msgId: data.msgId
+                                };
+                                myAjax("/patient/addReply", par, function (data) {
+                                    if (data.code === 1) {
+                                        //说明操作成功
+                                        showSuccInfo("操作成功！");
+                                        // getForDocMsg();
+                                        $("#query").trigger("click");
+                                    } else {
+                                        //说明操作失败
+                                        showErrorInfo(data.message);
+                                        operState = false;
+                                    }
+                                });
+                                return operState;
+                            }
+                        }
+                    }
+            });
         }
 
         var selectedMsgId = "";

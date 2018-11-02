@@ -28,9 +28,15 @@ public class PatientController {
         return patientService.getFordocMsg(page, wjwFordocMsg);
     }
 
-    @RequestMapping("/sendMsg")
-    public @ResponseBody
-    Result sendMsg(WjwRepFordocMsg wjwRepFordocMsg) {
-        return patientService.sendMsg(wjwRepFordocMsg);
+    @RequestMapping("/getLastProblem")
+    public @ResponseBody Result getLastProblem(String msgId) {
+        return patientService.getLastProblem(msgId);
+    }
+    /**
+     * 医生回复
+     */
+    @RequestMapping("/addReply")
+    public @ResponseBody Result addReply(WjwRepFordocMsg wjwRepFordocMsg) {
+        return patientService.addReply(wjwRepFordocMsg);
     }
 }

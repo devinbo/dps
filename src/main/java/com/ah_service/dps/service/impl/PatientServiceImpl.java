@@ -12,7 +12,9 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.print.Doc;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -27,15 +29,30 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public ResultPage<WjwFordocMsg> getFordocMsg(Page page, WjwFordocMsg wjwFordocMsg) {
         PageHelper.startPage(page);
+        Doctor doctor = (Doctor) session.getAttribute("user");
+        wjwFordocMsg.setMsgDocId(doctor.getDocId());
         List<WjwFordocMsg> list = patientDao.getFordocMsg(wjwFordocMsg);
         return new ResultPage<>(list);
     }
 
     @Override
-    public Result sendMsg(WjwRepFordocMsg wjwRepFordocMsg) {
+    public Result getLastProblem(String msgId) {
+        WjwFordocMsg wjwFordocMsg = patientDao.getLastProblem(msgId);
+        WjwRepFordocMsg wjwRepFordocMsg = patientDao.getLastRepProblem(msgId);
+        List<WjwRepFordocMsg> list = new ArrayList<>();
+        if(wjwRepFordocMsg != null) {
+            list.add(wjwRepFordocMsg);
+        }
+        wjwFordocMsg.setWjwRepFordocMsgList(list);
+        return new Result<WjwFordocMsg>(1, "查询成功！", wjwFordocMsg);
+    }
+
+    @Override
+    public Result addReply(WjwRepFordocMsg wjwRepFordocMsg) {
         Doctor doctor = (Doctor) session.getAttribute("user");
         wjwRepFordocMsg.setMsgDocuserId(doctor.getDocId());
-        patientDao.sendMsg(wjwRepFordocMsg);
+        patientDao.updateWjwMsg(doctor.getDocId(), wjwRepFordocMsg.getMsgId());
+        patientDao.insertWjwRepMsg(wjwRepFordocMsg);
         return new Result();
     }
 }

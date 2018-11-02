@@ -2,22 +2,57 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.ah_service.dps.dao.PatientDao">
 
-    <insert id="sendMsg" parameterType="wjwRepFordocMsg">
-        insert into wjw_rep_fordoc_msg(rep_msg_info, rep_msg_type, msg_docuser_id, msg_id, rep_msg_time)
-        VALUES (#{repMsgInfo}, '2', #{msgDocuserId}, #{msgId}, now())
+
+    <insert id="insertWjwRepMsg" parameterType="wjwRepFordocMsg">
+        insert into wjw_rep_fordoc_msg(rep_msg_info, rep_msg_type, msg_docuser_id, msg_id)
+        VALUES (#{repMsgInfo}, '2', #{msgDocuserId}, #{msgId})
     </insert>
 
-    <select id="getFordocMsg" resultType="wjwFordocMsg" parameterType="wjwFordocMsg">
+    <update id="updateWjwMsg">
+        update wjw_fordoc_msg set msg_doc_id = #{docId}, rep_flag = '1', msg_updtime = now() where msg_id = #{msgId}
+    </update>
+
+    <select id="getFordocMsg" resultType="wjwFordocMsg" parameterType="wjwFordocMsg" resultMap="wjwFordocMsgMap">
         select m.msg_id, msg_info, msg_key, msg_user_id, msg_doc_id, msg_crttime, msg_updtime, rep_flag,
-        rep.rep_msg_info, rep.rep_msg_time
+        rep.rep_msg_id, rep.rep_msg_info, rep.rep_msg_time, rep.rep_msg_type, d.doc_name
         from wjw_fordoc_msg m left join wjw_rep_fordoc_msg rep on m.msg_id = rep.msg_id
-        where 1 = 1
+        left join doctor d on m.msg_doc_id = d.doc_id
+        where msg_doc_id = #{msgDocId}
         <if test="repFlag != null and repFlag !=''">
             and rep_flag = #{repFlag}
         </if>
         <if test="msgCrttime != null and msgCrttime != ''">
             and DATE_FORMAT(msgCrttime, '%Y-%m-%d') = #{msgCrttime}
         </if>
-        order by msg_crttime desc
+        order by m.msg_crttime desc, rep.rep_msg_time
     </select>
+
+    <!--加载当前最后的一个问题-->
+    <select id="getLastProblem" resultType="wjwFordocMsg">
+        select msg_id, msg_info, msg_key, msg_user_id, msg_crttime, msg_updtime, rep_flag
+        from wjw_fordoc_msg where msg_id = #{msgId}
+    </select>
+    <select id="getLastRepProblem" resultType="wjwRepFordocMsg">
+        select * from wjw_rep_fordoc_msg where msg_id = #{msgId} and rep_msg_type = '1' limit 1
+    </select>
+
+    <resultMap id="wjwFordocMsgMap" type="wjwFordocMsg">
+        <id property="msgId" column="msg_id"/>
+        <result property="msgInfo" column="msg_info"/>
+        <result property="msgKey" column="msg_key"/>
+        <result property="msgUserId" column="msg_user_id"/>
+        <result property="msgUpdtime" column="msg_user_id"/>
+        <result property="msgCrttime" column="msg_crttime"/>
+        <result property="repFlag" column="rep_flag"/>
+        <association property="doctor" javaType="doctor">
+            <id property="docId" column="msg_doc_id"/>
+            <result property="docName" column="doc_name"/>
+        </association>
+        <collection property="wjwRepFordocMsgList" ofType="wjwRepFordocMsg">
+            <id property="repMsgId" column="rep_msg_id"/>
+            <result property="repMsgInfo" column="rep_msg_info"/>
+            <result property="repMsgTime" column="rep_msg_time"/>
+            <result property="repMsgType" column="rep_msg_type"/>
+        </collection>
+    </resultMap>
 </mapper>

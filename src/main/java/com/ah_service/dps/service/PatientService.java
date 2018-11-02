@@ -10,5 +10,7 @@ public interface PatientService {
 
     ResultPage<WjwFordocMsg> getFordocMsg(Page page, WjwFordocMsg wjwFordocMsg);
 
-    Result sendMsg(WjwRepFordocMsg wjwRepFordocMsg);
+    Result getLastProblem(String msgId);
+
+    Result addReply(WjwRepFordocMsg wjwRepFordocMsg);
 }

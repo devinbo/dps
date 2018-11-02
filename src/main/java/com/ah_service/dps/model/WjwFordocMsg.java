@@ -1,5 +1,7 @@
 package com.ah_service.dps.model;
 
+import java.util.List;
+
 public class WjwFordocMsg {
 
   private Long msgId;
@@ -11,9 +13,9 @@ public class WjwFordocMsg {
   private String msgUpdtime;
   private String repFlag;
 
+  private Doctor doctor;
   //回复信息
-  private String repMsgInfo;
-  private String repMsgTime;
+  private List<WjwRepFordocMsg> wjwRepFordocMsgList;
 
   public Long getMsgId() {
     return msgId;
@@ -79,19 +81,19 @@ public class WjwFordocMsg {
     this.repFlag = repFlag;
   }
 
-  public String getRepMsgInfo() {
-    return repMsgInfo;
-  }
+    public Doctor getDoctor() {
+        return doctor;
+    }
 
-  public void setRepMsgInfo(String repMsgInfo) {
-    this.repMsgInfo = repMsgInfo;
-  }
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
 
-  public String getRepMsgTime() {
-    return repMsgTime;
-  }
+    public List<WjwRepFordocMsg> getWjwRepFordocMsgList() {
+        return wjwRepFordocMsgList;
+    }
 
-  public void setRepMsgTime(String repMsgTime) {
-    this.repMsgTime = repMsgTime;
-  }
+    public void setWjwRepFordocMsgList(List<WjwRepFordocMsg> wjwRepFordocMsgList) {
+        this.wjwRepFordocMsgList = wjwRepFordocMsgList;
+    }
 }

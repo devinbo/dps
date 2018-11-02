@@ -595,7 +595,7 @@
                             var data = $('#validation-form').serialize()
                             //请求后台修改密码
                             myAjax("/user/updPass", data, function (data) {
-                                if (data.code == 1) {
+                                if (data.code === 1) {
                                     //说明操作成功
                                     showSuccInfo("操作成功！");
                                 } else {
