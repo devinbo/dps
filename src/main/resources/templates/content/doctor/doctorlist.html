@@ -90,7 +90,7 @@
 
                 //新增数据
                 $("#hospital_add").on("click", function () {
-                    toCustomUrl('page/hospital/hospitalDetail');
+                    toCustomUrl('page/doctor/doctorDetail');
                 });
 
                 //修改数据
@@ -101,7 +101,7 @@
                     }else if(ids.length>1) {
                         showWarnInfo("只能选择一条记录进行修改", 3000);
                     }else{
-                        toCustomUrl('server/hospital/toHospitalDetail?id='+ids[0]);
+                        toCustomUrl('server/user/toDoctorDetail?id='+ids[0]);
                     }
                 });
 

@@ -43,12 +43,12 @@
                                 <label class="control-label" for="form-hospital-adminnm">医院管理员姓名<span
                                         class="red">*</span></label>
                                 <input class="form-control" id="form-hospital-adminnm" name="docName" th:value="${hospital?.admin?.docName}"
-                                       placeholder="请输入医院管理员账户">
+                                       placeholder="请输入医院管理员姓名">
                             </div>
 
                             <div class="col-xs-3 form-group">
                                 <label class="control-label" for="form-hospital-adminno">医院管理员账户<span
-                                        class="red">*</span><span class="orange" th:hidden="${hospital.hosId != null}">初始密码为000000</span></label>
+                                        class="red">*</span><span class="orange" th:hidden="${hospital?.hosId != null}">初始密码为000000</span></label>
                                 <input class="form-control" id="form-hospital-adminno" name="hosAdminNo" th:value="${hospital?.admin?.docLoginno}"
                                        placeholder="请输入医院管理员账户">
                             </div>
@@ -59,7 +59,7 @@
                                 <label class="control-label" for="form-hospital-name">医院名称<span
                                         class="red">*</span></label>
                                 <input class="form-control" id="form-hospital-name" name="hosName" th:value="${hospital?.hosName}"
-                                       placeholder="请输入代理商昵称">
+                                       placeholder="请输入医院名称">
                             </div>
 
                             <div class="col-xs-3  form-group">
@@ -149,6 +149,11 @@
 
     function resetForm() {
         $(".chosen-select").val('').trigger("chosen:updated");
+    }
+
+    function openFile(fileurl) {
+        //打开文件
+        window.open(fileurl);
     }
 
     $('.page-content-area').ace_ajax('loadScripts', scripts, function () {

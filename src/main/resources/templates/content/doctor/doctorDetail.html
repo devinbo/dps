@@ -127,6 +127,11 @@
         $(".chosen-select").val('').trigger("chosen:updated");
     }
 
+    function openFile(fileurl) {
+        //打开文件
+        window.open(fileurl);
+    }
+
     $('.page-content-area').ace_ajax('loadScripts', scripts, function () {
 
         /**
@@ -135,7 +140,7 @@
         $("#docMedicineId").chosen({allow_single_deselect:true});
         myAjax("/hospital/getAllDivision", null, function(result){
             if(result.code == 1) {
-                toSelectData(result.data, "div_id", "div_name");
+                toSelectData(result.data, "data_id", "data_name");
                 //设置选择框中信息
                 createDepSelect(result.data);
             }else{
@@ -152,7 +157,6 @@
             $("#docMedicineId").trigger("chosen:updated");
             $("#docMedicineId").val('[[${doctor?.docMedicineId}]]').trigger("chosen:updated");
         }
-
 
         //提交
         $("#validation-form-doctor").submit(function (e) {

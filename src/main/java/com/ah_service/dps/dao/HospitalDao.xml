@@ -58,8 +58,8 @@
     </select>
 
     <!--加载当前医院的所有医科-->
-    <select id="getAllDivision" resultType="division" parameterType="doctor">
-        select div_id, div_name from division where hospital_id = #{docHospital}
+    <select id="getAllDivision" resultType="map">
+        select data_id, data_name from bs_basedict where dict_code = 'YK001'
     </select>
 
     <insert id="addHospital" parameterType="hospital">

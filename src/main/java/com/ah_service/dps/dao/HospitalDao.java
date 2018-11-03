@@ -6,6 +6,7 @@ import com.ah_service.dps.model.Hospital;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface HospitalDao {
 
@@ -21,5 +22,5 @@ public interface HospitalDao {
 
     void delHospital(@Param("ids") List<String> ids);
 
-    List<Division> getAllDivision(Doctor loginDoctor);
+    List<Map<String, Object>> getAllDivision();
 }

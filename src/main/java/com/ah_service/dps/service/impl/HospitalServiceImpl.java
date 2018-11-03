@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class HospitalServiceImpl implements HospitalService {
@@ -67,8 +68,8 @@ public class HospitalServiceImpl implements HospitalService {
 
     @Override
     public Result getAllDivision() {
-        Doctor loginDoctor = getLoginDoctor();
-        List<Division> list = hospitalDao.getAllDivision(loginDoctor);
+//        Doctor loginDoctor = getLoginDoctor();
+        List<Map<String, Object>> list = hospitalDao.getAllDivision();
         return new Result<List>(1, "查询成功！", list);
     }
 
