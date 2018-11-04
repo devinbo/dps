@@ -21,8 +21,11 @@
         <if test="repFlag != null and repFlag !=''">
             and rep_flag = #{repFlag}
         </if>
-        <if test="msgCrttime != null and msgCrttime != ''">
-            and DATE_FORMAT(msgCrttime, '%Y-%m-%d') = #{msgCrttime}
+        <if test="currWeek != null and currWeek != ''">
+            and DATE_FORMAT(msg_crttime, '%Y-%m-%d') >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+        </if>
+        <if test="currDay != null and currDay != ''">
+            and DATE_FORMAT(msg_crttime, '%Y-%m-%d') = current_date()
         </if>
         order by m.msg_crttime desc, rep.rep_msg_time
     </select>

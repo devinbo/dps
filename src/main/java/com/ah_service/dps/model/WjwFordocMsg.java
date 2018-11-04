@@ -12,6 +12,8 @@ public class WjwFordocMsg {
   private String msgCrttime;
   private String msgUpdtime;
   private String repFlag;
+  private String currDay;
+  private String currWeek;
 
   private Doctor doctor;
   //回复信息
@@ -96,4 +98,20 @@ public class WjwFordocMsg {
     public void setWjwRepFordocMsgList(List<WjwRepFordocMsg> wjwRepFordocMsgList) {
         this.wjwRepFordocMsgList = wjwRepFordocMsgList;
     }
+
+  public String getCurrDay() {
+    return currDay;
+  }
+
+  public void setCurrDay(String currDay) {
+    this.currDay = currDay;
+  }
+
+  public String getCurrWeek() {
+    return currWeek;
+  }
+
+  public void setCurrWeek(String currWeek) {
+    this.currWeek = currWeek;
+  }
 }

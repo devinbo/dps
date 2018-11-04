@@ -10,21 +10,21 @@
         <div class="well">
             <form id="queryForm" class="form-horizontal">
                 <div class="form-group">
-                    <div class="col-xs-3">
-                        <label for="msgCrtdate" class="col-sm-3 control-label no-padding-right">留言时间:</label>
-                        <div class="col-sm-9">
-                            <!--<input type="text" id="hos_name" name="hos_name" class="form-control"/>-->
-                            <input class="form-control date-picker" id="msgCrtdate" type="text"
-                                   name="msgCrtdate"
-                                   data-date-format="yyyy-mm-dd"  placeholder="留言时间">
+                    <div class="col-xs-4">
+                        <div class="col-xs-6">
+                            <label class="inline">
+                                <input type="checkbox" class="ace input-lg" name="currDay" checked value="1">
+                                <span class="lbl">今日尚未回复留言</span>
+                            </label>
+                        </div>
+                        <div class="col-xs-6">
+                            <label class="inline">
+                                <input type="checkbox" class="ace input-lg" name="currWeek" value="1">
+                                <span class="lbl">近7日留言</span>
+                            </label>
                         </div>
                     </div>
-                    <div class="col-xs-3">
-                        <label for="msgUserName" class="col-sm-3 control-label no-padding-right">用户姓名:</label>
-                        <div class="col-sm-9">
-                            <input type="text" id="msgUserName" name="msgUserName" class="form-control"/>
-                        </div>
-                    </div>
+
                     <div class="col-xs-3">
                         <label for="repFlag" class="col-sm-3 control-label no-padding-right">是否回复:</label>
                         <div class="col-sm-9">
@@ -130,6 +130,7 @@
                         rows: 20
                     };
                     var formData = $("#queryForm").serializeJson();
+                    console.log(formData);
                     par = Object.assign(par, formData);
                     myAjax("/patient/getFordocMsg", par, function(result) {
                         if(page === 1) {
