@@ -15,6 +15,10 @@ public class WjwFordocMsg {
   private String currDay;
   private String currWeek;
 
+  //开始时间
+  private String startDate;
+  //结束时间
+  private String endDate;
   private Doctor doctor;
   //回复信息
   private List<WjwRepFordocMsg> wjwRepFordocMsgList;
@@ -113,5 +117,21 @@ public class WjwFordocMsg {
 
   public void setCurrWeek(String currWeek) {
     this.currWeek = currWeek;
+  }
+
+  public String getStartDate() {
+    return startDate;
+  }
+
+  public void setStartDate(String startDate) {
+    this.startDate = startDate;
+  }
+
+  public String getEndDate() {
+    return endDate;
+  }
+
+  public void setEndDate(String endDate) {
+    this.endDate = endDate;
   }
 }

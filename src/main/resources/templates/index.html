@@ -179,7 +179,8 @@
                 </ul>
             </li>
 
-            <li>
+            <!--医院管理员和超级管理员没有便民服务，只针对医生-->
+            <li th:style="${'display:'+((session.user.isadmin == null && session.user.ishosadmin == null) ? 'block': 'none')}">
                 <a href="#" class="dropdown-toggle">
                     <i class="menu-icon fa fa-users"></i>
                     <span class="menu-text">便民服务</span>

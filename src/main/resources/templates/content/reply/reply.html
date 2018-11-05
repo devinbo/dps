@@ -10,18 +10,14 @@
         <div class="well">
             <form id="queryForm" class="form-horizontal">
                 <div class="form-group">
-                    <div class="col-xs-4">
-                        <div class="col-xs-6">
-                            <label class="inline">
-                                <input type="checkbox" class="ace input-lg" name="currDay" checked value="1">
-                                <span class="lbl">今日尚未回复留言</span>
-                            </label>
-                        </div>
-                        <div class="col-xs-6">
-                            <label class="inline">
-                                <input type="checkbox" class="ace input-lg" name="currWeek" value="1">
-                                <span class="lbl">近7日留言</span>
-                            </label>
+                    <div class="col-xs-5">
+                        <label for="repFlag" class="col-sm-3 control-label no-padding-right">留言起止日期:</label>
+                        <div class="input-daterange input-group">
+                            <input type="text" class="input-sm form-control" data-date-format="yyyy-mm-dd" name="startDate" placeholder="请输入查询开始日期">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-exchange"></i>
+                                </span>
+                            <input type="text" class="input-sm form-control" data-date-format="yyyy-mm-dd" name="endDate" placeholder="请输入查询截止日期">
                         </div>
                     </div>
 
@@ -41,13 +37,25 @@
                             <i class="ace-icon fa fa-search bigger"></i>
                             查询
                         </button>
-                        <button class="btn" type="reset">
+                        <button class="btn" type="reset" id="reset">
                             <i class="ace-icon fa fa-refresh bigger"></i>
                             重置
                         </button>
                     </div>
                 </div>
             </form>
+        </div>
+
+        <div class="">
+                <table width="100%" class="center">
+                    <tr>
+                        <td width="12%" class="btn btn-light weektime" th:attr="data-id=${info.week_date}" th:each="info,infoState:${view}" >
+                            <div><strong th:text="${info.week_date}"></strong></div>
+                            <div><strong th:text="${info.week}"></strong></div>
+                            <div class="blue">待回复：<span th:text="${info.num}"></span></div>
+                        </td>
+                    </tr>
+                </table>
         </div>
 
         <div class="col-sm-12">
@@ -105,11 +113,8 @@
                     $(grid_selector).jqGrid('setGridHeight', $(window).height() - 360);
                 });
 
-                //设置日期选择样式
-                $('.date-picker').datepicker({
-                    autoclose: true,
-                    todayHighlight: true
-                });
+                //设置起止日期选择
+                $('.input-daterange').datepicker({autoclose:true, todayHighlight: true, format:'yyyy-mm-dd'});
 
                 //重新进入时，销毁原有页面信息
                 $(document).one('ajaxloadstart.page', function (e) {
@@ -119,19 +124,34 @@
 
                 var page = 1; //当前页面
                 $("#query").click(function(){
+                    $(".weektime").removeClass("active");
                     page = 1;
                     getForDocMsg();
                 });
+
+                $(".weektime").click(function(){
+                   $(".weektime").removeClass("active");
+                   $(this).addClass("active");
+                   page = 1;
+                    //重置表单
+                    $("#reset").trigger("click");
+                   var params = {
+                       msgCrttime: $(this).attr("data-id"),
+                       repFlag: '2'
+                   };
+                   getForDocMsg(params);
+                });
+
                 //加载留言信息
                 getForDocMsg();
-                function getForDocMsg() {
+                function getForDocMsg(params) {
                     var par = {
                         page: page,
                         rows: 20
                     };
                     var formData = $("#queryForm").serializeJson();
                     console.log(formData);
-                    par = Object.assign(par, formData);
+                    par = Object.assign(par, formData, params);
                     myAjax("/patient/getFordocMsg", par, function(result) {
                         if(page === 1) {
                             $("#msgContent").html("");
@@ -209,7 +229,7 @@
             });
 
             $('#msgContent').ace_scroll({
-                size: 600
+                size: 550
             });
         });
 

@@ -21,11 +21,14 @@
         <if test="repFlag != null and repFlag !=''">
             and rep_flag = #{repFlag}
         </if>
-        <if test="currWeek != null and currWeek != ''">
-            and DATE_FORMAT(msg_crttime, '%Y-%m-%d') >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)
+        <if test="msgCrttime != null and msgCrttime != ''">
+            and date_format(m.msg_crttime, '%Y-%m-%d') = #{msgCrttime}
         </if>
-        <if test="currDay != null and currDay != ''">
-            and DATE_FORMAT(msg_crttime, '%Y-%m-%d') = current_date()
+        <if test="startDate != null and startDate != ''">
+            and date_format(m.msg_crttime, '%Y-%m-%d') >= #{startDate}
+        </if>
+        <if test="endDate != null and endDate != ''">
+            and date_format(m.msg_crttime, '%Y-%m-%d') &lt;= #{endDate}
         </if>
         order by m.msg_crttime desc, rep.rep_msg_time
     </select>
@@ -37,6 +40,19 @@
     </select>
     <select id="getLastRepProblem" resultType="wjwRepFordocMsg">
         select * from wjw_rep_fordoc_msg where msg_id = #{msgId} and rep_msg_type = '1' limit 1
+    </select>
+
+    <select id="getReplyAllView" resultType="map">
+        select count(*) num, '全部' week_date, '待回复' week from wjw_fordoc_msg where msg_doc_id = #{docId} and rep_flag = '2' union ALL
+        <foreach collection="weekList" item="week"  separator=" union all ">
+            select count(*) num, '${week.day}' week_date, '${week.week}' week from wjw_fordoc_msg
+            where msg_doc_id = #{docId} and rep_flag = '2' and  date_format(msg_crttime, '%Y-%m-%d') = #{week.date}
+        </foreach>
+    </select>
+
+    <select id="getAskCount" resultType="map">
+        select (select count(*) from wjw_fordoc_msg where msg_doc_id = #{docId}) asknum,
+         (select count(*) from wjw_fordoc_msg where msg_doc_id =#{docId} and rep_flag = '2') unasknum
     </select>
 
     <resultMap id="wjwFordocMsgMap" type="wjwFordocMsg">
