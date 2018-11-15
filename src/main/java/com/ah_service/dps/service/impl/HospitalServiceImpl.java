@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 public class HospitalServiceImpl implements HospitalService {
@@ -49,13 +50,13 @@ public class HospitalServiceImpl implements HospitalService {
         hospital.setCrtuser(loginDoctor.getDocLoginno());
         hospital.setUpduser(loginDoctor.getDocLoginno());
         if(hospital.getHosId() == null) {
+            //生成原始id, 现在已原始ID为主
+            hospital.setRawHospitalId(PublicUtil.randomStr(16));
             hospitalDao.addHospital(hospital);
             //生成管理员信息
-
         }else{
             hospitalDao.updHospital(hospital);
             //修改管理员信息
-
         }
         return new Result();
     }

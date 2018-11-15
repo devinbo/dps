@@ -7,6 +7,7 @@ import com.ah_service.dps.pojo.Page;
 import com.ah_service.dps.pojo.Result;
 import com.ah_service.dps.pojo.ResultPage;
 import com.ah_service.dps.service.UserService;
+import com.ah_service.dps.utils.PublicUtil;
 import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -73,9 +74,12 @@ public class UserServiceImpl implements UserService {
         Doctor loginDoctor = (Doctor) session.getAttribute("user");
         doctor.setCrtuser(loginDoctor.getCrtuser());
         doctor.setUpduser(loginDoctor.getCrtuser());
+        doctor.setRawHosId(loginDoctor.getRawHosId());
+        doctor.setDocHospital(loginDoctor.getDocHospital());
         if(doctor.getDocId() == null) {
             //新增
             doctor.setDocPasswordMd5(DigestUtils.md5DigestAsHex(DoctorConstant.PASSWORD.getBytes()));
+            doctor.setRawHosId(PublicUtil.randomStr(16));
             userDao.addDoctor(doctor);
         }else {
             userDao.updDoctor(doctor);

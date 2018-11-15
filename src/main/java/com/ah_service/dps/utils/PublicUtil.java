@@ -415,5 +415,16 @@ public class PublicUtil {
         return simpleDateFormat.parse(dateStr);
     }
 
+    /**
+     * 生成指定长度0-9+a-z 字符
+     * @param len
+     * @return
+     */
+    public static String randomStr(int len) {
+        if(len > 32) {
+            throw new RuntimeException("指定的UUID长度过长，请输入小鱼32位的数值");
+        }
+        return UUID.randomUUID().toString().replaceAll("-", "").substring(0, len);
+    }
 
 }

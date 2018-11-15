@@ -3,9 +3,9 @@
 <mapper namespace="com.ah_service.dps.dao.UserDao">
     <insert id="addDoctor" parameterType="doctor">
         insert into doctor(doc_name, doc_loginno, doc_password, doc_sex, doc_age, doc_speciality,
-         doc_desc, doc_medicineId, doc_headimg, crtuser, crtdate)
+         doc_desc, doc_medicineId, doc_headimg, crtuser, crtdate, raw_hos_id, raw_hos_id)
         VALUES (#{docName}, #{docLoginno}, #{docPasswordMd5}, #{docSex}, #{docAge}, #{docSpeciality},
-        #{docDesc}, #{docMedicineId}, #{docHeadimg}, #{crtuser}, now())
+        #{docDesc}, #{docMedicineId}, #{docHeadimg}, #{crtuser}, now(), #{rawHosId}, raw_hos_id)
     </insert>
 
     <update id="updDoctor" parameterType="doctor">
@@ -20,13 +20,15 @@
     <select id="checkNoAndPass" resultType="doctor" parameterType="doctor" resultMap="doctorMap">
         select doc_id, doc_name, doc_loginno, doc_password, doc_sex,
         doc_age, doc_speciality, doc_desc, doc_medicineId, doc_hospital, doc_headimg,
-        isadmin, ishosadmin,
+        isadmin, ishosadmin, doc_school, doc_position, doc_score, raw_doc_id, raw_hos_id, doc_phone,
+        doc_medicine_name, doc_hospital_name,
         h.hos_id, h.hos_area, h.hos_city, h.hos_awards, h.hos_desc, h.hos_grade, h.hos_logo,
-        h.hos_linkphone, h.hos_medicine, h.hos_name,
+        h.hos_linkphone, h.hos_medicine, h.hos_name, h.hos_address, h.hos_website, h.hos_latitude,
+        h.hos_longitude, h.raw_hospital_id, h.hos_type,
         (select data_name from bs_basedict where dict_code = 'HOS01' and data_code = h.hos_grade) hos_grade_name,
         (select name from city where city_id = h.hos_city) hos_city_name,
         (select name from area where area_id = h.hos_area) hos_area_name
-        from doctor d left join hospital h on d.doc_hospital = h.hos_id
+        from doctor d left join hospital h on d.raw_hos_id = h.raw_hospital_id
         where d.doc_loginno = #{docLoginno} and d.doc_password = #{docPasswordMd5} and d.recsts = '1'
     </select>
 
@@ -75,6 +77,13 @@
         <result property="docHeadimg" column="doc_headimg"/>
         <result property="isadmin" column="isadmin"/>
         <result property="ishosadmin" column="ishosadmin"/>
+        <result property="docSchool" column="doc_school"/>
+        <result property="docScore" column="doc_score"/>
+        <result property="rawDocId" column="raw_doc_id"/>
+        <result property="docPhone" column="doc_phone"/>
+        <result property="rawHosId" column="raw_hos_id"/>
+        <result property="docMedicineName" column="doc_medicine_name"/>
+        <result property="docHospitalName" column="doc_hospital_name"/>
         <association property="hospital" javaType="hospital">
             <id column="hos_id" property="hosId"/>
             <result column="hos_area" property="hosArea"/>
@@ -89,6 +98,12 @@
             <result column="hos_linkphone" property="hosLinkphone"/>
             <result column="hos_medicine" property="hosMedicine"/>
             <result column="hos_name" property="hosName"/>
+            <result column="hos_address" property="hosAddress"/>
+            <result column="hos_website" property="hosWite"/>
+            <result column="hos_latitude" property="hosLatitude"/>
+            <result column="hos_longitude" property="hosLongitude"/>
+            <result column="raw_hospital_id" property="rawHospitalId"/>
+            <result column="hos_type" property="hosType"/>
         </association>
     </resultMap>
 </mapper>

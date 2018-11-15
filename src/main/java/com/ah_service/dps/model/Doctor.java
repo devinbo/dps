@@ -1,8 +1,12 @@
 package com.ah_service.dps.model;
 
+import lombok.Data;
+import org.springframework.format.annotation.DateTimeFormat;
+
 /**
  * 医生
  */
+@Data
 public class Doctor {
 
   private Long docId;
@@ -22,234 +26,22 @@ public class Doctor {
   private Boolean isadmin; //超级管理员
   private String docHeadimg; //个人头像地址
   private String crtuser;
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private String crtdate;
   private String upduser;
+  @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
   private String update;
   private String recsts;
+
+  private String docSchool; //毕业院校
+  private String docPosition;//职位
+  private String docScore; //评分
+  private String rawDocId; //原始ID;
+  private String docPhone; //医生电话号码
+  private String rawHosId; //所属医院ID；
+
 
   private Hospital hospital; //所属医院信息
 
 
-  public Long getDocId() {
-    return docId;
-  }
-
-  public void setDocId(long docId) {
-    this.docId = docId;
-  }
-
-
-  public String getDocName() {
-    return docName;
-  }
-
-  public void setDocName(String docName) {
-    this.docName = docName;
-  }
-
-  public String getDocLoginno() {
-    return docLoginno;
-  }
-
-  public void setDocLoginno(String docLoginno) {
-    this.docLoginno = docLoginno;
-  }
-
-
-  public String getDocPassword() {
-    return docPassword;
-  }
-
-  public void setDocPassword(String docPassword) {
-    this.docPassword = docPassword;
-  }
-
-  public void setDocId(Long docId) {
-    this.docId = docId;
-  }
-
-  public String getDocPasswordMd5() {
-    return docPasswordMd5;
-  }
-
-  public void setDocPasswordMd5(String docPasswordMd5) {
-    this.docPasswordMd5 = docPasswordMd5;
-  }
-
-  public void setDocMedicineId(Long docMedicineId) {
-    this.docMedicineId = docMedicineId;
-  }
-
-  public void setDocHospital(Long docHospital) {
-    this.docHospital = docHospital;
-  }
-
-  public String getDocSex() {
-    return docSex;
-  }
-
-  public void setDocSex(String docSex) {
-    this.docSex = docSex;
-  }
-
-
-  public String getDocAge() {
-    return docAge;
-  }
-
-  public void setDocAge(String docAge) {
-    this.docAge = docAge;
-  }
-
-
-  public String getDocSpeciality() {
-    return docSpeciality;
-  }
-
-  public void setDocSpeciality(String docSpeciality) {
-    this.docSpeciality = docSpeciality;
-  }
-
-  public String getDocDesc() {
-    return docDesc;
-  }
-
-  public void setDocDesc(String docDesc) {
-    this.docDesc = docDesc;
-  }
-
-
-  public Long getDocMedicineId() {
-    return docMedicineId;
-  }
-
-  public void setDocMedicineId(long docMedicineId) {
-    this.docMedicineId = docMedicineId;
-  }
-
-
-  public Long getDocHospital() {
-    return docHospital;
-  }
-
-  public void setDocHospital(long docHospital) {
-    this.docHospital = docHospital;
-  }
-
-  public String getCrtuser() {
-    return crtuser;
-  }
-
-  public void setCrtuser(String crtuser) {
-    this.crtuser = crtuser;
-  }
-
-  public String getCrtdate() {
-    return crtdate;
-  }
-
-  public void setCrtdate(String crtdate) {
-    this.crtdate = crtdate;
-  }
-
-  public String getRecsts() {
-    return recsts;
-  }
-
-  public void setRecsts(String recsts) {
-    this.recsts = recsts;
-  }
-
-  public Boolean getIshosadmin() {
-    return ishosadmin;
-  }
-
-  public void setIshosadmin(Boolean ishosadmin) {
-    this.ishosadmin = ishosadmin;
-  }
-
-  public Boolean getIsadmin() {
-    return isadmin;
-  }
-
-  public void setIsadmin(Boolean isadmin) {
-    this.isadmin = isadmin;
-  }
-
-
-  public Hospital getHospital() {
-    return hospital;
-  }
-
-  public void setHospital(Hospital hospital) {
-    this.hospital = hospital;
-  }
-
-  public String getDocHeadimg() {
-    return docHeadimg;
-  }
-
-  public void setDocHeadimg(String docHeadimg) {
-    this.docHeadimg = docHeadimg;
-  }
-
-  public String getDocMedicineName() {
-    return docMedicineName;
-  }
-
-  public void setDocMedicineName(String docMedicineName) {
-    this.docMedicineName = docMedicineName;
-  }
-
-  public String getDocHospitalName() {
-    return docHospitalName;
-  }
-
-  public void setDocHospitalName(String docHospitalName) {
-    this.docHospitalName = docHospitalName;
-  }
-
-  public String getUpduser() {
-    return upduser;
-  }
-
-  public void setUpduser(String upduser) {
-    this.upduser = upduser;
-  }
-
-  public String getUpdate() {
-    return update;
-  }
-
-  public void setUpdate(String update) {
-    this.update = update;
-  }
-
-  @Override
-  public String toString() {
-    return "Doctor{" +
-            "docId=" + docId +
-            ", docName='" + docName + '\'' +
-            ", docLoginno='" + docLoginno + '\'' +
-            ", docPassword='" + docPassword + '\'' +
-            ", docPasswordMd5='" + docPasswordMd5 + '\'' +
-            ", docSex='" + docSex + '\'' +
-            ", docAge='" + docAge + '\'' +
-            ", docSpeciality='" + docSpeciality + '\'' +
-            ", docDesc='" + docDesc + '\'' +
-            ", docMedicineId=" + docMedicineId +
-            ", docMedicineName='" + docMedicineName + '\'' +
-            ", docHospital=" + docHospital +
-            ", docHospitalName='" + docHospitalName + '\'' +
-            ", ishosadmin=" + ishosadmin +
-            ", isadmin=" + isadmin +
-            ", docHeadimg='" + docHeadimg + '\'' +
-            ", crtuser='" + crtuser + '\'' +
-            ", crtdate='" + crtdate + '\'' +
-            ", upduser='" + upduser + '\'' +
-            ", update='" + update + '\'' +
-            ", recsts='" + recsts + '\'' +
-            ", hospital=" + hospital +
-            '}';
-  }
 }

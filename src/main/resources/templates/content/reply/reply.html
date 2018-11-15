@@ -103,6 +103,7 @@
         var scripts = [null, "assets/js/date-time/bootstrap-datepicker.js",
             "assets/js/jqGrid/jquery.jqGrid.custom.js",
             "assets/js/chosen.jquery.js",
+            "assets/js/date-time/moment.js",
             "assets/js/ace/elements.scroller.js",
             "assets/js/jqGrid/i18n/grid.locale-cn.js", null]
         var grid_selector = "#grid-table";
@@ -174,7 +175,7 @@
                             html += '<div class="time">';
                             html += '</div>';
                             html += '<div class="name">';
-                            html += '<a>患者：'+data.msgUserId+'; <span class="green"><i class="ace-icon fa fa-clock-o"></i>'+data.msgCrttime+'</span></a>';
+                            html += '<a>患者：'+data.msgUserId+'; <span class="green"><i class="ace-icon fa fa-clock-o"></i>'+gettime(data.msgCrttime)+'</span></a>';
                             html += '</div>';
                             html += '<div class="text" style="font-size: 16px; padding: 10px;">'+data.msgInfo+'</div>';
                             //如果进行过回复
@@ -193,11 +194,11 @@
                                     if(rep.repMsgType === '2') {
                                         //如果是医生的回复
                                         html += '<div class="well replyclass" style="margin-top:20px; width: 80%; margin-left:10%; display: '+hidden+'">' +
-                                            '<h4 class="blue">'+data.doctor.docName+'： <span class="grey">于'+rep.repMsgTime+'回复</span></h4>'+rep.repMsgInfo+'</div>';
+                                            '<h4 class="blue">'+data.doctor.docName+'： <span class="grey">于'+gettime(rep.repMsgTime)+'回复</span></h4>'+rep.repMsgInfo+'</div>';
                                     }else {
                                         //是患者的回复
                                         html += '<div style="display: '+hidden+'" class="name replyclass">';
-                                        html += '<a>患者：'+data.msgUserId+'; <span class="green"><i class="ace-icon fa fa-clock-o"></i>'+rep.repMsgTime+'</span></a>';
+                                        html += '<a>患者：'+data.msgUserId+'; <span class="green"><i class="ace-icon fa fa-clock-o"></i>'+gettime(rep.repMsgTime)+'</span></a>';
                                         html += '<div class="text" style="font-size: 16px; padding: 10px;"><span class="orange2">追问:</span>'+rep.repMsgInfo+'</div>';
                                         html += '</div>';
                                     }
@@ -322,6 +323,54 @@
                     showSuccInfo("已成功回复");
                 }
             })
-        })
+        });
+
+
+        function gettime(valueTime){
+            valueTime = moment(valueTime);
+            if(valueTime){
+                // var newData =  Date.parse(new Date());
+                var  newData = Math.round(new Date().getTime()/1000).toString();
+                var diffTime = Math.abs(newData-valueTime);
+                if (diffTime > 7 * 24 * 3600 ) {
+                    var date = new Date(valueTime);
+                    var y = date.getFullYear();
+                    console.log("yyyy:"+y)
+                    var m = date.getMonth() + 1;
+                    console.log("mm:"+m)
+                    m = m < 10 ? ('0' + m) : m;
+                    var d = date.getDate();
+                    d = d < 10 ? ('0' + d) : d;
+                    var h = date.getHours();
+                    h = h < 10 ? ('0' + h) : h;
+                    var minute = date.getMinutes();
+                    var second = date.getSeconds();
+                    minute = minute < 10 ? ('1' + minute) : minute;
+                    second = second < 10 ? ('0' + second) : second;
+                    return  m + '-' + d+' '+h+':'+minute;
+
+                } else if (diffTime < 7 * 24 * 3600 && diffTime > 24 * 3600) {
+                    // //注释("一周之内");
+
+                    // var time = newData - diffTime;
+                    var dayNum = Math.floor(diffTime / (24 * 60 * 60));
+                    return dayNum + "天前";
+
+                } else if (diffTime < 24 * 3600 && diffTime > 3600) {
+                    // //注释("一天之内");
+                    // var time = newData - diffTime;
+                    var dayNum = Math.floor(diffTime / (60 * 60));
+                    return dayNum + "小时前";
+
+                } else if (diffTime < 3600 && diffTime > 0) {
+                    // //注释("一小时之内");
+                    // var time = newData - diffTime;ß
+                    var dayNum = Math.floor(diffTime / (60));
+                    return dayNum + "分钟前";
+
+                }
+            }
+        }
+
     </script>
 </body>

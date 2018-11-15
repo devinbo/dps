@@ -56,7 +56,7 @@
     </select>
 
     <select id="getLatestLeave" resultType="java.util.Map">
-        select msg_id, msg_info, msg_user_id, msg_crttime from wjw_fordoc_msg where msg_doc_id = #{docId} order by msg_crttime DESC limit 5
+        select msg_id, msg_info, msg_user_id, date_format(msg_crttime, '%Y-%m-%d %T') from wjw_fordoc_msg where msg_doc_id = #{docId} order by msg_crttime DESC limit 5
     </select>
 
     <resultMap id="wjwFordocMsgMap" type="wjwFordocMsg">

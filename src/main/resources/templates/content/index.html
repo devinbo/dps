@@ -41,9 +41,9 @@
                 <div class="col-xs-12">
                     <blockquote class="pull-right">
                         <h1>公司简介</h1>
-                        <p th:text="${session.user.hospital.hosDesc}"></p>
+                        <p th:text="${session.user.hospital?.hosDesc}"></p>
                         <small>
-                            <cite th:title="${session.user.hospital.hosName}" th:text="${session.user?.hospital?.hosName}"></cite>
+                            <cite th:title="${session.user.hospital?.hosName}" th:text="${session.user?.hospital?.hosName}"></cite>
                         </small>
                     </blockquote>
                 </div>
