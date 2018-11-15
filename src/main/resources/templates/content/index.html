@@ -14,8 +14,8 @@
         <div class="row">
             <div class="col-lg-offset-1 col-xs-2">
                 <img width="100%" src="assets/images/hospital.jpg">
-                <h3 class="center" th:text="${session.user.hospital.hosName}"></h3>
-                <h6 style="width: 100%" class="center label label-success arrowed-in arrowed-in-right" th:text="${session.user.hospital.hosGradeName}"></h6>
+                <h3 class="center" th:text="${session.user?.hospital?.hosName}"></h3>
+                <h6 style="width: 100%" class="center label label-success arrowed-in arrowed-in-right" th:text="${session.user?.hospital?.hosGradeName}"></h6>
                 <div class="hr hr12 dotted"></div>
                 <div class="clearfix">
                     <div class="grid2" style="text-align: center">
@@ -31,7 +31,7 @@
                 </div>
                 <div class="hr hr12 dotted"></div>
 
-                <a href="#" class="btn btn-sm btn-block btn-info" th:style="${'display:'+ ((session.user.ishosadmin == null || !session.user.ishosadmin)? 'none': '')}">
+                <a href="#" class="btn btn-sm btn-block btn-info" th:style="${'display:'+ ((session.user?.ishosadmin == null || !session.user?.ishosadmin)? 'none': '')}">
                     <i class="ace-icon fa fa-edit bigger-120"></i>
                     <span class="bigger-110">修改资料</span>
                 </a>
@@ -43,7 +43,7 @@
                         <h1>公司简介</h1>
                         <p th:text="${session.user.hospital.hosDesc}"></p>
                         <small>
-                            <cite th:title="${session.user.hospital.hosName}" th:text="${session.user.hospital.hosName}"></cite>
+                            <cite th:title="${session.user.hospital.hosName}" th:text="${session.user?.hospital?.hosName}"></cite>
                         </small>
                     </blockquote>
                 </div>
@@ -52,7 +52,7 @@
     </div>
 
     <!--超级管理员显示的界面-->
-    <div class="row" th:hidden="${session.user.isadmin == null || !session.user.isadmin}">
+    <div class="row" th:hidden="${session.user?.isadmin == null || !session.user?.isadmin}">
         <div class="page-header">
             <h1>
                 系统总阅
@@ -235,7 +235,7 @@
     </div>
 
     <!--普通医生显示的页面-->
-    <div class="row" th:hidden="${session.user.isadmin != null || session.user.ishosadmin != null}">
+    <div class="row" th:hidden="${session.user?.isadmin != null || session.user?.ishosadmin != null}">
         <div class="page-header">
             <h1>
                 系统总阅
