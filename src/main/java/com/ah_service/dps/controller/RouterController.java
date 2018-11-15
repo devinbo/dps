@@ -1,6 +1,7 @@
 package com.ah_service.dps.controller;
 
 import com.ah_service.dps.model.Doctor;
+import com.ah_service.dps.model.WjwFordocMsg;
 import com.ah_service.dps.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -52,6 +53,10 @@ public class RouterController {
             //普通医生，加载对应的问诊总数
             Map<String, Object> askState = patientService.getAskCount(doctor.getDocId());
             modelAndView.addObject("askState", askState);
+            //加载最近5条留言信息
+            List<Map<String, Object>> msgList = patientService.getLatestLeave();
+            System.out.println(msgList);
+            modelAndView.addObject("fordocMsgList", msgList);
         }
         modelAndView.setViewName("content/index");
         return modelAndView;

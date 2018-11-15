@@ -20,4 +20,6 @@ public interface PatientService {
     List<Map<String,Object>> getReplyAllView();
 
     Map<String,Object> getAskCount(Long docId);
+
+    List<Map<String, Object>> getLatestLeave();
 }

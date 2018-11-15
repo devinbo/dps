@@ -289,75 +289,16 @@
                     <div class="widget-main no-padding">
                         <!-- #section:pages/dashboard.conversations -->
                         <div class="dialogs ace-scroll">
-                            <div class="itemdiv dialogdiv">
+                            <div class="itemdiv dialogdiv"  th:each="info,infoState:${fordocMsgList}">
                                 <div class="body">
                                     <div class="time">
                                         <i class="ace-icon fa fa-clock-o"></i>
-                                        <span class="green">4 sec</span>
+                                        <span class="green" th:text="${info.msg_crttime}"></span>
                                     </div>
                                     <div class="name">
-                                        <a href="#">张三</a>
+                                        <a href="#" th:text="${info.msg_user_id}"></a>
                                     </div>
-                                    <div class="text">希望能尽快添加在线问诊服务.</div>
-                                    <div class="tools">
-                                        <a href="#" class="btn btn-minier btn-info">
-                                            <i class="icon-only ace-icon fa fa-share"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="itemdiv dialogdiv">
-                                <div class="body">
-                                    <div class="time">
-                                        <i class="ace-icon fa fa-clock-o"></i>
-                                        <span class="blue">38 sec</span>
-                                    </div>
-                                    <div class="name">
-                                        <a href="#">李四</a>
-                                    </div>
-                                    <div class="text">希望能多增加合作医院，现在入驻医院太少.</div>
-                                    <div class="tools">
-                                        <a href="#" class="btn btn-minier btn-info">
-                                            <i class="icon-only ace-icon fa fa-share"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="itemdiv dialogdiv">
-                                <div class="body">
-                                    <div class="time">
-                                        <i class="ace-icon fa fa-clock-o"></i>
-                                        <span class="orange">2 min</span>
-                                    </div>
-
-                                    <div class="name">
-                                        <a href="#">中山医院</a>
-                                        <span class="label label-info arrowed arrowed-in-right">admin</span>
-                                    </div>
-                                    <div class="text">希望尽快添加新的功能，增加移动端.</div>
-
-                                    <div class="tools">
-                                        <a href="#" class="btn btn-minier btn-info">
-                                            <i class="icon-only ace-icon fa fa-share"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="itemdiv dialogdiv">
-                                <div class="body">
-                                    <div class="time">
-                                        <i class="ace-icon fa fa-clock-o"></i>
-                                        <span class="grey">3 min</span>
-                                    </div>
-
-                                    <div class="name">
-                                        <a href="#">阿毛</a>
-                                    </div>
-                                    <div class="text">我想说些心里话.</div>
-
+                                    <div class="text" th:text="${info.msg_info}"></div>
                                     <div class="tools">
                                         <a href="#" class="btn btn-minier btn-info">
                                             <i class="icon-only ace-icon fa fa-share"></i>
@@ -370,13 +311,32 @@
                                 <!--<div class="body">-->
                                     <!--<div class="time">-->
                                         <!--<i class="ace-icon fa fa-clock-o"></i>-->
-                                        <!--<span class="green">4 min</span>-->
+                                        <!--<span class="blue">38 sec</span>-->
+                                    <!--</div>-->
+                                    <!--<div class="name">-->
+                                        <!--<a href="#">李四</a>-->
+                                    <!--</div>-->
+                                    <!--<div class="text">希望能多增加合作医院，现在入驻医院太少.</div>-->
+                                    <!--<div class="tools">-->
+                                        <!--<a href="#" class="btn btn-minier btn-info">-->
+                                            <!--<i class="icon-only ace-icon fa fa-share"></i>-->
+                                        <!--</a>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+
+                            <!--<div class="itemdiv dialogdiv">-->
+                                <!--<div class="body">-->
+                                    <!--<div class="time">-->
+                                        <!--<i class="ace-icon fa fa-clock-o"></i>-->
+                                        <!--<span class="orange">2 min</span>-->
                                     <!--</div>-->
 
                                     <!--<div class="name">-->
-                                        <!--<a href="#">阿狗</a>-->
+                                        <!--<a href="#">中山医院</a>-->
+                                        <!--<span class="label label-info arrowed arrowed-in-right">admin</span>-->
                                     <!--</div>-->
-                                    <!--<div class="text">汪汪汪，没听懂你.</div>-->
+                                    <!--<div class="text">希望尽快添加新的功能，增加移动端.</div>-->
 
                                     <!--<div class="tools">-->
                                         <!--<a href="#" class="btn btn-minier btn-info">-->
@@ -385,7 +345,28 @@
                                     <!--</div>-->
                                 <!--</div>-->
                             <!--</div>-->
-                            <div class='center' id="moreAsk"><a href='javascript:void(0);' >查看详细</a></div>
+
+                            <!--<div class="itemdiv dialogdiv">-->
+                                <!--<div class="body">-->
+                                    <!--<div class="time">-->
+                                        <!--<i class="ace-icon fa fa-clock-o"></i>-->
+                                        <!--<span class="grey">3 min</span>-->
+                                    <!--</div>-->
+
+                                    <!--<div class="name">-->
+                                        <!--<a href="#">阿毛</a>-->
+                                    <!--</div>-->
+                                    <!--<div class="text">我想说些心里话.</div>-->
+
+                                    <!--<div class="tools">-->
+                                        <!--<a href="#" class="btn btn-minier btn-info">-->
+                                            <!--<i class="icon-only ace-icon fa fa-share"></i>-->
+                                        <!--</a>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+
+                            <div class='center'><a href='javascript:void(0);' id="moreAsk">查看详细</a></div>
                         </div>
                     </div>
                 </div>
@@ -411,8 +392,9 @@
                 });
 
                 $("#moreAsk").click(function(){
-                    toCustomUrl("page/index");
-                })
+                    toCustomUrl("page/reply/reply");
+                });
+
              });
         })
     </script>

@@ -22,4 +22,6 @@ public interface PatientDao {
     List<Map<String,Object>> getReplyAllView(@Param("weekList") List<Map<String, String>> weekList, @Param("docId") Long docId);
 
     Map<String,Object> getAskCount(@Param("docId") Long docId);
+
+    List<Map<String, Object>> getLatestLeave(@Param("docId") Long docId);
 }

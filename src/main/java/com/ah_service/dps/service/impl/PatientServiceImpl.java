@@ -86,6 +86,12 @@ public class PatientServiceImpl implements PatientService {
         return map;
     }
 
+    @Override
+    public List<Map<String, Object>> getLatestLeave() {
+        Doctor doctor = (Doctor) session.getAttribute("user");
+        return patientDao.getLatestLeave(doctor.getDocId());
+    }
+
     private List<Map<String,String>> getWeekDate() {
         List<Map<String, String>> list = new ArrayList<>();
         Date date = new Date();
