@@ -51,6 +51,12 @@
                                        placeholder="请输入登录账号">
                             </div>
 
+                            <div class="col-xs-3  form-group" th:hidden="${doctor?.docId}">
+                                <label for="docLoginno">登录账号<span class="red">*</span></label>
+                                <input class="form-control" id="docPassword" name="docPassword" th:value="${doctor?.docPassword}"
+                                       placeholder="请输入登录账号">
+                            </div>
+
                             <div class="col-xs-3 form-group">
                                 <label class="control-label" for="docSex">性别</label>
                                 <select th:value="${doctor?.docSex}" id="docSex" name="docSex" class="form-control" data-placeholder="请选择性别">
@@ -58,6 +64,15 @@
                                     <option value="男" th:selected="${doctor?.docSex=='男'}">男</option>
                                     <option value="女" th:selected="${doctor?.docSex=='女'}">女</option>
                                 </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-xs-3 form-group">
+                                <label class="control-label" for="docMedicineName">所属医科<span class="red">*</span></label>
+                                <!--<select  id="docMedicineId" name="docMedicineId" class="chosen-select form-control" data-placeholder="请选择所属医科"></select>-->
+                                <input class="form-control" id="docMedicineName" name="docMedicineName" th:value="${doctor?.docMedicineName}"
+                                       placeholder="请输入个人特长"/>
                             </div>
 
                             <div class="col-xs-3 form-group">
@@ -75,10 +90,6 @@
                                        placeholder="请输入个人特长"/>
                             </div>
 
-                            <div class="col-xs-6 form-group">
-                                <label class="control-label" for="docMedicineId">所属医科</label>
-                                <select  id="docMedicineId" name="docMedicineId" class="chosen-select form-control" data-placeholder="请选择所属医科"></select>
-                            </div>
                         </div>
 
                         <div class="space-12"></div>
@@ -195,6 +206,7 @@
             rules: {
                 docName: {required: true},
                 docLoginno: {required: true},
+                docMedicineName: {required: true}
             },
             highlight: function (e) {
                 $(e).closest('.form-group').removeClass('has-info').addClass('has-error');

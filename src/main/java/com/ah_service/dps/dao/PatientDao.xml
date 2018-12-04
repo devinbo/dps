@@ -13,8 +13,11 @@
     </update>
 
     <select id="getFordocMsg" resultType="wjwFordocMsg" parameterType="wjwFordocMsg" resultMap="wjwFordocMsgMap">
-        select m.msg_id, msg_info, msg_key, msg_user_id, msg_doc_id, msg_crttime, msg_updtime, rep_flag,
-        rep.rep_msg_id, rep.rep_msg_info, rep.rep_msg_time, rep.rep_msg_type, d.doc_name
+        select m.msg_id, msg_info, msg_key, msg_user_id, msg_doc_id, msg_crttime, msg_updtime,
+        (select group_concat(img_src) from wjw_msg_img wsi where wsi.add_rep_msg_id = m.msg_id and business_type = '1') msg_img,
+        rep_flag,rep.rep_msg_id, rep.rep_msg_info, rep.rep_msg_time, rep.rep_msg_type,
+        (select group_concat(img_src) from wjw_msg_img wsi where wsi.add_rep_msg_id = rep.msg_id and business_type = '2') rep_msg_img,
+        d.doc_name
         from wjw_fordoc_msg m left join wjw_rep_fordoc_msg rep on m.msg_id = rep.msg_id
         left join doctor d on m.msg_doc_id = d.doc_id
         where msg_doc_id = #{msgDocId}
@@ -67,6 +70,7 @@
         <result property="msgUpdtime" column="msg_user_id"/>
         <result property="msgCrttime" column="msg_crttime"/>
         <result property="repFlag" column="rep_flag"/>
+        <result property="msgImg" column="msg_img"/>
         <association property="doctor" javaType="doctor">
             <id property="docId" column="msg_doc_id"/>
             <result property="docName" column="doc_name"/>
@@ -76,6 +80,7 @@
             <result property="repMsgInfo" column="rep_msg_info"/>
             <result property="repMsgTime" column="rep_msg_time"/>
             <result property="repMsgType" column="rep_msg_type"/>
+            <result property="repMsgImg" column="rep_msg_img"/>
         </collection>
     </resultMap>
 </mapper>

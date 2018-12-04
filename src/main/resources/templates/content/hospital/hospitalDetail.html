@@ -2,7 +2,7 @@
 <html lang="cn" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>客户信息</title>
+    <title>医院信息</title>
     <style>
         .form-horizontal .form-group {
             margin-left: 0px;
@@ -64,7 +64,9 @@
 
                             <div class="col-xs-3  form-group">
                                 <label for="form-hospital-grade">医院等级<span class="red">*</span></label>
-                                <select id="form-hospital-grade" name="hosGrade" class="chosen-select form-control" data-placeholder="请输入医院等级"></select>
+                                <!--<select id="form-hospital-grade" name="hosGrade" class="chosen-select form-control" data-placeholder="请输入医院等级"></select>-->
+                                <input class="form-control" id="form-hospital-grade" name="hosGrade" th:value="${hospital?.hosGrade}"
+                                       placeholder="请输入医院等级">
                             </div>
 
                             <div class="col-xs-3 form-group">
@@ -160,16 +162,16 @@
         /**
          * 设置选择框
          */
-        $("#form-hospital-grade").chosen({allow_single_deselect:true});
-        myAjax("/base/getAllGrade", null, function(result){
-            if(result.code == 1) {
-                toSelectData(result.data, "data_id", "data_name");
-                //设置选择框中信息
-                createDepSelect(result.data);
-            }else{
-                showErrorInfo(result.message);
-            }
-        });
+        // $("#form-hospital-grade").chosen({allow_single_deselect:true});
+        // myAjax("/base/getAllGrade", null, function(result){
+        //     if(result.code == 1) {
+        //         toSelectData(result.data, "data_id", "data_name");
+        //         //设置选择框中信息
+        //         createDepSelect(result.data);
+        //     }else{
+        //         showErrorInfo(result.message);
+        //     }
+        // });
 
         function createDepSelect(data) {
             var html = '<option value="">&nbsp;</option>';

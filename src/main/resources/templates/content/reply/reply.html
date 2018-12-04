@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"  xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>留言回复</title>
     <!--列表样式信息-->
@@ -8,369 +8,462 @@
             background-color: #cecece !important;
         }
     </style>
+    <link rel="stylesheet" href="assets/css/colorbox.css" />
 </head>
 
 <body>
-    <div class="row">
-        <div class="well">
-            <form id="queryForm" class="form-horizontal">
-                <div class="form-group">
-                    <div class="col-xs-5">
-                        <label for="repFlag" class="col-sm-3 control-label no-padding-right">留言起止日期:</label>
-                        <div class="input-daterange input-group">
-                            <input type="text" class="input-sm form-control" data-date-format="yyyy-mm-dd" name="startDate" placeholder="请输入查询开始日期">
-                                <span class="input-group-addon">
+<div class="row">
+    <div class="well">
+        <form id="queryForm" class="form-horizontal">
+            <div class="form-group">
+                <div class="col-xs-5">
+                    <label for="repFlag" class="col-sm-3 control-label no-padding-right">留言起止日期:</label>
+                    <div class="input-daterange input-group">
+                        <input type="text" class="input-sm form-control" data-date-format="yyyy-mm-dd" name="startDate"
+                               placeholder="请输入查询开始日期">
+                        <span class="input-group-addon">
                                     <i class="fa fa-exchange"></i>
                                 </span>
-                            <input type="text" class="input-sm form-control" data-date-format="yyyy-mm-dd" name="endDate" placeholder="请输入查询截止日期">
-                        </div>
-                    </div>
-
-                    <div class="col-xs-3">
-                        <label for="repFlag" class="col-sm-3 control-label no-padding-right">是否回复:</label>
-                        <div class="col-sm-6">
-                            <select class="form-control" id="repFlag" name="repFlag">
-                                <option value="" selected></option>
-                                <option value="1">已回复</option>
-                                <option value="2">尚未回复</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="col-xs-3">
-                        <button class="btn btn-primary" type="button" id="query">
-                            <i class="ace-icon fa fa-search bigger"></i>
-                            查询
-                        </button>
-                        <button class="btn" type="reset" id="reset">
-                            <i class="ace-icon fa fa-refresh bigger"></i>
-                            重置
-                        </button>
+                        <input type="text" class="input-sm form-control" data-date-format="yyyy-mm-dd" name="endDate"
+                               placeholder="请输入查询截止日期">
                     </div>
                 </div>
-            </form>
-        </div>
 
-        <div class="">
-                <table width="100%" class="center">
-                    <tr>
-                        <td width="12%" class="btn btn-light weektime" th:attr="data-id=${info.week_date}" th:each="info,infoState:${view}" >
-                            <div><strong th:text="${info.week_date}"></strong></div>
-                            <div><strong th:text="${info.week}"></strong></div>
-                            <div class="blue">待回复：<span th:text="${info.num}"></span></div>
-                        </td>
-                    </tr>
-                </table>
-        </div>
-
-        <div class="col-sm-12">
-            <div class="widget-box">
-                <div class="widget-header">
-                    <h4 class="widget-title lighter smaller">
-                        <i class="ace-icon fa fa-comment blue"></i>
-                        用户留言信息
-                    </h4>
+                <div class="col-xs-3">
+                    <label for="repFlag" class="col-sm-3 control-label no-padding-right">是否回复:</label>
+                    <div class="col-sm-6">
+                        <select class="form-control" id="repFlag" name="repFlag">
+                            <option value="" selected></option>
+                            <option value="1">已回复</option>
+                            <option value="2">尚未回复</option>
+                        </select>
+                    </div>
                 </div>
 
-                <div class="widget-body">
-                    <div class="widget-main no-padding">
-                        <!-- #section:pages/dashboard.conversations -->
-                        <div id="msgContent" class="dialogs ace-scroll" style="font-size: 16px;">
+                <div class="col-xs-3">
+                    <button class="btn btn-primary" type="button" id="query">
+                        <i class="ace-icon fa fa-search bigger"></i>
+                        查询
+                    </button>
+                    <button class="btn" type="reset" id="reset">
+                        <i class="ace-icon fa fa-refresh bigger"></i>
+                        重置
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
 
-                        </div>
-                        <div class='center' id="loadMore"><a href='javascript:void(0);' >加载更多</a></div>
-                        <!--<form>-->
-                            <!--<div class="form-actions">-->
-                                <!--<div class="input-group">-->
-                                    <!--<input id="sendMsgId" placeholder="选择客户进行留言" type="text" class="form-control" name="message" />-->
-                                    <!--<span class="input-group-btn">-->
-                                        <!--<button disabled id="send" class="btn btn-sm btn-info no-radius" type="button">-->
-                                            <!--<i class="ace-icon fa fa-share"></i>-->
-                                            <!--Send-->
-                                        <!--</button>-->
-									<!--</span>-->
-                                <!--</div>-->
-                            <!--</div>-->
-                        <!--</form>-->
+    <div class="">
+        <table width="100%" class="center">
+            <tr>
+                <td width="12%" class="btn btn-light weektime" th:attr="data-id=${info.week_date}"
+                    th:each="info,infoState:${view}">
+                    <div><strong th:text="${info.week_date}"></strong></div>
+                    <div><strong th:text="${info.week}"></strong></div>
+                    <div class="blue">待回复：<span th:text="${info.num}"></span></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="col-sm-12">
+        <div class="widget-box">
+            <div class="widget-header">
+                <h4 class="widget-title lighter smaller">
+                    <i class="ace-icon fa fa-comment blue"></i>
+                    用户留言信息
+                </h4>
+            </div>
+
+            <div class="widget-body">
+                <div class="widget-main no-padding">
+                    <!-- #section:pages/dashboard.conversations -->
+                    <div id="msgContent" class="dialogs ace-scroll" style="font-size: 16px;">
+
                     </div>
+                    <div class='center' id="loadMore"><a href='javascript:void(0);'>加载更多</a></div>
+                    <!--<form>-->
+                    <!--<div class="form-actions">-->
+                    <!--<div class="input-group">-->
+                    <!--<input id="sendMsgId" placeholder="选择客户进行留言" type="text" class="form-control" name="message" />-->
+                    <!--<span class="input-group-btn">-->
+                    <!--<button disabled id="send" class="btn btn-sm btn-info no-radius" type="button">-->
+                    <!--<i class="ace-icon fa fa-share"></i>-->
+                    <!--Send-->
+                    <!--</button>-->
+                    <!--</span>-->
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</form>-->
                 </div>
             </div>
         </div>
     </div>
+</div>
 
 
-    <script type="text/javascript">
-        var scripts = [null, "assets/js/date-time/bootstrap-datepicker.js",
-            "assets/js/jqGrid/jquery.jqGrid.custom.js",
-            "assets/js/chosen.jquery.js",
-            "assets/js/date-time/moment.js",
-            "assets/js/ace/elements.scroller.js",
-            "assets/js/jqGrid/i18n/grid.locale-cn.js", null]
-        var grid_selector = "#grid-table";
-        var pager_selector = "#grid-pager";
+<script type="text/javascript">
+    var scripts = [null, "assets/js/date-time/bootstrap-datepicker.js",
+        "assets/js/jqGrid/jquery.jqGrid.custom.js",
+        "assets/js/chosen.jquery.js",
+        "assets/js/jquery.colorbox.js",
+        "assets/js/date-time/moment.js",
+        "assets/js/ace/elements.scroller.js",
+        "assets/js/jqGrid/i18n/grid.locale-cn.js", null]
+    var grid_selector = "#grid-table";
+    var pager_selector = "#grid-pager";
 
 
-        $('.page-content-area').ace_ajax('loadScripts', scripts, function () {
-            //inline scripts related to this page
-            jQuery(function ($) {
-                var parent_column = $(grid_selector).closest('[class*="col-"]');
-                $(window).on('resize.jqGrid', function () {
-                    $(grid_selector).jqGrid('setGridWidth', parent_column.width());
-                    $(grid_selector).jqGrid('setGridHeight', $(window).height() - 360);
-                });
+    $('.page-content-area').ace_ajax('loadScripts', scripts, function () {
+        //inline scripts related to this page
+        jQuery(function ($) {
+            var parent_column = $(grid_selector).closest('[class*="col-"]');
+            $(window).on('resize.jqGrid', function () {
+                $(grid_selector).jqGrid('setGridWidth', parent_column.width());
+                $(grid_selector).jqGrid('setGridHeight', $(window).height() - 360);
+            });
 
-                //设置起止日期选择
-                $('.input-daterange').datepicker({autoclose:true, todayHighlight: true, format:'yyyy-mm-dd'});
+            //设置起止日期选择
+            $('.input-daterange').datepicker({autoclose: true, todayHighlight: true, format: 'yyyy-mm-dd'});
 
-                //重新进入时，销毁原有页面信息
-                $(document).one('ajaxloadstart.page', function (e) {
-                    $.jgrid.gridDestroy(grid_selector);
-                    $('.ui-jqdialog').remove();
-                });
+            //重新进入时，销毁原有页面信息
+            $(document).one('ajaxloadstart.page', function (e) {
+                $.jgrid.gridDestroy(grid_selector);
+                $('.ui-jqdialog').remove();
+            });
 
-                var page = 1; //当前页面
-                $("#query").click(function(){
-                    $(".weektime").removeClass("active");
-                    page = 1;
-                    getForDocMsg();
-                });
-
-                $(".weektime").click(function(){
-                   $(".weektime").removeClass("active");
-                   $(this).addClass("active");
-                   page = 1;
-                    //重置表单
-                    $("#reset").trigger("click");
-                   var params = {
-                       msgCrttime: $(this).attr("data-id"),
-                       repFlag: '2'
-                   };
-                   getForDocMsg(params);
-                });
-
-                //加载留言信息
+            var page = 1; //当前页面
+            $("#query").click(function () {
+                $(".weektime").removeClass("active");
+                page = 1;
                 getForDocMsg();
-                function getForDocMsg(params) {
-                    var par = {
-                        page: page,
-                        rows: 20
-                    };
-                    var formData = $("#queryForm").serializeJson();
-                    console.log(formData);
-                    par = Object.assign(par, formData, params);
-                    myAjax("/patient/getFordocMsg", par, function(result) {
-                        if(page === 1) {
-                            $("#msgContent").html("");
-                        }
-                        createMsgHtml(result);
-                    });
-                }
+            });
 
-                function createMsgHtml(result) {
-                    var html = "";
-                    if(result.rows) {
-                        result.rows.forEach(function(data) {
-                            html += '<div class="itemdiv dialogdiv" id="msg'+data.msgId+'">';
-                            html += '<div class="body">';
-                            html += '<div class="time">';
+            $(".weektime").click(function () {
+                $(".weektime").removeClass("active");
+                $(this).addClass("active");
+                page = 1;
+                //重置表单
+                $("#reset").trigger("click");
+                var params = {
+                    msgCrttime: $(this).attr("data-id"),
+                    repFlag: '2'
+                };
+                getForDocMsg(params);
+            });
+
+            //加载留言信息
+            getForDocMsg();
+
+            function getForDocMsg(params) {
+                var par = {
+                    page: page,
+                    rows: 20
+                };
+                var formData = $("#queryForm").serializeJson();
+                console.log(formData);
+                par = Object.assign(par, formData, params);
+                myAjax("/patient/getFordocMsg", par, function (result) {
+                    if (page === 1) {
+                        $("#msgContent").html("");
+                    }
+                    createMsgHtml(result);
+                });
+            }
+
+            function createMsgHtml(result) {
+                var html = "";
+                if (result.rows) {
+                    result.rows.forEach(function (data) {
+                        html += '<div class="itemdiv dialogdiv" id="msg' + data.msgId + '">';
+                        html += '<div class="body">';
+                        html += '<div class="time">';
+                        html += '</div>';
+                        html += '<div class="name">';
+                        html += '<a>患者：' + data.msgUserId + '; <span class="green"><i class="ace-icon fa fa-clock-o"></i>' + gettime(data.msgCrttime) + '</span></a>';
+                        html += '</div>';
+                        html += '<div class="text" style="font-size: 16px; padding: 10px;">';
+                        html += data.msgInfo;
+                        if (data.msgImg) {
+                            html += '<div style="padding: 10px">';
+                            html += '<ul class="ace-thumbnails clearfix">';
+                            data.msgImg.split(",").forEach(function (imgSrc) {
+                                html += '<li>';
+                                html += '<a href="'+imgSrc+'" data-rel="colorbox">';
+                                html += '<img width="150" height="150" alt="150x150" src="'+imgSrc+'" />';
+                                html += '<div class="text">';
+                                html += '<div class="inner">点击查看详细</div>';
+                                html += '</div>';
+                                html += '</a>';
+                                html += '</li>';
+                            });
+                            html += '</ul>';
                             html += '</div>';
-                            html += '<div class="name">';
-                            html += '<a>患者：'+data.msgUserId+'; <span class="green"><i class="ace-icon fa fa-clock-o"></i>'+gettime(data.msgCrttime)+'</span></a>';
-                            html += '</div>';
-                            html += '<div class="text" style="font-size: 16px; padding: 10px;">'+data.msgInfo+'</div>';
-                            //如果进行过回复
-                            if(data.repFlag == '1') {
-                                var hasMore = false;
-                                data.wjwRepFordocMsgList.forEach(function(rep, index){
-                                    var hidden = "block";
-                                    if(index > 2) {
-                                        //如果超过5条记录，那么就隐藏.
-                                        hidden = "none";
-                                        if(!hasMore) {
-                                            hasMore = true;
-                                            html += '<a href="javascript:void(0);" class="openAll" data-id="'+data.msgId+'">查看全部记录<a/>'
-                                        }
+                        }
+                        html += '</div>';
+
+                        //如果进行过回复
+                        if (data.repFlag == '1') {
+                            var hasMore = false;
+                            data.wjwRepFordocMsgList.forEach(function (rep, index) {
+                                var hidden = "block";
+                                if (index > 2) {
+                                    //如果超过5条记录，那么就隐藏.
+                                    hidden = "none";
+                                    if (!hasMore) {
+                                        hasMore = true;
+                                        html += '<a href="javascript:void(0);" class="openAll" data-id="' + data.msgId + '">查看全部记录<a/>'
                                     }
-                                    if(rep.repMsgType === '2') {
-                                        //如果是医生的回复
-                                        html += '<div class="well replyclass" style="margin-top:20px; width: 80%; margin-left:10%; display: '+hidden+'">' +
-                                            '<h4 class="blue">'+data.doctor.docName+'： <span class="grey">于'+gettime(rep.repMsgTime)+'回复</span></h4>'+rep.repMsgInfo+'</div>';
-                                    }else {
-                                        //是患者的回复
-                                        html += '<div style="display: '+hidden+'" class="name replyclass">';
-                                        html += '<a>患者：'+data.msgUserId+'; <span class="green"><i class="ace-icon fa fa-clock-o"></i>'+gettime(rep.repMsgTime)+'</span></a>';
-                                        html += '<div class="text" style="font-size: 16px; padding: 10px;"><span class="orange2">追问:</span>'+rep.repMsgInfo+'</div>';
+                                }
+                                if (rep.repMsgType === '2') {
+                                    //如果是医生的回复
+                                    html += '<div class="well replyclass" style="margin-top:20px; width: 80%; margin-left:10%; display: ' + hidden + '">' +
+                                        '<h4 class="blue">' + data.doctor.docName + '： <span class="grey">于' + gettime(rep.repMsgTime) + '回复</span></h4>' + rep.repMsgInfo + '</div>';
+                                } else {
+                                    //是患者的回复
+                                    html += '<div style="display: ' + hidden + '" class="name replyclass">';
+                                    html += '<a>患者：' + data.msgUserId + '; <span class="green"><i class="ace-icon fa fa-clock-o"></i>' + gettime(rep.repMsgTime) + '</span></a>';
+                                    html += '<div class="text" style="font-size: 16px; padding: 10px;"><span class="orange2">追问:</span>';
+                                    html += rep.repMsgInfo;
+                                    if (data.repMsgImg) {
+                                        html += '<div style="padding: 10px">';
+                                        html += '<ul class="ace-thumbnails clearfix">';
+                                        data.repMsgImg.split(",").forEach(function (imgSrc) {
+                                            html += '<li>';
+                                            html += '<a href="'+imgSrc+'" data-rel="colorbox">';
+                                            html += '<img width="150" height="150" alt="150x150" src="'+imgSrc+'" />';
+                                            html += '<div class="text">';
+                                            html += '<div class="inner">点击查看详细</div>';
+                                            html += '</div>';
+                                            html += '</a>';
+                                            html += '</li>';
+                                        });
+                                        html += '</ul>';
                                         html += '</div>';
                                     }
-                                });
-                            }
-                            html += '<div class="tools">';
-                            html += '<a href="javascript:void(0);" onclick="selectId('+data.msgId+')" class="btn btn-minier btn-info">';
-                            html += '<i class="icon-only ace-icon fa fa-share" title="进行回复" ></i>';
-                            html += '</a>';
-                            html += '</div>';
-                            html += '</div>';
-                            html += '</div>';
-                        });
-                        if(result.rows.length === 20) {
-                            //加载更多
-                            $("#loadMore").show();
-                        }else{
-                            $("#loadMore").hide();
+                                    html +='</div>';
+                                    html += '</div>';
+                                }
+                            });
                         }
+                        html += '<div class="tools">';
+                        html += '<a href="javascript:void(0);" onclick="selectId(' + data.msgId + ')" class="btn btn-minier btn-info">';
+                        html += '<i class="icon-only ace-icon fa fa-share" title="进行回复" ></i>';
+                        html += '</a>';
+                        html += '</div>';
+                        html += '</div>';
+                        html += '</div>';
+                    });
+                    if (result.rows.length === 20) {
+                        //加载更多
+                        $("#loadMore").show();
+                    } else {
+                        $("#loadMore").hide();
                     }
-                    $("#msgContent").append(html);
                 }
+                $("#msgContent").append(html);
 
-                $("#loadMore").find("a").on("click", function(){
-                    page++;
-                    getForDocMsg();
-                });
-
-                $(document).on("click", ".openAll", function(){
-                    var msgId = $(this).attr("data-id");
-                    $("#msg"+msgId).find(".replyclass").show();
-                    $(this).hide();
-                })
-            });
-
-            $('#msgContent').ace_scroll({
-                size: 550
-            });
-        });
-
-        function selectId(msgId, userName) {
-            //加载该患者最后的问题
-            myAjax("/patient/getLastProblem", {msgId: msgId}, function(result){
-                if(result.code === 1) {
-                    createReplyHtml(result, userName);
-                }else{
-                    showErrorInfo(result.message);
-                }
-            });
-            selectedMsgId = msgId;
-        }
-
-
-        function createReplyHtml(result, userName) {
-            var data = result.data;
-            var question = "";
-            if(data.wjwRepFordocMsgList && data.wjwRepFordocMsgList.length > 0) {
-                question = data.wjwRepFordocMsgList[0].repMsgInfo;
-            }else{
-                question = data.msgInfo;
+                // $(".ace-thumbnails").colorbox();
             }
-            //弹窗回复
-            bootbox.dialog({
-                title: '给患者：'+ (userName?userName:'')+'回复',
-                closeButton: false,
-                message: '<form class="form-horizontal" id="validation-form" method="get">' +
-                '<div style="padding-left: 50px; padding-right: 50px;">' +
-                '<h3 class="light-blue">问:<span style="font-size:14px;" class="grey">'+question+'</span></h3>' +
-                '</div>' +
-                '<div class="form-group2">' +
-                '<div class="col-xs-12 col-sm-9">' +
-                '<textarea id="replycontent" class="col-xs-12 col-xs-offset-2" style="min-height: 150px;" placeholder="在此输入你要回复的内容"/>' +
-                '</div>' +
-                '</div>' +
-                '</form>',
-                buttons: {
-                    cancel: {
-                        label: '取消',
-                        className: 'btn-danger',
+
+            imgFileFunction();
+            //处理图片信息
+            function imgFileFunction() {
+                var $overflow = '';
+                var colorbox_params = {
+                    rel: 'colorbox',
+                    reposition:true,
+                    scalePhotos:true,
+                    scrolling:false,
+                    previous:'<i class="ace-icon fa fa-arrow-left"></i>',
+                    next:'<i class="ace-icon fa fa-arrow-right"></i>',
+                    close:'&times;',
+                    current:'{current} of {total}',
+                    maxWidth:'100%',
+                    maxHeight:'100%',
+                    onOpen:function(){
+                        $overflow = document.body.style.overflow;
+                        document.body.style.overflow = 'hidden';
                     },
-                    ok: {
-                        label: '确认',
-                        className: 'btn-success',
-                        callback: function () {
-                                var operState = true;
-                                var par = {
-                                    repMsgInfo: $("#replycontent").val(),
-                                    msgId: data.msgId
-                                };
-                                myAjax("/patient/addReply", par, function (data) {
-                                    if (data.code === 1) {
-                                        //说明操作成功
-                                        showSuccInfo("操作成功！");
-                                        // getForDocMsg();
-                                        $("#query").trigger("click");
-                                    } else {
-                                        //说明操作失败
-                                        showErrorInfo(data.message);
-                                        operState = false;
-                                    }
-                                });
-                                return operState;
-                            }
-                        }
+                    onClosed:function(){
+                        document.body.style.overflow = $overflow;
+                    },
+                    onComplete:function(){
+                        $.colorbox.resize();
                     }
-            });
-        }
+                };
 
-        var selectedMsgId = "";
-        $("#send").click(function() {
-            //选择客户信息进行发送
-            if(!selectedMsgId) {
-                return;
+                $('.ace-thumbnails [data-rel="colorbox"]').colorbox(colorbox_params);
+                $("#cboxLoadingGraphic").html("<i class='ace-icon fa fa-spinner orange fa-spin'></i>");//let's add a custom loading icon
+
+                $(document).one('ajaxloadstart.page', function (e) {
+                    $('#colorbox, #cboxOverlay').remove();
+                });
             }
-            if(!$(this).val()) {
-                showWarnInfo("留言信息不能为空");
-                return;
-            }
-            myAjax("/patient/sendMsg", {repMsgInfo: $(this).val(), msgId: selectedMsgId}, function(result) {
-                if(result.code === 1) {
-                    $("#send").val("");
-                    showSuccInfo("已成功回复");
-                }
+
+            $("#loadMore").find("a").on("click", function () {
+                page++;
+                getForDocMsg();
+            });
+
+            $(document).on("click", ".openAll", function () {
+                var msgId = $(this).attr("data-id");
+                $("#msg" + msgId).find(".replyclass").show();
+                $(this).hide();
             })
         });
 
+        $('#msgContent').ace_scroll({
+            size: 550
+        });
+    });
 
-        function gettime(valueTime){
-            valueTime = moment(valueTime);
-            if(valueTime){
-                // var newData =  Date.parse(new Date());
-                var  newData = Math.round(new Date().getTime()/1000).toString();
-                var diffTime = Math.abs(newData-valueTime);
-                if (diffTime > 7 * 24 * 3600 ) {
-                    var date = new Date(valueTime);
-                    var y = date.getFullYear();
-                    console.log("yyyy:"+y)
-                    var m = date.getMonth() + 1;
-                    console.log("mm:"+m)
-                    m = m < 10 ? ('0' + m) : m;
-                    var d = date.getDate();
-                    d = d < 10 ? ('0' + d) : d;
-                    var h = date.getHours();
-                    h = h < 10 ? ('0' + h) : h;
-                    var minute = date.getMinutes();
-                    var second = date.getSeconds();
-                    minute = minute < 10 ? ('1' + minute) : minute;
-                    second = second < 10 ? ('0' + second) : second;
-                    return  m + '-' + d+' '+h+':'+minute;
+    function selectId(msgId, userName) {
+        //加载该患者最后的问题
+        myAjax("/patient/getLastProblem", {msgId: msgId}, function (result) {
+            if (result.code === 1) {
+                createReplyHtml(result, userName);
+            } else {
+                showErrorInfo(result.message);
+            }
+        });
+        selectedMsgId = msgId;
+    }
 
-                } else if (diffTime < 7 * 24 * 3600 && diffTime > 24 * 3600) {
-                    // //注释("一周之内");
 
-                    // var time = newData - diffTime;
-                    var dayNum = Math.floor(diffTime / (24 * 60 * 60));
-                    return dayNum + "天前";
-
-                } else if (diffTime < 24 * 3600 && diffTime > 3600) {
-                    // //注释("一天之内");
-                    // var time = newData - diffTime;
-                    var dayNum = Math.floor(diffTime / (60 * 60));
-                    return dayNum + "小时前";
-
-                } else if (diffTime < 3600 && diffTime > 0) {
-                    // //注释("一小时之内");
-                    // var time = newData - diffTime;ß
-                    var dayNum = Math.floor(diffTime / (60));
-                    return dayNum + "分钟前";
-
+    function createReplyHtml(result, userName) {
+        var data = result.data;
+        var question = "";
+        if (data.wjwRepFordocMsgList && data.wjwRepFordocMsgList.length > 0) {
+            question = data.wjwRepFordocMsgList[0].repMsgInfo;
+        } else {
+            question = data.msgInfo;
+        }
+        //弹窗回复
+        bootbox.dialog({
+            title: '给患者：' + (userName ? userName : '') + '回复',
+            closeButton: false,
+            message: '<form class="form-horizontal" id="validation-form" method="get">' +
+            '<div style="padding-left: 50px; padding-right: 50px;">' +
+            '<h3 class="light-blue">问:<span style="font-size:14px;" class="grey">' + question + '</span></h3>' +
+            '</div>' +
+            '<div class="form-group2">' +
+            '<div class="col-xs-12 col-sm-9">' +
+            '<textarea id="replycontent" class="col-xs-12 col-xs-offset-2" style="min-height: 150px;" placeholder="在此输入你要回复的内容"/>' +
+            '</div>' +
+            '</div>' +
+            '</form>',
+            buttons: {
+                cancel: {
+                    label: '取消',
+                    className: 'btn-danger',
+                },
+                ok: {
+                    label: '确认',
+                    className: 'btn-success',
+                    callback: function () {
+                        var operState = true;
+                        var par = {
+                            repMsgInfo: $("#replycontent").val(),
+                            msgId: data.msgId
+                        };
+                        myAjax("/patient/addReply", par, function (data) {
+                            if (data.code === 1) {
+                                //说明操作成功
+                                showSuccInfo("操作成功！");
+                                // getForDocMsg();
+                                $("#query").trigger("click");
+                            } else {
+                                //说明操作失败
+                                showErrorInfo(data.message);
+                                operState = false;
+                            }
+                        });
+                        return operState;
+                    }
                 }
             }
-        }
+        });
+    }
 
-    </script>
+    var selectedMsgId = "";
+    $("#send").click(function () {
+        //选择客户信息进行发送
+        if (!selectedMsgId) {
+            return;
+        }
+        if (!$(this).val()) {
+            showWarnInfo("留言信息不能为空");
+            return;
+        }
+        myAjax("/patient/sendMsg", {repMsgInfo: $(this).val(), msgId: selectedMsgId}, function (result) {
+            if (result.code === 1) {
+                $("#send").val("");
+                showSuccInfo("已成功回复");
+            }
+        })
+    });
+
+    $('#merHomeicon').ace_file_input({
+        style: 'well',
+        btn_choose: 'Drop files here or click to choose',
+        btn_change: null,
+        no_icon: 'ace-icon fa fa-cloud-upload',
+        droppable: true,
+        thumbnail: 'small',
+        preview_error : function(filename, error_code) {
+        }
+    }).on('change', function(){
+    });
+
+
+
+    function gettime(valueTime) {
+        valueTime = moment(valueTime);
+        if (valueTime) {
+            // var newData =  Date.parse(new Date());
+            var newData = Math.round(new Date().getTime() / 1000).toString();
+            var diffTime = Math.abs(newData - valueTime);
+            if (diffTime > 7 * 24 * 3600) {
+                var date = new Date(valueTime);
+                var y = date.getFullYear();
+                console.log("yyyy:" + y)
+                var m = date.getMonth() + 1;
+                console.log("mm:" + m)
+                m = m < 10 ? ('0' + m) : m;
+                var d = date.getDate();
+                d = d < 10 ? ('0' + d) : d;
+                var h = date.getHours();
+                h = h < 10 ? ('0' + h) : h;
+                var minute = date.getMinutes();
+                var second = date.getSeconds();
+                minute = minute < 10 ? ('1' + minute) : minute;
+                second = second < 10 ? ('0' + second) : second;
+                return m + '-' + d + ' ' + h + ':' + minute;
+
+            } else if (diffTime < 7 * 24 * 3600 && diffTime > 24 * 3600) {
+                // //注释("一周之内");
+
+                // var time = newData - diffTime;
+                var dayNum = Math.floor(diffTime / (24 * 60 * 60));
+                return dayNum + "天前";
+
+            } else if (diffTime < 24 * 3600 && diffTime > 3600) {
+                // //注释("一天之内");
+                // var time = newData - diffTime;
+                var dayNum = Math.floor(diffTime / (60 * 60));
+                return dayNum + "小时前";
+
+            } else if (diffTime < 3600 && diffTime > 0) {
+                // //注释("一小时之内");
+                // var time = newData - diffTime;ß
+                var dayNum = Math.floor(diffTime / (60));
+                return dayNum + "分钟前";
+
+            }
+        }
+    }
+
+</script>
 </body>

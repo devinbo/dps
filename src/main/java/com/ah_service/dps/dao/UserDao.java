@@ -20,4 +20,8 @@ public interface UserDao {
     void addDoctor(Doctor doctor);
 
     void updDoctor(Doctor doctor);
+
+    int getDoctorNums(@Param("rawHosId") String rawHosId);
+
+    int getDivisionNums(@Param("rawHosId") String rawHosId);
 }

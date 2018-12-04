@@ -13,18 +13,18 @@
         </div>
         <div class="row">
             <div class="col-lg-offset-1 col-xs-2">
-                <img width="100%" src="assets/images/hospital.jpg">
+                <img width="100%"  alt="医院LOGO图片" th:src="${session.user?.hospital?.hosLogo}">
                 <h3 class="center" th:text="${session.user?.hospital?.hosName}"></h3>
                 <h6 style="width: 100%" class="center label label-success arrowed-in arrowed-in-right" th:text="${session.user?.hospital?.hosGradeName}"></h6>
                 <div class="hr hr12 dotted"></div>
                 <div class="clearfix">
                     <div class="grid2" style="text-align: center">
-                        <span class="bigger-175 blue">12</span>
+                        <span class="bigger-175 blue" th:text="${session.user?.hospital?.divisionNums}"></span>
                         <br>
                         科室数
                     </div>
                     <div class="grid2" style="text-align: center">
-                        <span class="bigger-175 blue">25</span>
+                        <span class="bigger-175 blue" th:text="${session.user?.hospital?.doctorNums}"></span>
                         <br>
                         医生数
                     </div>
@@ -41,9 +41,9 @@
                 <div class="col-xs-12">
                     <blockquote class="pull-right">
                         <h1>公司简介</h1>
-                        <p th:text="${session.user.hospital?.hosDesc}"></p>
+                        <p th:utext="${session.user?.hospital?.hosDesc}"></p>
                         <small>
-                            <cite th:title="${session.user.hospital?.hosName}" th:text="${session.user?.hospital?.hosName}"></cite>
+                            <cite th:title="${session.user?.hospital?.hosName}" th:text="${session.user?.hospital?.hosName}"></cite>
                         </small>
                     </blockquote>
                 </div>
@@ -118,194 +118,36 @@
         </div>
 
         <!--右侧最近建议-->
-        <div class="col-sm-6">
-            <div class="widget-box">
-                <div class="widget-header">
-                    <h4 class="widget-title lighter smaller">
-                        <i class="ace-icon fa fa-comment blue"></i>
-                        系统建议
-                    </h4>
-                </div>
+        <!--<div class="col-sm-6">-->
+            <!--<div class="widget-box">-->
+                <!--<div class="widget-header">-->
+                    <!--<h4 class="widget-title lighter smaller">-->
+                        <!--<i class="ace-icon fa fa-comment blue"></i>-->
+                        <!--系统建议-->
+                    <!--</h4>-->
+                <!--</div>-->
 
-                <div class="widget-body">
-                    <div class="widget-main no-padding">
-                        <!-- #section:pages/dashboard.conversations -->
-                        <div class="dialogs ace-scroll">
-                            <div class="itemdiv dialogdiv">
-                                <div class="body">
-                                    <div class="time">
-                                        <i class="ace-icon fa fa-clock-o"></i>
-                                        <span class="green">4 sec</span>
-                                    </div>
-                                    <div class="name">
-                                        <a href="#">张三</a>
-                                    </div>
-                                    <div class="text">希望能尽快添加在线问诊服务.</div>
-                                    <div class="tools">
-                                        <a href="#" class="btn btn-minier btn-info">
-                                            <i class="icon-only ace-icon fa fa-share"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="itemdiv dialogdiv">
-                                <div class="body">
-                                    <div class="time">
-                                        <i class="ace-icon fa fa-clock-o"></i>
-                                        <span class="blue">38 sec</span>
-                                    </div>
-                                    <div class="name">
-                                        <a href="#">李四</a>
-                                    </div>
-                                    <div class="text">希望能多增加合作医院，现在入驻医院太少.</div>
-                                    <div class="tools">
-                                        <a href="#" class="btn btn-minier btn-info">
-                                            <i class="icon-only ace-icon fa fa-share"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="itemdiv dialogdiv">
-                                <div class="body">
-                                    <div class="time">
-                                        <i class="ace-icon fa fa-clock-o"></i>
-                                        <span class="orange">2 min</span>
-                                    </div>
-
-                                    <div class="name">
-                                        <a href="#">中山医院</a>
-                                        <span class="label label-info arrowed arrowed-in-right">admin</span>
-                                    </div>
-                                    <div class="text">希望尽快添加新的功能，增加移动端.</div>
-
-                                    <div class="tools">
-                                        <a href="#" class="btn btn-minier btn-info">
-                                            <i class="icon-only ace-icon fa fa-share"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="itemdiv dialogdiv">
-                                <div class="body">
-                                    <div class="time">
-                                        <i class="ace-icon fa fa-clock-o"></i>
-                                        <span class="grey">3 min</span>
-                                    </div>
-
-                                    <div class="name">
-                                        <a href="#">阿毛</a>
-                                    </div>
-                                    <div class="text">我想说些心里话.</div>
-
-                                    <div class="tools">
-                                        <a href="#" class="btn btn-minier btn-info">
-                                            <i class="icon-only ace-icon fa fa-share"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="itemdiv dialogdiv">
-                                <div class="body">
-                                    <div class="time">
-                                        <i class="ace-icon fa fa-clock-o"></i>
-                                        <span class="green">4 min</span>
-                                    </div>
-
-                                    <div class="name">
-                                        <a href="#">阿狗</a>
-                                    </div>
-                                    <div class="text">汪汪汪，没听懂你.</div>
-
-                                    <div class="tools">
-                                        <a href="#" class="btn btn-minier btn-info">
-                                            <i class="icon-only ace-icon fa fa-share"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!--普通医生显示的页面-->
-    <div class="row" th:hidden="${session.user?.isadmin != null || session.user?.ishosadmin != null}">
-        <div class="page-header">
-            <h1>
-                系统总阅
-            </h1>
-        </div>
-        <!--左侧统计-->
-        <div class="widget-box transparent col-xs-6">
-            <!--<div class="widget-header">-->
-                <!--<h4 class="widget-title lighter smaller">-->
-                    <!--<i class="ace-icon fa fa-rss orange"></i>较上月同比增长-->
-                <!--</h4>-->
-            <!--</div>-->
-            <div class="widget-body">
-                <div style="margin-top: 30px;" class="col-sm-12 infobox-container">
-                    <div class="infobox infobox-green" style="display:block; width: 100%">
-                        <div class="infobox-icon">
-                            <i class="ace-icon fa fa-shopping-cart"></i>
-                        </div>
-                        <div class="infobox-data">
-                            <span class="infobox-data-number" th:text="${askState.asknum}"></span>
-                            <div class="infobox-content">咨询总数</div>
-                        </div>
-                        <!--<div class="stat stat-success">8%</div>-->
-                    </div>
-
-
-                    <div class="infobox infobox-pink" style="display:block;width: 100%">
-                        <div class="infobox-icon">
-                            <i class="ace-icon fa fa-shopping-cart"></i>
-                        </div>
-
-                        <div class="infobox-data">
-                            <span class="infobox-data-number" th:text="${askState.unasknum}"></span>
-                            <div class="infobox-content">待回复咨询</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-sm-6">
-            <div class="widget-box">
-                <div class="widget-header">
-                    <h4 class="widget-title lighter smaller">
-                        <i class="ace-icon fa fa-comment blue"></i>
-                        咨询信息
-                    </h4>
-                </div>
-
-                <div class="widget-body">
-                    <div class="widget-main no-padding">
-                        <!-- #section:pages/dashboard.conversations -->
-                        <div class="dialogs ace-scroll">
-                            <div class="itemdiv dialogdiv"  th:each="info,infoState:${fordocMsgList}">
-                                <div class="body">
-                                    <div class="time">
-                                        <i class="ace-icon fa fa-clock-o"></i>
-                                        <span class="green" th:text="${info.msg_crttime}"></span>
-                                    </div>
-                                    <div class="name">
-                                        <a href="#" th:text="${info.msg_user_id}"></a>
-                                    </div>
-                                    <div class="text" th:text="${info.msg_info}"></div>
-                                    <div class="tools">
-                                        <a href="#" class="btn btn-minier btn-info">
-                                            <i class="icon-only ace-icon fa fa-share"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                            </div>
+                <!--<div class="widget-body">-->
+                    <!--<div class="widget-main no-padding">-->
+                        <!--&lt;!&ndash; #section:pages/dashboard.conversations &ndash;&gt;-->
+                        <!--<div class="dialogs ace-scroll">-->
+                            <!--<div class="itemdiv dialogdiv">-->
+                                <!--<div class="body">-->
+                                    <!--<div class="time">-->
+                                        <!--<i class="ace-icon fa fa-clock-o"></i>-->
+                                        <!--<span class="green">4 sec</span>-->
+                                    <!--</div>-->
+                                    <!--<div class="name">-->
+                                        <!--<a href="#">张三</a>-->
+                                    <!--</div>-->
+                                    <!--<div class="text">希望能尽快添加在线问诊服务.</div>-->
+                                    <!--<div class="tools">-->
+                                        <!--<a href="#" class="btn btn-minier btn-info">-->
+                                            <!--<i class="icon-only ace-icon fa fa-share"></i>-->
+                                        <!--</a>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
 
                             <!--<div class="itemdiv dialogdiv">-->
                                 <!--<div class="body">-->
@@ -365,6 +207,105 @@
                                     <!--</div>-->
                                 <!--</div>-->
                             <!--</div>-->
+
+                            <!--<div class="itemdiv dialogdiv">-->
+                                <!--<div class="body">-->
+                                    <!--<div class="time">-->
+                                        <!--<i class="ace-icon fa fa-clock-o"></i>-->
+                                        <!--<span class="green">4 min</span>-->
+                                    <!--</div>-->
+
+                                    <!--<div class="name">-->
+                                        <!--<a href="#">阿狗</a>-->
+                                    <!--</div>-->
+                                    <!--<div class="text">汪汪汪，没听懂你.</div>-->
+
+                                    <!--<div class="tools">-->
+                                        <!--<a href="#" class="btn btn-minier btn-info">-->
+                                            <!--<i class="icon-only ace-icon fa fa-share"></i>-->
+                                        <!--</a>-->
+                                    <!--</div>-->
+                                <!--</div>-->
+                            <!--</div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    </div>
+
+    <!--普通医生显示的页面-->
+    <div class="row" th:hidden="${session.user?.isadmin != null || session.user?.ishosadmin != null}">
+        <div class="page-header">
+            <h1>
+                系统总阅
+            </h1>
+        </div>
+        <!--左侧统计-->
+        <div class="widget-box transparent col-xs-6">
+            <!--<div class="widget-header">-->
+                <!--<h4 class="widget-title lighter smaller">-->
+                    <!--<i class="ace-icon fa fa-rss orange"></i>较上月同比增长-->
+                <!--</h4>-->
+            <!--</div>-->
+            <div class="widget-body">
+                <div style="margin-top: 30px;" class="col-sm-12 infobox-container">
+                    <div class="infobox infobox-green" style="display:block; width: 100%">
+                        <div class="infobox-icon">
+                            <i class="ace-icon fa fa-shopping-cart"></i>
+                        </div>
+                        <div class="infobox-data">
+                            <span class="infobox-data-number" th:text="${askState?.asknum}"></span>
+                            <div class="infobox-content">咨询总数</div>
+                        </div>
+                        <!--<div class="stat stat-success">8%</div>-->
+                    </div>
+
+
+                    <div class="infobox infobox-pink" style="display:block;width: 100%">
+                        <div class="infobox-icon">
+                            <i class="ace-icon fa fa-shopping-cart"></i>
+                        </div>
+
+                        <div class="infobox-data">
+                            <span class="infobox-data-number" th:text="${askState?.unasknum}"></span>
+                            <div class="infobox-content">待回复咨询</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-sm-6">
+            <div class="widget-box">
+                <div class="widget-header">
+                    <h4 class="widget-title lighter smaller">
+                        <i class="ace-icon fa fa-comment blue"></i>
+                        咨询信息
+                    </h4>
+                </div>
+
+                <div class="widget-body">
+                    <div class="widget-main no-padding">
+                        <!-- #section:pages/dashboard.conversations -->
+                        <div class="dialogs ace-scroll">
+                            <div class="itemdiv dialogdiv"  th:each="info,infoState:${fordocMsgList}">
+                                <div class="body">
+                                    <div class="time">
+                                        <i class="ace-icon fa fa-clock-o"></i>
+                                        <span class="green" th:text="${info.msg_crttime}"></span>
+                                    </div>
+                                    <div class="name">
+                                        <a href="#" th:text="${info.msg_user_id}"></a>
+                                    </div>
+                                    <div class="text" th:text="${info.msg_info}"></div>
+                                    <div class="tools">
+                                        <a href="#" class="btn btn-minier btn-info">
+                                            <i class="icon-only ace-icon fa fa-share"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class='center'><a href='javascript:void(0);' id="moreAsk">查看详细</a></div>
                         </div>

@@ -40,7 +40,6 @@ public class Doctor {
   private String docPhone; //医生电话号码
   private String rawHosId; //所属医院ID；
 
-
   private Hospital hospital; //所属医院信息
 
 

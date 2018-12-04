@@ -35,7 +35,13 @@ public class UserServiceImpl implements UserService {
         if (doctorDb == null) {
             return new Result<>(0, "用户们或密码错误！");
         }
+        //设置医生和科室数量
+        int docNums = userDao.getDoctorNums(doctorDb.getRawHosId());
+        doctorDb.getHospital().setDoctorNums(docNums);
+        int divisionNums = userDao.getDivisionNums(doctorDb.getRawHosId());
+        doctorDb.getHospital().setDivisionNums(divisionNums);
         session.setAttribute("user", doctorDb);
+        System.out.println(doctorDb);
         return new Result<>(1, "操作成功！", doctor);
     }
 
@@ -78,7 +84,7 @@ public class UserServiceImpl implements UserService {
         doctor.setDocHospital(loginDoctor.getDocHospital());
         if(doctor.getDocId() == null) {
             //新增
-            doctor.setDocPasswordMd5(DigestUtils.md5DigestAsHex(DoctorConstant.PASSWORD.getBytes()));
+            doctor.setDocPasswordMd5(DigestUtils.md5DigestAsHex(doctor.getDocPassword().getBytes()));
             doctor.setRawHosId(PublicUtil.randomStr(16));
             userDao.addDoctor(doctor);
         }else {

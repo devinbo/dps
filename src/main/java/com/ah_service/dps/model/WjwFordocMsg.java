@@ -20,6 +20,8 @@ public class WjwFordocMsg {
   private String currDay;
   private String currWeek;
 
+  private String msgImg; //消息图片
+
   //开始时间
   private String startDate;
   //结束时间

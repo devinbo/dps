@@ -16,9 +16,9 @@
                 <form id="queryForm" class="form-horizontal">
                     <div class="form-group">
                         <div class="col-xs-3">
-                            <label for="hos_name" class="col-sm-3 control-label no-padding-right">医院名称:</label>
+                            <label for="hosName" class="col-sm-3 control-label no-padding-right">医院名称:</label>
                             <div class="col-sm-9">
-                                <input type="text" id="hos_name" name="hos_name" class="form-control"/>
+                                <input type="text" id="hosName" name="hosName" class="form-control"/>
                             </div>
                         </div>
                         <div class="col-xs-3">
@@ -86,7 +86,7 @@
                 var parent_column = $(grid_selector).closest('[class*="col-"]');
                 $(window).on('resize.jqGrid', function () {
                     $(grid_selector).jqGrid('setGridWidth', parent_column.width());
-                    $(grid_selector).jqGrid('setGridHeight', $(window).height() - 360);
+                    $(grid_selector).jqGrid('setGridHeight', $(window).height() - 370);
                 });
                 //resize on sidebar collapse/expand
 
@@ -138,13 +138,14 @@
                     url: projectUrl + "/hospital/hospitalList", //获取所用用户信息
                     datatype: "json",
                     mtype: 'POST',
-                    height: $(window).height() - 360,
-                    colNames: ['ID', '医院名称', '医院等级', '所在市', '所在县', '联系电话', '特色医科', '获取的奖项', '医院描述',
+                    height: $(window).height() - 370,
+                    colNames: ['ID','医院LOGO', '医院名称', '医院等级', '所在市', '所在县', '联系电话', '特色医科', '获取的奖项', '医院描述',
                         '创建人', '创建时间'],
                     colModel: [
                         {name: 'hosId', key: true, width: 60, hidden: true},
+                        {name: 'hosLogo', width: 120, formatter: pickHeadImgFile},
                         {name: 'hosName', width: 100},
-                        {name: 'hosGradeName', width: 100},
+                        {name: 'hosGrade', width: 100},
                         {name: 'hosCityName', width: 100},
                         {name: 'hosAreaName', width: 80},
                         {name: 'hosLinkphone', width: 100, editable: true},
@@ -178,6 +179,13 @@
                     toCustomUrl('server/hospital/toHospitalDetail?id='+rowid);
                 }
 
+                function pickHeadImgFile(val) {
+                    if(val) {
+                        return "<img style='height: 100px; width: 100px;' alt='医院LOGO' src='"+val+"'/>"
+                    }else{
+                        return "";
+                    }
+                }
 
                 //加载县
                 $("#hos_city").chosen({allow_single_deselect:true});

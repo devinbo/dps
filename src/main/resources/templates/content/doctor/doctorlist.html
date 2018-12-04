@@ -24,7 +24,7 @@
                         <div class="col-xs-3">
                             <label for="hos_city" class="col-sm-3 control-label no-padding-right">所属科室:</label>
                             <div class="col-sm-9">
-                                <select  id="hos_city" name="hosCity" class="chosen-select form-control" data-placeholder="请输入所属科室"></select>
+                                <select id="hos_city" name="hosCity" class="chosen-select form-control" data-placeholder="请输入所属科室"></select>
                             </div>
                         </div>
 
@@ -131,7 +131,7 @@
                     datatype: "json",
                     mtype: 'POST',
                     height: $(window).height() - 360,
-                    colNames: ['ID', '医生名称', '登录账号', '性别', '年龄', '特长', '所属医科', '所属医院', '个人头像',
+                    colNames: ['ID', '个人照', '医生名称', '登录账号', '性别', '年龄', '特长', '所属医科', '所属医院',
                         '个人简介', '创建人', '创建时间'],
                     colModel: [
                         {name: 'docId', key: true, width: 60, hidden: true},
@@ -173,7 +173,7 @@
 
                 function pickHeadImgFile(val) {
                     if(val) {
-                        return "<img style='height: 100px; width: 100px;' src='"+val+"'/>"
+                        return "<img style='height: 100px; width: 100px;' alt='个人照' src='"+val+"'/>"
                     }else{
                         return "";
                     }

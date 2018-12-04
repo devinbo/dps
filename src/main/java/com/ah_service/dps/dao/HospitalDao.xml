@@ -8,8 +8,8 @@
         (select name from city where city_id = hos_city) hos_city_name, hos_city,
         (select name from area where area_id = hos_area) hos_area_name, hos_area,
          hos_desc, hos_awards, crtuser, crtdate from hospital
-         where recsts = 1
-        <if test="hosName !=null and hosName !=''">
+         where recsts = '1'
+        <if test="hosName != null and hosName !=''">
             and hos_name like concat('%', #{hosName}, '%')
         </if>
          <if test="hosCity != null and hosCity != ''">
@@ -75,7 +75,7 @@
          <if test="hosLogo != null and hosLogo != ''">
              hos_logo = #{hosLogo},
          </if>
-         hos_desc = #{hosDesc}, upduser = #{upduser}, `update` = now() where hos_id = #{hosId}
+         hos_desc = #{hosDesc}, upduser = #{upduser}, upddate = now() where hos_id = #{hosId}
     </update>
 
     <update id="delHospital">

@@ -34,6 +34,9 @@ public class Hospital {
   private String rawHospitalId;
   private String hosType;
 
+  private Integer divisionNums; //科室数
+  private Integer doctorNums; //医生总数
+
   private Doctor admin; //医院管理员账户
 
 }
