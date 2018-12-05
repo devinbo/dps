@@ -17,9 +17,11 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.print.Doc;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 import java.util.UUID;
 
 //import javax.servlet.http.HttpSession;
@@ -32,9 +34,16 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Result<Doctor> login(Doctor doctor) {
-        if(StringUtils.isEmpty(doctor.getDocLoginno()) || StringUtils.isEmpty(doctor.getDocPassword())) {
+    public Result<Doctor> login(Doctor doctor, HttpServletRequest request) {
+        String yzm = request.getParameter("yzm");
+        if(StringUtils.isEmpty(yzm)) {
+            return new Result<>(0, "验证码不能为空！");
+        }else if(StringUtils.isEmpty(doctor.getDocLoginno()) || StringUtils.isEmpty(doctor.getDocPassword())) {
             return new Result<>(0, "用户名或密码不能为空!");
+        }
+        String captchaId = (String) request.getSession().getAttribute("vrifyCode");
+        if(!yzm.equals(captchaId)) {
+            return new Result<>(0, "验证码不正确！");
         }
         return userService.login(doctor);
     }

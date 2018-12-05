@@ -41,6 +41,7 @@ public class ConfigurationFilter {
                     || req.getRequestURI().endsWith(".gif")
                     || req.getRequestURI().endsWith(".jpeg")
                     || req.getRequestURI().endsWith("/login.html")
+                    || req.getRequestURI().endsWith("defaultKaptcha")
                     || req.getRequestURI().endsWith(".js")
                     || req.getRequestURI().endsWith(".css")
                     || req.getRequestURI().endsWith(".svg")

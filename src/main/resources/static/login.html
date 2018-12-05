@@ -99,6 +99,14 @@
 															<i class="ace-icon fa fa-lock"></i>
 														</span>
                                             </label>
+
+                                            <label class="block clearfix">
+														<span class="block input-icon input-icon-right">
+															<input name="yzm" type="text" class="col-xs-6" placeholder="请输入验证码"/>
+															<img class="col-xs-6" height="35px" src="base/defaultKaptcha" onclick="this.src=this.src+'?'+Math.random();">
+														</span>
+                                            </label>
+
                                             <div id="errortop" hidden class="text-warning bigger-110 orange">
                                                 <i class="ace-icon fa fa-exclamation-triangle"></i>
                                                 <span id="errormsg"></span>
@@ -163,13 +171,15 @@
     function login() {
         var user_no = $("input[name=user_no]").val();
         var password = $("input[name=password]").val();
+        var yzm = $("input[name=yzm]").val();
         $.ajax({
             url : prodUrl +"/user/login",
             type: "POST",
             async: false,
             data: {
                 docLoginno : user_no,
-                docPassword: password
+                docPassword: password,
+                yzm:yzm
             },
             success: function(result) {
                 if(result.code === 1) {
