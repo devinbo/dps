@@ -2,11 +2,13 @@ package com.ah_service.dps.service.impl;
 
 
 import com.ah_service.dps.dao.BaseDao;
+import com.ah_service.dps.model.Doctor;
 import com.ah_service.dps.pojo.Result;
 import com.ah_service.dps.service.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -15,6 +17,9 @@ public class BaseServiceImpl implements BaseService {
 
     @Autowired
     private BaseDao baseDao;
+
+    @Autowired
+    private HttpSession session;
 
     @Override
     public Result<List> getAllGrade() {
@@ -32,5 +37,12 @@ public class BaseServiceImpl implements BaseService {
     public Result<List> getArea(String city_id) {
         List<Map> list = baseDao.getArea(city_id);
         return new Result<>(1, "查询成功！", list);
+    }
+
+    @Override
+    public Result getAllMedicine(){
+        Doctor doctor = (Doctor) session.getAttribute("user");
+        List<Map<String, Object>> list = baseDao.getAllMedicine(doctor.getRawHosId());
+        return new Result(1, "查询成功！", list);
     }
 }

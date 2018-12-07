@@ -12,8 +12,8 @@ import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
+import org.springframework.util.StringUtils;
 
-import javax.print.Doc;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
         Doctor doctorDb = userDao.checkNoAndPass(doctor);
         System.out.println(doctorDb);
         if (doctorDb == null) {
-            return new Result<>(0, "用户们或密码错误！");
+            return new Result<>(0, "用户名或密码错误！");
         }
         //设置医生和科室数量
         int docNums = userDao.getDoctorNums(doctorDb.getRawHosId());
@@ -48,10 +48,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResultPage<Doctor> doctorList(Doctor doctor, Page page) {
         Doctor loginDoctor = (Doctor) session.getAttribute("user");
-        loginDoctor.setDocName(doctor.getDocName());
-        loginDoctor.setDocMedicineId(doctor.getDocMedicineId());
+        doctor.setRawHosId(loginDoctor.getRawHosId());
         PageHelper.startPage(page);
-        List<Doctor> list = userDao.doctorList(loginDoctor);
+        List<Doctor> list = userDao.doctorList(doctor);
         return new ResultPage<>(list);
     }
 
@@ -83,13 +82,29 @@ public class UserServiceImpl implements UserService {
         doctor.setRawHosId(loginDoctor.getRawHosId());
         doctor.setDocHospital(loginDoctor.getDocHospital());
         if(doctor.getDocId() == null) {
+            if(!StringUtils.isEmpty(doctor.getDocPassword())) {
+                if(!doctor.getDocPassword().equals(doctor.getDocCfmPassword())) {
+                    return new Result(0, "两次输入密码不一致");
+                }
+                doctor.setDocPasswordMd5(DigestUtils.md5DigestAsHex(doctor.getDocPassword().getBytes()));
+            }else{
+                doctor.setDocPasswordMd5(DigestUtils.md5DigestAsHex(DoctorConstant.PASSWORD.getBytes()));
+            }
             //新增
-            doctor.setDocPasswordMd5(DigestUtils.md5DigestAsHex(doctor.getDocPassword().getBytes()));
-            doctor.setRawHosId(PublicUtil.randomStr(16));
+            doctor.setRawHosId(loginDoctor.getRawHosId());
             userDao.addDoctor(doctor);
         }else {
             userDao.updDoctor(doctor);
         }
+        return new Result();
+    }
+
+    @Override
+    public Result setFee(String fee) {
+        Doctor loginDoctor = (Doctor) session.getAttribute("user");
+        loginDoctor.setInquirprice(Double.valueOf(fee));
+        userDao.updInquirprice(loginDoctor);
+        session.setAttribute("user", loginDoctor);
         return new Result();
     }
 }

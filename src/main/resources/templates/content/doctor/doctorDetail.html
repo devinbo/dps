@@ -28,7 +28,7 @@
             <input type="hidden" name="docId" th:value='${doctor?.docId}'>
             <div class="widget-box">
                 <div class="widget-header">
-                    <h4 class="widget-title">医院信息(<span class="orange">新创建用户，密码默认为000000，如需修改，请登录系统后，手动修改</span>)</h4>
+                    <h4 class="widget-title">医院信息(<span class="orange">新创建用户，不填写密码，那么密码默认为000000，如需修改，请登录系统后，手动修改</span>)</h4>
                     <div class="widget-toolbar">
                         <a href="#" data-action="collapse">
                             <i class="ace-icon fa fa-chevron-up"></i>
@@ -52,10 +52,21 @@
                             </div>
 
                             <div class="col-xs-3  form-group" th:hidden="${doctor?.docId}">
-                                <label for="docLoginno">登录账号<span class="red">*</span></label>
-                                <input class="form-control" id="docPassword" name="docPassword" th:value="${doctor?.docPassword}"
+                                <label for="docLoginno">登录密码</label>
+                                <input type="password" class="form-control" id="docPassword" name="docPassword" th:value="${doctor?.docPassword}"
                                        placeholder="请输入登录账号">
                             </div>
+
+                            <div class="col-xs-3  form-group" th:hidden="${doctor?.docId}">
+                                <label for="docLoginno">确认登录密码</label>
+                                <input type="password" class="form-control" id="docCfmPassword" name="docCfmPassword" th:value="${doctor?.docPassword}"
+                                       placeholder="请输入登录账号">
+                            </div>
+
+
+                        </div>
+
+                        <div class="row">
 
                             <div class="col-xs-3 form-group">
                                 <label class="control-label" for="docSex">性别</label>
@@ -65,20 +76,17 @@
                                     <option value="女" th:selected="${doctor?.docSex=='女'}">女</option>
                                 </select>
                             </div>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-xs-3 form-group">
-                                <label class="control-label" for="docMedicineName">所属医科<span class="red">*</span></label>
-                                <!--<select  id="docMedicineId" name="docMedicineId" class="chosen-select form-control" data-placeholder="请选择所属医科"></select>-->
-                                <input class="form-control" id="docMedicineName" name="docMedicineName" th:value="${doctor?.docMedicineName}"
-                                       placeholder="请输入个人特长"/>
-                            </div>
 
                             <div class="col-xs-3 form-group">
                                 <label class="control-label" for="docAge">年龄</label>
                                 <input class="form-control" id="docAge" name="docAge" th:value="${doctor?.docAge}" placeholder="请输入年龄">
                             </div>
+
+                            <div class="col-xs-3 form-group">
+                                <label class="control-label" for="docMedicineName">所属医科<span class="red">*</span></label>
+                                <select  id="docMedicineName" name="docMedicineName" class="chosen-select form-control" data-placeholder="请选择所属医科"></select>
+                            </div>
+
                         </div>
 
                         <div class="space-12"></div>
@@ -86,20 +94,22 @@
                         <div class="row">
                             <div class="col-xs-6 form-group">
                                 <label class="control-label" for="docSpeciality">特长</label>
-                                <input class="form-control" id="docSpeciality" name="docSpeciality" th:value="${doctor?.docSpeciality}"
+                                <textarea class="form-control" id="docSpeciality" name="docSpeciality" th:value="${doctor?.docSpeciality}"
+                                          th:text="${doctor?.docSpeciality}"
                                        placeholder="请输入个人特长"/>
                             </div>
 
+                            <div class="col-xs-6 form-group">
+                                <label class="control-label" for="docDesc">个人简介</label>
+                                <textarea class="form-control" id="docDesc" name="docDesc"
+                                          th:value='${doctor?.docDesc}' th:text='${doctor?.docDesc}' placeholder="请输入个人简介"/>
+                            </div>
                         </div>
 
                         <div class="space-12"></div>
 
                         <div class="row">
-                            <div class="col-xs-6 form-group">
-                                <label class="control-label" for="docDesc">个人简介</label>
-                                <textarea class="form-control" id="docDesc" name="docDesc"
-                                       th:value='${doctor?.docDesc}' th:text='${doctor?.docDesc}' placeholder="请输入个人简介"/>
-                            </div>
+
 
                             <div class="col-xs-6 form-group">
                                 <label class="control-label" for="docHeadimg">个人头像</label>
@@ -121,7 +131,7 @@
     </div>
 </div>
 
-<script>
+<script th:inline="javascript">
     var scripts = [null, "assets/js/jquery-ui.custom.js",
         "assets/js/date-time/bootstrap-datepicker.js",
         "assets/js/date-time/bootstrap-timepicker.js",
@@ -144,31 +154,6 @@
     }
 
     $('.page-content-area').ace_ajax('loadScripts', scripts, function () {
-
-        /**
-         * 设置选择框
-         */
-        $("#docMedicineId").chosen({allow_single_deselect:true});
-        myAjax("/hospital/getAllDivision", null, function(result){
-            if(result.code == 1) {
-                toSelectData(result.data, "data_id", "data_name");
-                //设置选择框中信息
-                createDepSelect(result.data);
-            }else{
-                showErrorInfo(result.message);
-            }
-        });
-
-        function createDepSelect(data) {
-            var html = '<option value="">&nbsp;</option>';
-            data.forEach(function(info) {
-                html += '<option value="'+info.data_id+'">'+info.data_name+'</option>';
-            });
-            $("#docMedicineId").html(html);
-            $("#docMedicineId").trigger("chosen:updated");
-            $("#docMedicineId").val('[[${doctor?.docMedicineId}]]').trigger("chosen:updated");
-        }
-
         //提交
         $("#validation-form-doctor").submit(function (e) {
             e.preventDefault();
@@ -185,7 +170,7 @@
                                 history.back();
                             }, 3000);
                         } else {
-                            showErrorInfo("操作失败！错误信息：" + result.message);
+                            showWarnInfo(result.message);
                         }
                     },
                     error: function (err) {
@@ -236,8 +221,7 @@
             },
         });
 
-
-        if ('[[${doctor?.docHeadimg}]]') {
+        if ('[[${doctor?.docHeadimg}]]' && '[[${doctor?.docHeadimg}]]' != 'null') {
             $('#docHeadimg').hide();
             var hosLogo = '[[${doctor?.docHeadimg}]]';
             console.log(hosLogo);
@@ -268,6 +252,38 @@
                 //console.log($(this).data('ace_input_method'));
             });
         }
+
+        /**
+         * 设置选择框
+         */
+        $("#docMedicineName").chosen({allow_single_deselect:true});
+        var depObj = [];
+        var allDep = "";
+        myAjax("/base/getAllMedicine", null, function(result){
+            if(result.code == 1) {
+                depObj = result.data;
+                allDep = toSelectData(result.data, "name", "name");
+                //设置选择框中信息
+                createDepSelect(result.data);
+            }else{
+                showErrorInfo(result.message);
+            }
+        });
+
+        function createDepSelect(data) {
+            var html = '<option value="">&nbsp;</option>';
+            var name = '[[${doctor?.docMedicineName}]]';
+            data.forEach(function(info) {
+                if(info.name == name) {
+                    html += '<option value="'+info.name+'" selected>'+info.name+'</option>';
+                }else{
+                    html += '<option value="'+info.name+'">'+info.name+'</option>';
+                }
+            });
+            $("#docMedicineName").html(html);
+            $("#docMedicineName").trigger("chosen:updated");
+        }
+
     })
 </script>
 </body>

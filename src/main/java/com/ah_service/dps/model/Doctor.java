@@ -12,7 +12,8 @@ public class Doctor {
   private Long docId;
   private String docName;
   private String docLoginno;
-  private String docPassword;
+  private String docPassword; //密码
+  private String docCfmPassword; //确认密码
   private String docPasswordMd5;
   private String docSex;
   private String docAge;
@@ -39,6 +40,8 @@ public class Doctor {
   private String rawDocId; //原始ID;
   private String docPhone; //医生电话号码
   private String rawHosId; //所属医院ID；
+
+  private Double inquirprice;
 
   private Hospital hospital; //所属医院信息
 

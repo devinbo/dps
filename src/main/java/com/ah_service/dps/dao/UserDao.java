@@ -24,4 +24,6 @@ public interface UserDao {
     int getDoctorNums(@Param("rawHosId") String rawHosId);
 
     int getDivisionNums(@Param("rawHosId") String rawHosId);
+
+    void updInquirprice(Doctor loginDoctor);
 }

@@ -16,17 +16,24 @@
                 <form id="queryForm" class="form-horizontal">
                     <div class="form-group">
                         <div class="col-xs-3">
-                            <label for="hos_name" class="col-sm-3 control-label no-padding-right">医生名称:</label>
+                            <label for="docName" class="col-sm-3 control-label no-padding-right">医生名称:</label>
                             <div class="col-sm-9">
-                                <input type="text" id="hos_name" name="hos_name" class="form-control" data-placeholder="请输入医生名称"/>
+                                <input type="text" id="docName" name="docName" class="form-control" data-placeholder="请输入医生名称"/>
                             </div>
                         </div>
+
                         <div class="col-xs-3">
-                            <label for="hos_city" class="col-sm-3 control-label no-padding-right">所属科室:</label>
+                            <label for="docLoginno" class="col-sm-3 control-label no-padding-right">登录账号:</label>
                             <div class="col-sm-9">
-                                <select id="hos_city" name="hosCity" class="chosen-select form-control" data-placeholder="请输入所属科室"></select>
+                                <input type="text" id="docLoginno" name="docLoginno" class="form-control" data-placeholder="请输入登录账号"/>
                             </div>
                         </div>
+                        <!--<div class="col-xs-3">-->
+                            <!--<label for="hos_city" class="col-sm-3 control-label no-padding-right">所属科室:</label>-->
+                            <!--<div class="col-sm-9">-->
+                                <!--<select id="hos_city" name="hosCity" class="chosen-select form-control" data-placeholder="请输入所属科室"></select>-->
+                            <!--</div>-->
+                        <!--</div>-->
 
                         <div class="col-xs-3">
                             <button class="btn btn-primary" type="button" onclick="queryData()">

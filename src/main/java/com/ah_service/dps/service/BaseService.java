@@ -13,4 +13,6 @@ public interface BaseService {
     Result<List> getAllCity();
 
     Result<List> getArea(String city_id);
+
+    Result getAllMedicine();
 }

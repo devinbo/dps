@@ -14,4 +14,6 @@ public interface UserService {
     Doctor toDoctorDetail(String id);
 
     Result saveDoctor(Doctor doctor);
+
+    Result setFee(String fee);
 }

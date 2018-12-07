@@ -36,13 +36,13 @@ public class UserController {
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public Result<Doctor> login(Doctor doctor, HttpServletRequest request) {
         String yzm = request.getParameter("yzm");
-        if(StringUtils.isEmpty(yzm)) {
+        if (StringUtils.isEmpty(yzm)) {
             return new Result<>(0, "验证码不能为空！");
-        }else if(StringUtils.isEmpty(doctor.getDocLoginno()) || StringUtils.isEmpty(doctor.getDocPassword())) {
+        } else if (StringUtils.isEmpty(doctor.getDocLoginno()) || StringUtils.isEmpty(doctor.getDocPassword())) {
             return new Result<>(0, "用户名或密码不能为空!");
         }
         String captchaId = (String) request.getSession().getAttribute("vrifyCode");
-        if(!yzm.equals(captchaId)) {
+        if (!yzm.equals(captchaId)) {
             return new Result<>(0, "验证码不正确！");
         }
         return userService.login(doctor);
@@ -60,7 +60,8 @@ public class UserController {
     }
 
     @RequestMapping("/toDoctorDetail")
-    public @ResponseBody ModelAndView toDoctorDetail(String id) {
+    public @ResponseBody
+    ModelAndView toDoctorDetail(String id) {
         Doctor doctor = userService.toDoctorDetail(id);
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.setViewName("content/doctor/doctorDetail");
@@ -69,12 +70,23 @@ public class UserController {
     }
 
     @RequestMapping("/saveDoctor")
-    public @ResponseBody Result saveDoctor(MultipartFile docHeadimgFile, Doctor doctor) throws IOException {
-        if(docHeadimgFile != null) {
+    public @ResponseBody
+    Result saveDoctor(MultipartFile docHeadimgFile, Doctor doctor) throws IOException {
+        if (docHeadimgFile != null) {
             String filepath = dealFile(docHeadimgFile);
             doctor.setDocHeadimg(filepath);
         }
         return userService.saveDoctor(doctor);
+    }
+
+    @RequestMapping("/setFee")
+    public @ResponseBody
+    Result setFee(String fee) {
+        if (StringUtils.isEmpty(fee)) {
+            return new Result(0, "价格不能为空！");
+        } else {
+            return userService.setFee(fee);
+        }
     }
 
     private String dealFile(MultipartFile file) throws IOException {
@@ -86,7 +98,7 @@ public class UserController {
         String uuid = UUID.randomUUID().toString().replaceAll("_", "").substring(0, 8);
         //生成文件名称
         String date = PublicUtil.getDate("yyyy-MM-dd");
-        String filename = date +"_" + uuid + ref;
+        String filename = date + "_" + uuid + ref;
         String dir = PropertyLoad.getProperty("headImgServicePath");
         System.out.println(dir);
         File dirFile = new File(dir);

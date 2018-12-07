@@ -13,4 +13,8 @@
     <select id="getArea" resultType="map">
         select area_id, name from area where city_id = #{city_id}
     </select>
+
+    <select id="getAllMedicine" resultType="map">
+        select div_name name from division where raw_hospital_id = #{rawHosId}
+    </select>
 </mapper>

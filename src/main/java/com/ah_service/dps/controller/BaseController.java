@@ -49,12 +49,13 @@ public class BaseController {
 
     /**
      * 获取验证码 的 请求路径
+     *
      * @param httpServletRequest
      * @param httpServletResponse
      * @throws Exception
      */
     @RequestMapping("/defaultKaptcha")
-    public void defaultKaptcha(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception{
+    public void defaultKaptcha(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws Exception {
         byte[] captchaChallengeAsJpeg = null;
         ByteArrayOutputStream jpegOutputStream = new ByteArrayOutputStream();
         try {
@@ -82,26 +83,8 @@ public class BaseController {
     }
 
 
-    /**
-     * 验证的方法
-     * @param httpServletRequest
-     * @param httpServletResponse
-     * @return
-     */
-    @RequestMapping("/imgvrifyControllerDefaultKaptcha")
-    public ModelAndView imgvrifyControllerDefaultKaptcha(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse){
-        ModelAndView andView = new ModelAndView();
-        String captchaId = (String) httpServletRequest.getSession().getAttribute("vrifyCode");
-        String parameter = httpServletRequest.getParameter("vrifyCode");
-        System.out.println("Session  vrifyCode "+captchaId+" form vrifyCode "+parameter);
-
-        if (!captchaId.equals(parameter)) {
-            andView.addObject("info", "错误的验证码");
-            andView.setViewName("index");
-        } else {
-            andView.addObject("info", "登录成功");
-            andView.setViewName("succeed");
-        }
-        return andView;
+    @RequestMapping("/getAllMedicine")
+    public Result getAllMedicine() {
+        return baseService.getAllMedicine();
     }
 }

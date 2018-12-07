@@ -13,4 +13,6 @@ public interface BaseDao {
     List<Map> getAllCityByAnHui();
 
     List<Map> getArea(@Param("city_id") String city_id);
+
+    List<Map<String,Object>> getAllMedicine(@Param("rawHosId") String rawHosId);
 }
