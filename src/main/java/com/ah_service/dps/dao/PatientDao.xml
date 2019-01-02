@@ -63,6 +63,14 @@
         from wjw_fordoc_msg where msg_doc_id = #{docId} order by msg_crttime DESC limit 5
     </select>
 
+    <select id="getAllHosCount" resultType="int">
+        select count(*) from hospital
+    </select>
+
+    <select id="getAllDocCount" resultType="int">
+        select count(*) from doctor
+    </select>
+
     <resultMap id="wjwFordocMsgMap" type="wjwFordocMsg">
         <id property="msgId" column="msg_id"/>
         <result property="msgInfo" column="msg_info"/>

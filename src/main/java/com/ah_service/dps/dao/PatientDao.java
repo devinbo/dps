@@ -24,4 +24,8 @@ public interface PatientDao {
     Map<String,Object> getAskCount(@Param("docId") Long docId);
 
     List<Map<String, Object>> getLatestLeave(@Param("docId") Long docId);
+
+    int getAllHosCount();
+
+    int getAllDocCount();
 }

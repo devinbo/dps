@@ -17,4 +17,13 @@
     <select id="getAllMedicine" resultType="map">
         select div_name name from division where raw_hospital_id = #{rawHosId}
     </select>
+
+    <select id="getHosByKey" resultType="map">
+        select raw_hospital_id id, hos_name text from hospital
+        where recsts = '1'
+        <if test="key != null and key != ''">
+            and hos_name like concat('%', #{key}, '%')
+        </if>
+        limit 10
+    </select>
 </mapper>

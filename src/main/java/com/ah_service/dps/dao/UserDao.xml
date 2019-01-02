@@ -15,11 +15,18 @@
           <if test="docHeadimg != null and docHeadimg != ''">
              doc_headimg = #{docHeadimg},
           </if>
+          <if test="docPasswordMd5 != null and docPasswordMd5 != ''">
+              doc_password = #{docPasswordMd5},
+          </if>
            upduser = #{upduser}, upddate = now() where doc_id = #{docId}
     </update>
 
     <update id="updInquirprice" parameterType="doctor">
         update doctor set inquirprice = #{inquirprice} where doc_id = #{docId}
+    </update>
+
+    <update id="updPass">
+        update doctor set doc_password = #{md5Pass} where doc_id = #{docId}
     </update>
 
     <select id="checkNoAndPass" resultType="doctor" parameterType="doctor" resultMap="doctorMap">
@@ -54,7 +61,7 @@
     </select>
 
     <select id="getDoctorDetail" resultType="doctor">
-        select doc_id, doc_name, doc_loginno, doc_password, doc_sex,
+        select doc_id, doc_name, doc_loginno, doc_password, doc_sex, ishosadmin, isadmin,
         doc_age, doc_speciality, doc_desc, doc_medicineId, doc_hospital, doc_headimg,
         doc_medicine_name,doc_hospital_name, doc_medicine_name,
         isadmin, ishosadmin from doctor d where recsts = '1' and doc_id = #{id}
@@ -95,7 +102,8 @@
         <result property="docMedicineName" column="doc_medicine_name"/>
         <result property="docHospitalName" column="doc_hospital_name"/>
         <association property="hospital" javaType="hospital">
-            <id column="hos_id" property="hosId"/>
+            <id column="raw_hospital_id" property="rawHospitalId"/>
+            <result column="hos_id" property="hosId"/>
             <result column="hos_area" property="hosArea"/>
             <result column="hos_city" property="hosCity"/>
             <result column="hos_awards" property="hosAwards"/>
@@ -112,7 +120,6 @@
             <result column="hos_website" property="hosWite"/>
             <result column="hos_latitude" property="hosLatitude"/>
             <result column="hos_longitude" property="hosLongitude"/>
-            <result column="raw_hospital_id" property="rawHospitalId"/>
             <result column="hos_type" property="hosType"/>
         </association>
     </resultMap>

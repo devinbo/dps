@@ -26,4 +26,6 @@ public interface UserDao {
     int getDivisionNums(@Param("rawHosId") String rawHosId);
 
     void updInquirprice(Doctor loginDoctor);
+
+    void updPass(@Param("docId") Long docId, @Param("md5Pass") String md5Pass);
 }
