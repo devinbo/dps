@@ -48,7 +48,9 @@
 
                             <div class="col-xs-3 form-group">
                                 <label class="control-label" for="docName">选择医院</label>
-                                <select id="raw_hos_id" name="rawHosId" class="form-control"></select>
+                                <select id="raw_hos_id" name="rawHosId" class="form-control">
+                                    <option th:hidden="${doctor?.docId == null}" th:value="${doctor?.rawHosId}" th:text="${doctor?.docHospitalName}"></option>
+                                </select>
                             </div>
                         </div>
 
@@ -69,12 +71,12 @@
 
                             <div class="col-xs-3  form-group">
                                 <label for="docLoginno">登录密码</label>
-                                <input type="password" class="form-control" id="docPassword" name="docPassword" placeholder="请输入登录账号">
+                                <input type="password" class="form-control" id="docPassword" name="docPassword" placeholder="请输入登录密码">
                             </div>
 
                             <div class="col-xs-3  form-group">
                                 <label for="docLoginno">确认登录密码</label>
-                                <input type="password" class="form-control" id="docCfmPassword" name="docCfmPassword" placeholder="请输入登录账号">
+                                <input type="password" class="form-control" id="docCfmPassword" name="docCfmPassword" placeholder="请再次输入登录密码">
                             </div>
                         </div>
 
@@ -162,7 +164,7 @@
         "assets/js/select2.js",
         "assets/js/date-time/bootstrap-datetimepicker.js", null];
 
-    console.log([[${session.user}]]);
+    console.log([[${doctor}]]);
     function resetForm() {
         $(".chosen-select").val('').trigger("chosen:updated");
     }
@@ -173,13 +175,14 @@
         window.open(hosLogo);
     }
 
+    var rawHosId = [[${doctor?.rawHosId}]];
     $('.page-content-area').ace_ajax('loadScripts', scripts, function () {
 
         $('#raw_hos_id').select2({
             ajax: {
                 url: projectUrl + "/base/getHosByKey",
                 dataType: "json",
-                delay: 500,
+                delay: 300,
                 data: function (params) {
                     var query = {
                         key: params.term
@@ -295,13 +298,27 @@
             });
         }
 
+        $('#raw_hos_id').change(function(){
+            rawHosId = $(this).val();
+            myAjax("/base/getAllMedicine", {rawHosId: rawHosId}, function(result){
+                if(result.code == 1) {
+                    depObj = result.data;
+                    allDep = toSelectData(result.data, "name", "name");
+                    //设置选择框中信息
+                    createDepSelect(result.data);
+                }else{
+                    showErrorInfo(result.message);
+                }
+            });
+        });
+
         /**
          * 设置选择框
          */
         $("#docMedicineName").chosen({allow_single_deselect:true});
         var depObj = [];
         var allDep = "";
-        myAjax("/base/getAllMedicine", null, function(result){
+        myAjax("/base/getAllMedicine", {rawHosId: rawHosId}, function(result){
             if(result.code == 1) {
                 depObj = result.data;
                 allDep = toSelectData(result.data, "name", "name");

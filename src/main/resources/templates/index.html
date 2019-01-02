@@ -94,7 +94,7 @@
             <ul class="nav ace-nav">
                 <li class="dropdown-modal light-blue">
                     <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                        <img id="user_headicon" height="100%" src="assets/images/avatars/avatar2.png" alt="个人头像">
+                        <img id="user_headicon" height="100%" th:src="${session?.user?.docHeadimg}" alt="个人头像">
                         <span class="user-info">
 								<small>Welcome,</small>
 								<span id="user_name"></span>

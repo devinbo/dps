@@ -28,4 +28,6 @@ public interface UserDao {
     void updInquirprice(Doctor loginDoctor);
 
     void updPass(@Param("docId") Long docId, @Param("md5Pass") String md5Pass);
+
+    void delDoctor(@Param("ids") List<String> ids);
 }

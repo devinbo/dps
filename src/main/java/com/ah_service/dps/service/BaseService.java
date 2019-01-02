@@ -4,7 +4,6 @@ package com.ah_service.dps.service;
 import com.ah_service.dps.pojo.Result;
 
 import java.util.List;
-import java.util.Map;
 
 public interface BaseService {
 
@@ -14,7 +13,7 @@ public interface BaseService {
 
     Result<List> getArea(String city_id);
 
-    Result getAllMedicine();
+    Result getAllMedicine(String rawHosId);
 
     Result getHosByKey(String key);
 }

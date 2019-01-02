@@ -40,9 +40,8 @@ public class BaseServiceImpl implements BaseService {
     }
 
     @Override
-    public Result getAllMedicine(){
-        Doctor doctor = (Doctor) session.getAttribute("user");
-        List<Map<String, Object>> list = baseDao.getAllMedicine(doctor.getRawHosId());
+    public Result getAllMedicine(String rawHosId){
+        List<Map<String, Object>> list = baseDao.getAllMedicine(rawHosId);
         return new Result(1, "查询成功！", list);
     }
 

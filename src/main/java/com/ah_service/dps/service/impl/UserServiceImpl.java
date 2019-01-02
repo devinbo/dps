@@ -92,34 +92,32 @@ public class UserServiceImpl implements UserService {
         doctor.setCrtuser(loginDoctor.getCrtuser());
         doctor.setUpduser(loginDoctor.getCrtuser());
         if(!loginDoctor.getIsadmin()) {
-            //如果是超级管理员添加，那么不重置医院信息
+            //如果不是超级管理员添加，那么重置医院为当前登录用户信息
             doctor.setRawHosId(loginDoctor.getRawHosId());
             doctor.setDocHospital(loginDoctor.getDocHospital());
         }
         System.out.println(doctor);
+        if(doctor.getDocId() == null) {
+            if(!StringUtils.isEmpty(doctor.getDocPassword())) {
+                if(!doctor.getDocPassword().equals(doctor.getDocCfmPassword())) {
+                    return new Result(0, "两次输入密码不一致");
+                }
+                doctor.setDocPasswordMd5(DigestUtils.md5DigestAsHex(doctor.getDocPassword().getBytes()));
+            }else{
+                doctor.setDocPasswordMd5(DigestUtils.md5DigestAsHex(DoctorConstant.PASSWORD.getBytes()));
+            }
+            //新增
+            userDao.addDoctor(doctor);
+        }else {
+            if(!StringUtils.isEmpty(doctor.getDocPassword())) {
+                if(!doctor.getDocPassword().equals(doctor.getDocCfmPassword())) {
+                    return new Result(0, "两次输入密码不一致");
+                }
+                doctor.setDocPasswordMd5(DigestUtils.md5DigestAsHex(doctor.getDocPassword().getBytes()));
+            }
+            userDao.updDoctor(doctor);
+        }
         return new Result();
-//        if(doctor.getDocId() == null) {
-//            if(!StringUtils.isEmpty(doctor.getDocPassword())) {
-//                if(!doctor.getDocPassword().equals(doctor.getDocCfmPassword())) {
-//                    return new Result(0, "两次输入密码不一致");
-//                }
-//                doctor.setDocPasswordMd5(DigestUtils.md5DigestAsHex(doctor.getDocPassword().getBytes()));
-//            }else{
-//                doctor.setDocPasswordMd5(DigestUtils.md5DigestAsHex(DoctorConstant.PASSWORD.getBytes()));
-//            }
-//            //新增
-//            doctor.setRawHosId(loginDoctor.getRawHosId());
-//            userDao.addDoctor(doctor);
-//        }else {
-//            if(!StringUtils.isEmpty(doctor.getDocPassword())) {
-//                if(!doctor.getDocPassword().equals(doctor.getDocCfmPassword())) {
-//                    return new Result(0, "两次输入密码不一致");
-//                }
-//                doctor.setDocPasswordMd5(DigestUtils.md5DigestAsHex(doctor.getDocPassword().getBytes()));
-//            }
-//            userDao.updDoctor(doctor);
-//        }
-//        return new Result();
     }
 
     @Override
@@ -151,5 +149,11 @@ public class UserServiceImpl implements UserService {
         }else{
             return new Result(0, "密码错误，操作失败！");
         }
+    }
+
+    @Override
+    public Result delDoctor(String ids) {
+        userDao.delDoctor(PublicUtil.toListByIds(ids));
+        return new Result();
     }
 }

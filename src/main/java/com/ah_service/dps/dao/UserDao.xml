@@ -3,9 +3,9 @@
 <mapper namespace="com.ah_service.dps.dao.UserDao">
     <insert id="addDoctor" parameterType="doctor">
         insert into doctor(doc_name, doc_loginno, doc_password, doc_sex, doc_age, doc_speciality,
-         doc_desc, doc_medicineId, doc_headimg,  crtuser, crtdate, raw_hos_id, doc_medicine_name)
+         doc_desc, doc_medicineId, doc_headimg, ishosadmin, crtuser, crtdate, raw_hos_id, doc_medicine_name)
         VALUES (#{docName}, #{docLoginno}, #{docPasswordMd5}, #{docSex}, #{docAge}, #{docSpeciality},
-        #{docDesc}, #{docMedicineId}, #{docHeadimg}, #{crtuser}, now(), #{rawHosId}, #{docMedicineName})
+        #{docDesc}, #{docMedicineId}, #{docHeadimg}, #{ishosadmin}, #{crtuser}, now(), #{rawHosId}, #{docMedicineName})
     </insert>
 
     <update id="updDoctor" parameterType="doctor">
@@ -27,6 +27,9 @@
 
     <update id="updPass">
         update doctor set doc_password = #{md5Pass} where doc_id = #{docId}
+    </update>
+    <update id="delDoctor">
+        update doctor set recsts = 'D' where doc_id in <foreach collection="ids" item="id" open="(" close=")" separator=",">#{id}</foreach>
     </update>
 
     <select id="checkNoAndPass" resultType="doctor" parameterType="doctor" resultMap="doctorMap">
@@ -63,7 +66,8 @@
     <select id="getDoctorDetail" resultType="doctor">
         select doc_id, doc_name, doc_loginno, doc_password, doc_sex, ishosadmin, isadmin,
         doc_age, doc_speciality, doc_desc, doc_medicineId, doc_hospital, doc_headimg,
-        doc_medicine_name,doc_hospital_name, doc_medicine_name,
+        doc_medicine_name, doc_medicine_name,raw_hos_id,
+        (select hos_name from hospital where d.raw_hos_id = raw_hospital_id) docHospitalName,
         isadmin, ishosadmin from doctor d where recsts = '1' and doc_id = #{id}
     </select>
     <select id="hasSameDoctor" resultType="int" parameterType="doctor">
@@ -80,6 +84,7 @@
         SELECT COUNT(c.doc_medicine_name) FROM (SELECT doc_medicine_name FROM doctor WHERE raw_hos_id = #{rawHosId} GROUP BY doc_medicine_name) c;
     </select>
 
+    
     <resultMap id="doctorMap" type="doctor">
         <id property="docId" column="doc_id"/>
         <result property="docName" column="doc_name"/>

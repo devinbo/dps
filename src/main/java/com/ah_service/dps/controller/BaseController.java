@@ -84,8 +84,8 @@ public class BaseController {
 
 
     @RequestMapping("/getAllMedicine")
-    public Result getAllMedicine() {
-        return baseService.getAllMedicine();
+    public Result getAllMedicine(String rawHosId) {
+        return baseService.getAllMedicine(rawHosId);
     }
 
 

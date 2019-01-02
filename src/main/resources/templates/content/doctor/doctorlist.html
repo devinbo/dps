@@ -120,7 +120,7 @@
                     }else{
                         bootbox.confirm("确认删除选中的客户信息? ", function(result) {
                             if(result) {
-                                myAjax("/hospital/delHospital", {ids: ids.join(",")}, function(result) {
+                                myAjax("/user/delDoctor", {ids: ids.join(",")}, function(result) {
                                     if(result.code === 1) {
                                         showSuccInfo("操作成功！");
                                         queryData();

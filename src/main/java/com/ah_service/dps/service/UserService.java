@@ -20,4 +20,6 @@ public interface UserService {
     Result setFee(String fee);
 
     Result updPass(Map<String, Object> param);
+
+    Result delDoctor(String ids);
 }

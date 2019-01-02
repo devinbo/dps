@@ -115,4 +115,9 @@ public class UserController {
     public @ResponseBody Result updPass(@RequestParam Map<String, Object> param, HttpServletResponse response) {
         return userService.updPass(param);
     }
+
+    @RequestMapping("/delDoctor")
+    public @ResponseBody Result delDoctor(String ids) {
+        return userService.delDoctor(ids);
+    }
 }
