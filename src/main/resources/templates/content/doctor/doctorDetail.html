@@ -28,7 +28,7 @@
             <input type="hidden" name="docId" th:value='${doctor?.docId}'>
             <div class="widget-box">
                 <div class="widget-header">
-                    <h4 class="widget-title">医院信息(<span class="orange">新创建用户，不填写密码，那么密码默认为000000，如需修改，请登录系统后，手动修改</span>)</h4>
+                    <h4 class="widget-title">医院信息(<span class="orange">如需修改密码，请直接输入即可，不输入表示不修改密码</span>)</h4>
                     <div class="widget-toolbar">
                         <a href="#" data-action="collapse">
                             <i class="ace-icon fa fa-chevron-up"></i>
@@ -37,6 +37,22 @@
                 </div>
                 <div class="widget-body">
                     <div class="widget-main" style="min-height: 200px;">
+
+                        <div class="row" th:hidden="${session?.user?.isadmin!=true }">
+                            <div class="col-xs-3 form-group">
+                                <label class="control-label" for="docName">设置为医院管理员</label>
+                                <input name="ishosadmin" class="ace ace-switch ace-switch-4"
+                                       type="checkbox" value="1" th:checked="${doctor?.ishosadmin == true}"/>
+                                <span class="lbl"></span>
+                            </div>
+
+                            <div class="col-xs-3 form-group">
+                                <label class="control-label" for="docName">选择医院</label>
+                                <select id="raw_hos_id" name="rawHosId" class="form-control"></select>
+                            </div>
+                        </div>
+
+
                         <div class="row">
                             <div class="col-xs-3 form-group">
                                 <label class="control-label" for="docName">医生名称<span
@@ -51,19 +67,15 @@
                                        placeholder="请输入登录账号">
                             </div>
 
-                            <div class="col-xs-3  form-group" th:hidden="${doctor?.docId}">
+                            <div class="col-xs-3  form-group">
                                 <label for="docLoginno">登录密码</label>
-                                <input type="password" class="form-control" id="docPassword" name="docPassword" th:value="${doctor?.docPassword}"
-                                       placeholder="请输入登录账号">
+                                <input type="password" class="form-control" id="docPassword" name="docPassword" placeholder="请输入登录账号">
                             </div>
 
-                            <div class="col-xs-3  form-group" th:hidden="${doctor?.docId}">
+                            <div class="col-xs-3  form-group">
                                 <label for="docLoginno">确认登录密码</label>
-                                <input type="password" class="form-control" id="docCfmPassword" name="docCfmPassword" th:value="${doctor?.docPassword}"
-                                       placeholder="请输入登录账号">
+                                <input type="password" class="form-control" id="docCfmPassword" name="docCfmPassword" placeholder="请输入登录账号">
                             </div>
-
-
                         </div>
 
                         <div class="row">
@@ -119,14 +131,19 @@
                     </div>
                 </div>
             </div>
-
-            <div class="space-12"></div>
-            <div class="row">
-                <div class="col-xs-4 col-xs-offset-5">
-                    <input type="submit" class="btn btn-primary" id="agency_save">
-                    <input class="btn" type="reset" style="margin-left: 20px;" onclick="resetForm()" value="重置表单"/>
+            <!--<div th:hidden="${session?.user?.isadmin}">-->
+                <div class="space-12"></div>
+                <div class="row">
+                    <div class="col-xs-4 col-xs-offset-5">
+                        <input type="submit" class="btn btn-primary" id="agency_save">
+                        <input class="btn" type="reset" style="margin-left: 20px;" onclick="resetForm()" value="重置表单"/>
+                    </div>
                 </div>
-            </div>
+            <!--</div>-->
+            <!--<div th:hidden="${session?.user?.isadmin != true}" style="text-align: center">-->
+                <!--您当前为超级管理员，无法修改医生信息-->
+            <!--</div>-->
+
         </form>
     </div>
 </div>
@@ -142,18 +159,45 @@
         "assets/js/jquery.form.js",
         "assets/js/bootbox.js",
         "assets/js/chosen.jquery.js",
+        "assets/js/select2.js",
         "assets/js/date-time/bootstrap-datetimepicker.js", null];
 
+    console.log([[${session.user}]]);
     function resetForm() {
         $(".chosen-select").val('').trigger("chosen:updated");
     }
 
     function openFile(fileurl) {
         //打开文件
-        window.open(fileurl);
+        var hosLogo = [[${doctor?.docHeadimg}]];
+        window.open(hosLogo);
     }
 
     $('.page-content-area').ace_ajax('loadScripts', scripts, function () {
+
+        $('#raw_hos_id').select2({
+            ajax: {
+                url: projectUrl + "/base/getHosByKey",
+                dataType: "json",
+                delay: 500,
+                data: function (params) {
+                    var query = {
+                        key: params.term
+                    };
+                    return query;
+                },
+                cache: true,
+                processResults: function (data) {
+                    if (data.code === 1) {
+                        return {results: data.data}
+                    } else {
+                        showErrorInfo(data.result);
+                    }
+                }
+            },
+        });
+
+
         //提交
         $("#validation-form-doctor").submit(function (e) {
             e.preventDefault();
@@ -223,9 +267,7 @@
 
         if ('[[${doctor?.docHeadimg}]]' && '[[${doctor?.docHeadimg}]]' != 'null') {
             $('#docHeadimg').hide();
-            var hosLogo = '[[${doctor?.docHeadimg}]]';
-            console.log(hosLogo);
-            $('#docHeadimg').after('<a onclick="openFile(\''+hosLogo+'\')" class="blue2" style="display:block; cursor: pointer">文件已上传，点击查看</a><a class="orange reloadFile" style="cursor: pointer">重新上传</a>');
+            $('#docHeadimg').after('<a onclick="openFile()" class="blue2" style="display:block; cursor: pointer">文件已上传，点击查看</a><a class="orange reloadFile" style="cursor: pointer">重新上传</a>');
         } else {
             toFile($('#docHeadimg'));
         }
@@ -283,7 +325,6 @@
             $("#docMedicineName").html(html);
             $("#docMedicineName").trigger("chosen:updated");
         }
-
     })
 </script>
 </body>

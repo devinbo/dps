@@ -38,7 +38,7 @@
                 <div class="widget-body">
                     <div class="widget-main" style="min-height: 200px;">
                         <!--只有管理员可以去设置医院管理员账户-->
-                        <div class="row" th:hidden="${session.user.isadmin == null || !session.user.isadmin}">
+                        <div class="row" th:hidden="${hospital?.hosId != null ||  session.user.isadmin == null || !session.user.isadmin}">
                             <div class="col-xs-3 form-group">
                                 <label class="control-label" for="form-hospital-adminnm">医院管理员姓名<span
                                         class="red">*</span></label>

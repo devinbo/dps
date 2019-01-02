@@ -30,7 +30,7 @@
                 </div>
 
                 <div class="col-xs-3">
-                    <label for="repFlag" class="col-sm-3 control-label no-padding-right">是否回复:</label>
+                    <label for="repFlag" class="col-sm-6 control-label no-padding-right">是否回复:</label>
                     <div class="col-sm-6">
                         <select class="form-control" id="repFlag" name="repFlag">
                             <option value="" selected></option>
@@ -74,6 +74,11 @@
                     <i class="ace-icon fa fa-comment blue"></i>
                     用户留言信息
                 </h4>
+                <div class="widget-toolbar">
+                    <a href="#" data-action="fullscreen" class="orange2" id="openWinId">
+                        <i class="ace-icon fa fa-expand"></i>
+                    </a>
+                </div>
             </div>
 
             <div class="widget-body">
@@ -83,19 +88,6 @@
 
                     </div>
                     <div class='center' id="loadMore"><a href='javascript:void(0);'>加载更多</a></div>
-                    <!--<form>-->
-                    <!--<div class="form-actions">-->
-                    <!--<div class="input-group">-->
-                    <!--<input id="sendMsgId" placeholder="选择客户进行留言" type="text" class="form-control" name="message" />-->
-                    <!--<span class="input-group-btn">-->
-                    <!--<button disabled id="send" class="btn btn-sm btn-info no-radius" type="button">-->
-                    <!--<i class="ace-icon fa fa-share"></i>-->
-                    <!--Send-->
-                    <!--</button>-->
-                    <!--</span>-->
-                    <!--</div>-->
-                    <!--</div>-->
-                    <!--</form>-->
                 </div>
             </div>
         </div>
@@ -314,10 +306,8 @@
             })
         });
 
-        $('#msgContent').ace_scroll({
-            size: 550
-        });
     });
+
 
     function selectId(msgId, userName) {
         //加载该患者最后的问题

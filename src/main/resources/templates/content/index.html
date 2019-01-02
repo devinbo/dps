@@ -37,11 +37,11 @@
             </div>
             <div class="hr hr12 dotted"></div>
 
-            <a href="#" class="btn btn-sm btn-block btn-info"
-               th:style="${'display:'+ ((session.user?.ishosadmin == null || !session.user?.ishosadmin)? 'none': '')}">
-                <i class="ace-icon fa fa-edit bigger-120"></i>
-                <span class="bigger-110">修改资料</span>
-            </a>
+            <!--<a href="#" class="btn btn-sm btn-block btn-info"-->
+               <!--th:style="${'display:'+ ((session.user?.ishosadmin == null || !session.user?.ishosadmin)? 'none': '')}">-->
+                <!--<i class="ace-icon fa fa-edit bigger-120"></i>-->
+                <!--<span class="bigger-110">修改资料</span>-->
+            <!--</a>-->
         </div>
 
         <div class="col-xs-6 col-xs-offset-1">
@@ -68,11 +68,11 @@
     </div>
     <!--左侧统计-->
     <div class="widget-box transparent col-xs-6">
-        <div class="widget-header">
-            <h4 class="widget-title lighter smaller">
-                <i class="ace-icon fa fa-rss orange"></i>较上月同比增长
-            </h4>
-        </div>
+        <!--<div class="widget-header">-->
+            <!--<h4 class="widget-title lighter smaller">-->
+                <!--<i class="ace-icon fa fa-rss orange"></i>较上月同比增长-->
+            <!--</h4>-->
+        <!--</div>-->
 
         <div class="widget-body">
             <div style="margin-top: 30px;" class="col-sm-12 infobox-container">
@@ -81,7 +81,7 @@
                         <i class="ace-icon fa fa-shopping-cart"></i>
                     </div>
                     <div class="infobox-data">
-                        <span class="infobox-data-number">32</span>
+                        <span class="infobox-data-number" th:text="${adminSample?.hosCount}"></span>
                         <div class="infobox-content">入驻医院总数</div>
                     </div>
                     <!--<div class="stat stat-success">8%</div>-->
@@ -94,30 +94,30 @@
                     </div>
 
                     <div class="infobox-data">
-                        <span class="infobox-data-number">8</span>
+                        <span class="infobox-data-number" th:text="${adminSample?.hosDoc}"></span>
                         <div class="infobox-content">入驻医生总数</div>
                     </div>
                     <!--<div class="stat stat-important">4%</div>-->
                     <!--<div class="stat stat-success">4%</div>-->
                 </div>
 
-                <div class="infobox infobox-blue" style="display:block;width: 100%">
-                    <div class="infobox-icon">
-                        <!--<i class="ace-icon fa fa-twitter"></i>-->
-                        <i class="ace-icon fa fa-comments"></i>
-                    </div>
-
-                    <div class="infobox-data">
-                        <span class="infobox-data-number">11</span>
-                        <div class="infobox-content">历史问诊总数</div>
-                    </div>
-
-                    <!--<div class="badge badge-success">-->
-                    <!--+32%-->
-                    <!--<i class="ace-icon fa fa-arrow-up"></i>-->
+                <!--<div class="infobox infobox-blue" style="display:block;width: 100%">-->
+                    <!--<div class="infobox-icon">-->
+                        <!--&lt;!&ndash;<i class="ace-icon fa fa-twitter"></i>&ndash;&gt;-->
+                        <!--<i class="ace-icon fa fa-comments"></i>-->
                     <!--</div>-->
-                    <!--<div class="stat stat-important">10%</div>-->
-                </div>
+
+                    <!--<div class="infobox-data">-->
+                        <!--<span class="infobox-data-number">11</span>-->
+                        <!--<div class="infobox-content">历史问诊总数</div>-->
+                    <!--</div>-->
+
+                    <!--&lt;!&ndash;<div class="badge badge-success">&ndash;&gt;-->
+                    <!--&lt;!&ndash;+32%&ndash;&gt;-->
+                    <!--&lt;!&ndash;<i class="ace-icon fa fa-arrow-up"></i>&ndash;&gt;-->
+                    <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<div class="stat stat-important">10%</div>&ndash;&gt;-->
+                <!--</div>-->
 
                 <div class="space-6"></div>
 

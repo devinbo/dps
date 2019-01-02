@@ -47,8 +47,11 @@ public class RouterController {
         Doctor doctor = (Doctor) session.getAttribute("user");
         if(doctor.getIsadmin() != null) {
             //如果是超级管理员，那么加载超级管理员对应的统计信息
+            Map<String, Object> adminSample = patientService.getAdminSample();
+            modelAndView.addObject("adminSample", adminSample);
         }else if(doctor.getIshosadmin() != null) {
             //如果是医院管理员，那么加载医院管理员对应的统计信息
+
         }else{
             //普通医生，加载对应的问诊总数
             Map<String, Object> askState = patientService.getAskCount(doctor.getDocId());

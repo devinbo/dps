@@ -9,18 +9,17 @@ import com.ah_service.dps.utils.PropertyLoad;
 import com.ah_service.dps.utils.PublicUtil;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.print.Doc;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -109,5 +108,11 @@ public class UserController {
         File bookFile = new File(dir + File.separator + filename);
         file.transferTo(bookFile);
         return nginxImgPath + filename;
+    }
+
+
+    @RequestMapping("/updPass")
+    public @ResponseBody Result updPass(@RequestParam Map<String, Object> param, HttpServletResponse response) {
+        return userService.updPass(param);
     }
 }

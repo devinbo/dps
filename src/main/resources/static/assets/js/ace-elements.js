@@ -682,13 +682,13 @@ if (typeof jQuery === 'undefined') { throw new Error('Ace\'s JavaScript requires
      }
 
 	/**
-	$(document).on('ace.settings.ace_scroll', function(e, name) {
-		if(name == 'sidebar_collapsed') $('.ace-scroll').scroller('reset');
-	});
-	$(window).on('resize.ace_scroll', function() {
-		$('.ace-scroll').scroller('reset');
-	});
 	*/
+	// $(document).on('ace.settings.ace_scroll', function(e, name) {
+	// 	if(name == 'sidebar_collapsed') $('.ace-scroll').scroller('reset');
+	// });
+	// $(window).on('resize.ace_scroll', function() {
+	// 	$('.ace-scroll').scroller('reset');
+	// });
 
 })(window.jQuery);;/**
  <b>Custom color picker element</b>. Converts html select elements to a dropdown color picker.

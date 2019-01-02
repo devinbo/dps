@@ -87,4 +87,10 @@ public class BaseController {
     public Result getAllMedicine() {
         return baseService.getAllMedicine();
     }
+
+
+    @RequestMapping("/getHosByKey")
+    public Result getHosByKey(String key) {
+        return baseService.getHosByKey(key);
+    }
 }
