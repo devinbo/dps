@@ -15,4 +15,6 @@ public interface BaseService {
     Result<List> getArea(String city_id);
 
     Result getAllMedicine();
+
+    Result getHosByKey(String key);
 }

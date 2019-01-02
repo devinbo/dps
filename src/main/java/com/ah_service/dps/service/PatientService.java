@@ -22,4 +22,6 @@ public interface PatientService {
     Map<String,Object> getAskCount(Long docId);
 
     List<Map<String, Object>> getLatestLeave();
+
+    Map<String,Object> getAdminSample();
 }

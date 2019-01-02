@@ -26,11 +26,11 @@ public class PatientServiceImpl implements PatientService {
 
     @Autowired
     private HttpSession session;
-    private List<Map<String, String>> weekDate;
+
 
     @Override
     public ResultPage<WjwFordocMsg> getFordocMsg(Page page, WjwFordocMsg wjwFordocMsg) {
-        PageHelper.startPage(page);
+//        PageHelper.startPage(page);
         Doctor doctor = (Doctor) session.getAttribute("user");
         wjwFordocMsg.setMsgDocId(doctor.getDocId());
         if(!StringUtils.isEmpty(wjwFordocMsg.getMsgCrttime())) {
@@ -90,6 +90,17 @@ public class PatientServiceImpl implements PatientService {
     public List<Map<String, Object>> getLatestLeave() {
         Doctor doctor = (Doctor) session.getAttribute("user");
         return patientDao.getLatestLeave(doctor.getDocId());
+    }
+
+    @Override
+    public Map<String, Object> getAdminSample() {
+        Map<String, Object> map = new HashMap<>();
+        //获取医院总数量，
+        int hosCount = patientDao.getAllHosCount();
+        map.put("hosCount", hosCount);
+        int docCount = patientDao.getAllDocCount();
+        map.put("hosDoc", docCount);
+        return map;
     }
 
     private List<Map<String,String>> getWeekDate() {

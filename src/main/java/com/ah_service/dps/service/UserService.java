@@ -5,6 +5,8 @@ import com.ah_service.dps.pojo.Page;
 import com.ah_service.dps.pojo.Result;
 import com.ah_service.dps.pojo.ResultPage;
 
+import java.util.Map;
+
 public interface UserService {
 
     Result<Doctor> login(Doctor employee);
@@ -16,4 +18,6 @@ public interface UserService {
     Result saveDoctor(Doctor doctor);
 
     Result setFee(String fee);
+
+    Result updPass(Map<String, Object> param);
 }

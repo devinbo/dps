@@ -16,6 +16,8 @@ import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -37,9 +39,17 @@ public class UserServiceImpl implements UserService {
         }
         //设置医生和科室数量
         int docNums = userDao.getDoctorNums(doctorDb.getRawHosId());
-        doctorDb.getHospital().setDoctorNums(docNums);
-        int divisionNums = userDao.getDivisionNums(doctorDb.getRawHosId());
-        doctorDb.getHospital().setDivisionNums(divisionNums);
+        System.out.println(doctorDb.getIsadmin());
+        if(doctorDb.getIsadmin() != null && doctorDb.getIsadmin()) {
+            //说明是超级管理员
+            session.setAttribute("user", doctorDb);
+            return new Result<>(1, "操作成功！", doctor);
+        }
+        if(doctorDb.getHospital() != null) {
+            doctorDb.getHospital().setDoctorNums(docNums);
+            int divisionNums = userDao.getDivisionNums(doctorDb.getRawHosId());
+            doctorDb.getHospital().setDivisionNums(divisionNums);
+        }
         session.setAttribute("user", doctorDb);
         System.out.println(doctorDb);
         return new Result<>(1, "操作成功！", doctor);
@@ -49,6 +59,7 @@ public class UserServiceImpl implements UserService {
     public ResultPage<Doctor> doctorList(Doctor doctor, Page page) {
         Doctor loginDoctor = (Doctor) session.getAttribute("user");
         doctor.setRawHosId(loginDoctor.getRawHosId());
+        doctor.setIsadmin(loginDoctor.getIsadmin());
         PageHelper.startPage(page);
         List<Doctor> list = userDao.doctorList(doctor);
         return new ResultPage<>(list);
@@ -61,7 +72,8 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public Doctor toDoctorDetail(String id) {
-        return userDao.getDoctorDetail(id);
+        Doctor doctor = userDao.getDoctorDetail(id);
+        return doctor;
     }
 
     /**
@@ -79,24 +91,35 @@ public class UserServiceImpl implements UserService {
         Doctor loginDoctor = (Doctor) session.getAttribute("user");
         doctor.setCrtuser(loginDoctor.getCrtuser());
         doctor.setUpduser(loginDoctor.getCrtuser());
-        doctor.setRawHosId(loginDoctor.getRawHosId());
-        doctor.setDocHospital(loginDoctor.getDocHospital());
-        if(doctor.getDocId() == null) {
-            if(!StringUtils.isEmpty(doctor.getDocPassword())) {
-                if(!doctor.getDocPassword().equals(doctor.getDocCfmPassword())) {
-                    return new Result(0, "两次输入密码不一致");
-                }
-                doctor.setDocPasswordMd5(DigestUtils.md5DigestAsHex(doctor.getDocPassword().getBytes()));
-            }else{
-                doctor.setDocPasswordMd5(DigestUtils.md5DigestAsHex(DoctorConstant.PASSWORD.getBytes()));
-            }
-            //新增
+        if(!loginDoctor.getIsadmin()) {
+            //如果是超级管理员添加，那么不重置医院信息
             doctor.setRawHosId(loginDoctor.getRawHosId());
-            userDao.addDoctor(doctor);
-        }else {
-            userDao.updDoctor(doctor);
+            doctor.setDocHospital(loginDoctor.getDocHospital());
         }
+        System.out.println(doctor);
         return new Result();
+//        if(doctor.getDocId() == null) {
+//            if(!StringUtils.isEmpty(doctor.getDocPassword())) {
+//                if(!doctor.getDocPassword().equals(doctor.getDocCfmPassword())) {
+//                    return new Result(0, "两次输入密码不一致");
+//                }
+//                doctor.setDocPasswordMd5(DigestUtils.md5DigestAsHex(doctor.getDocPassword().getBytes()));
+//            }else{
+//                doctor.setDocPasswordMd5(DigestUtils.md5DigestAsHex(DoctorConstant.PASSWORD.getBytes()));
+//            }
+//            //新增
+//            doctor.setRawHosId(loginDoctor.getRawHosId());
+//            userDao.addDoctor(doctor);
+//        }else {
+//            if(!StringUtils.isEmpty(doctor.getDocPassword())) {
+//                if(!doctor.getDocPassword().equals(doctor.getDocCfmPassword())) {
+//                    return new Result(0, "两次输入密码不一致");
+//                }
+//                doctor.setDocPasswordMd5(DigestUtils.md5DigestAsHex(doctor.getDocPassword().getBytes()));
+//            }
+//            userDao.updDoctor(doctor);
+//        }
+//        return new Result();
     }
 
     @Override
@@ -106,5 +129,27 @@ public class UserServiceImpl implements UserService {
         userDao.updInquirprice(loginDoctor);
         session.setAttribute("user", loginDoctor);
         return new Result();
+    }
+
+    @Override
+    public Result updPass(Map<String, Object> param) {
+        String password = (String) param.get("password");
+        //校验密码是否正确
+        Doctor doctor = (Doctor) session.getAttribute("user");
+        if(Objects.equals(DigestUtils.md5DigestAsHex(password.getBytes()), doctor.getDocPasswordMd5())) {
+            String newpass = (String) param.get("newpassword");
+            String confpass = (String) param.get("cfmpassword");
+            if(newpass.length() < 4 || newpass.length() > 20 || !Objects.equals(newpass, confpass)) {
+                return new Result(0, "密码长度在4-20位之间！");
+            }
+            String md5Pass = DigestUtils.md5DigestAsHex(newpass.getBytes());
+            userDao.updPass(doctor.getDocId(), md5Pass);
+            //修改session中用户密码
+            doctor.setDocPasswordMd5(md5Pass);
+            session.setAttribute("user", doctor);
+            return new Result();
+        }else{
+            return new Result(0, "密码错误，操作失败！");
+        }
     }
 }

@@ -45,4 +45,9 @@ public class BaseServiceImpl implements BaseService {
         List<Map<String, Object>> list = baseDao.getAllMedicine(doctor.getRawHosId());
         return new Result(1, "查询成功！", list);
     }
+
+    @Override
+    public Result getHosByKey(String key) {
+        return new Result(1, "查询成功！", baseDao.getHosByKey(key));
+    }
 }
