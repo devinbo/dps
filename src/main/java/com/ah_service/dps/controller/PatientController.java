@@ -32,6 +32,7 @@ public class PatientController {
     public @ResponseBody Result getLastProblem(String msgId) {
         return patientService.getLastProblem(msgId);
     }
+
     /**
      * 医生回复
      */

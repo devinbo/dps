@@ -200,7 +200,7 @@
                                 </div>
                                 <div class="text" th:text="${info.msg_info}"></div>
                                 <div class="tools">
-                                    <a href="#" class="btn btn-minier btn-info">
+                                    <a href="javascript:void(0);" class="btn btn-minier btn-info" onclick="toDetail()">
                                         <i class="icon-only ace-icon fa fa-share"></i>
                                     </a>
                                 </div>
@@ -225,8 +225,13 @@
         "assets/js/fullcalendar.js",
         "assets/js/bootbox.js", null]
 
+    function toDetail() {
+        toCustomUrl("page/reply/reply");
+    }
+
     $('.page-content-area').ace_ajax('loadScripts', scripts, function () {
         //inline scripts related to this page
+
         jQuery(function ($) {
             $('.dialogs').ace_scroll({
                 size: 300
@@ -240,6 +245,7 @@
                 //用户尚未设置咨询价格， 那么就让他设置
                 setFee();
             }
+
 
             function setFee() {
                 bootbox.prompt({

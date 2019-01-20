@@ -200,7 +200,6 @@
             },
         });
 
-
         //提交
         $("#validation-form-doctor").submit(function (e) {
             e.preventDefault();
@@ -331,9 +330,9 @@
 
         function createDepSelect(data) {
             var html = '<option value="">&nbsp;</option>';
-            var name = '[[${doctor?.docMedicineName}]]';
+            var name = [[${doctor?.docMedicineName}]];
             data.forEach(function(info) {
-                if(info.name == name) {
+                if(info.name.indexOf(name) > -1) {
                     html += '<option value="'+info.name+'" selected>'+info.name+'</option>';
                 }else{
                     html += '<option value="'+info.name+'">'+info.name+'</option>';

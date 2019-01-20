@@ -50,7 +50,8 @@
     <select id="doctorList" resultType="doctor" parameterType="doctor">
         select doc_id, doc_name, doc_loginno, doc_password, doc_sex,
         doc_age, doc_speciality, doc_desc, doc_medicineId, doc_hospital, doc_headimg,
-        doc_medicine_name, doc_hospital_name, isadmin, ishosadmin
+        doc_medicine_name,
+        (select hos_name from hospital where raw_hospital_id = raw_hos_id) doc_hospital_name, isadmin, ishosadmin
         from doctor d where recsts = '1'
         <if test="isadmin == null or isadmin == false">
             and raw_hos_id = #{rawHosId}
