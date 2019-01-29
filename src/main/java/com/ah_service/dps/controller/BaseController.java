@@ -1,9 +1,11 @@
 package com.ah_service.dps.controller;
 
 
+import com.ah_service.dps.model.Doctor;
 import com.ah_service.dps.pojo.Result;
 import com.ah_service.dps.service.BaseService;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -13,6 +15,7 @@ import javax.imageio.ImageIO;
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
@@ -30,6 +33,9 @@ public class BaseController {
 
     @Autowired
     private BaseService baseService;
+
+    @Autowired
+    private HttpSession session;
 
     @RequestMapping("getAllGrade")
     public Result<List> getAllGrade() {
@@ -82,9 +88,13 @@ public class BaseController {
         responseOutputStream.close();
     }
 
+    public Doctor getLoginDoctor() {
+        return (Doctor) session.getAttribute("user");
+    }
 
     @RequestMapping("/getAllMedicine")
     public Result getAllMedicine(String rawHosId) {
+        rawHosId = !StringUtils.isEmpty(rawHosId) ? rawHosId : getLoginDoctor().getRawHosId();
         return baseService.getAllMedicine(rawHosId);
     }
 

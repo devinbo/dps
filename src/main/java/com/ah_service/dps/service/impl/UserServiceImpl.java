@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserService {
         Doctor loginDoctor = (Doctor) session.getAttribute("user");
         doctor.setCrtuser(loginDoctor.getCrtuser());
         doctor.setUpduser(loginDoctor.getCrtuser());
-        if(!loginDoctor.getIsadmin()) {
+        if(loginDoctor.getIsadmin() == null || !loginDoctor.getIsadmin()) {
             //如果不是超级管理员添加，那么重置医院为当前登录用户信息
             doctor.setRawHosId(loginDoctor.getRawHosId());
             doctor.setDocHospital(loginDoctor.getDocHospital());
